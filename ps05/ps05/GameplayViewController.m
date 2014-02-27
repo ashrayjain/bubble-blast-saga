@@ -13,6 +13,7 @@
 #import "TwoDVector.h"
 #import "CircularObjectModel.h"
 #import "ProjectileLaunchPath.h"
+#import "SaveController.h"
 
 
 #define COLLECTION_VIEW_CELL_IDENTIFIER         @"bubbleCell"
@@ -32,14 +33,14 @@
 // Models
 @property (nonatomic) GameBubbleColor currentVisibleColor;
 @property (nonatomic) GameBubbleColor currentHiddenColor;
-@property (nonatomic) GameBubbleBasicModel *projectileModel;
-@property (nonatomic) NSMutableArray *bubbleGridModels;
 
 // utility properties
 @property (nonatomic) TwoDVector *projectileLaunchPoint;
 @property (nonatomic) PhysicsEngine *engine;
 @property (nonatomic) BOOL panStarted;
 @property (nonatomic) BOOL projectileReady;
+@property (nonatomic) double cannonAngle;
+@property (nonatomic, strong) SaveController *saveController;
 
 @end
 
@@ -49,6 +50,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 	// Do any additional setup after loading the view, typically from a nib.
     self.currentVisibleColor = kBlue;
     self.currentHiddenColor = kRed;
@@ -59,13 +61,61 @@
     [self loadProjectileWithColor:self.currentVisibleColor];
     self.projectile.image = self.visibleReserveBubble.image;
     
-    if (self.loadedGrid == nil) {
-        [self loadBubbleGridModel];
+    [self loadBubbleGridModel];
+
+    [self.engine startEngine];
+    [self initializeCannon];
+
+    /*
+
+    UIImage *image = [UIImage imageNamed:@"bubble-burst.png"];
+    UIGraphicsBeginImageContextWithOptions (image.size, NO, [[UIScreen mainScreen] scale]); // for correct resolution on retina, thanks @MobileVet
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextTranslateCTM(context, 0, image.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
+    
+    // draw black background to preserve color of transparent pixels
+    CGContextSetBlendMode(context, kCGBlendModeNormal);
+    [[UIColor blackColor] setFill];
+    CGContextFillRect(context, rect);
+    
+    // draw original image
+    CGContextSetBlendMode(context, kCGBlendModeNormal);
+    CGContextDrawImage(context, rect, image.CGImage);
+    
+    // tint image (loosing alpha) - the luminosity of the original image is preserved
+    CGContextSetBlendMode(context, kCGBlendModeColor);
+    [[UIColor colorWithRed:155.0f/255.0f green:0.0f/255.0f blue:41.0f/255.0f alpha:1.0] setFill];
+    CGContextFillRect(context, rect);
+    
+    // mask by alpha values of original image
+    CGContextSetBlendMode(context, kCGBlendModeDestinationIn);
+    CGContextDrawImage(context, rect, image.CGImage);
+    
+    UIImage *coloredImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    UIImageView *v = [[UIImageView alloc] initWithImage:coloredImage];
+    [self.gameArea addSubview:v];
+
+    CGImageRef img = coloredImage.CGImage;
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 0; i < 4; i++) {
+            CGImageRef clip = CGImageCreateWithImageInRect(img, CGRectMake(i*160, 0, 160, 160));
+            [images addObject:[UIImage imageWithCGImage:clip]];
     }
-    else {
+    self.visibleReserveBubble.tintColor = [UIColor redColor];
+    self.visibleReserveBubble.animationImages = images;
+    self.visibleReserveBubble.animationRepeatCount = 10;
+    self.visibleReserveBubble.animationDuration = 0.5;
+    [self.visibleReserveBubble startAnimating];*/
+    
+    if (self.loadedGrid != nil) {
         [self loadBubbleGridModelFromLoadedData];
     }
-    [self.engine startEngine];
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,10 +124,38 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)setLoadedGrid:(id)loadedGrid
+{
+    _loadedGrid = loadedGrid;
+    if (self.bubbleGridModels != nil) {
+        [self loadBubbleGridModelFromLoadedData];
+    }
+}
 
 /*
  Initialization related methods
  */
+
+- (void)initializeCannon
+// MODIFIES: self.cannon, self.cannonAngle
+// EFFECTS: loads up the cannon sprites and sets up the animation parameters
+{
+    UIImage *image = [UIImage imageNamed:@"cannon.png"];
+    CGImageRef img = image.CGImage;
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 6; j++) {
+            CGImageRef clip = CGImageCreateWithImageInRect(img, CGRectMake(j*400, i*800+100, 400, 700));
+            [images addObject:[UIImage imageWithCGImage:clip]];
+        }
+    }
+    self.cannonAngle = 0;
+    self.cannon.image = [images firstObject];
+    self.cannon.animationImages = images;
+    self.cannon.animationDuration = 0.5;
+    self.cannon.animationRepeatCount = 1;
+}
+
 
 - (void)loadProjectileWithColor:(GameBubbleColor)color
 // MODIFIES: self.projectileModel, self.engine and self.projectileReady
@@ -147,17 +225,28 @@
 
 - (void)loadBubbleGridModelFromLoadedData
 {
-    self.bubbleGridModels = self.loadedGrid;
-    
+    //self.bubbleGridModels = self.loadedGrid;
     for (int i = 0; i < self.bubbleGridModels.count; i++) {
-        int numberOfBubblePerRow = kDefaultNumberOfBubblesPerRow;
-        if (i%2 != 0) {
-            numberOfBubblePerRow--;
-        }
-        
-        for (int j = 0; j < numberOfBubblePerRow; j++) {
+        NSMutableArray *row = self.bubbleGridModels[i];
+        for (int j = 0; j < row.count; j++) {
             GameBubbleBasicModel *bubble = self.bubbleGridModels[i][j];
-            bubble.delegate = self;
+            @try {
+                GameBubbleBasicModel *newBubble = self.loadedGrid[i][j];
+                bubble.color = newBubble.color;
+                if (bubble.color == kEmpty) {
+                    bubble.physicsModel.enabled = NO;
+                }
+                else {
+                    bubble.physicsModel.enabled = YES;
+                }
+            }
+            @catch (NSException *exception) {
+                bubble.color = kEmpty;
+                bubble.physicsModel.enabled = NO;
+            }
+        }
+    }
+            /*bubble.delegate = self;
             CircularObjectModel *bubblePhysicsModel;
             bubblePhysicsModel = [[CircularObjectModel alloc] initWithRadius:kDefaultBubbleRadius
                                                                     position:[TwoDVector nullVector]
@@ -198,7 +287,7 @@
             [self.engine addObject:bubblePhysicsModel isImmovable:YES];
             
         }
-    }
+    }*/
 }
 
 
@@ -435,14 +524,29 @@
         self.projectilePath.enabled = YES;
     }
     else if (sender.state == UIGestureRecognizerStateEnded && self.panStarted == YES) {
-        [self launchProjectileWithAbsoluteVector:[TwoDVector twoDVectorFromCGPoint:[sender locationInView:nil]]];
+        [self launchProjectileWithVector:[TwoDVector twoDVectorFromCGPoint:[sender locationInView:nil]]];
         self.panStarted = NO;
         self.projectilePath.enabled = NO;
     }
     else if (sender.state == UIGestureRecognizerStateChanged && self.panStarted == YES) {
         // refresh projectile path
         [self.projectilePath setNeedsDisplay];
-        self.projectilePath.endPoint = [sender locationInView:nil];
+        TwoDVector *endPoint = [TwoDVector twoDVectorFromCGPoint:[sender locationInView:nil]];
+        self.projectilePath.endPoint = endPoint.scalarComponents;
+        
+        endPoint = [endPoint subtractFromVector:[TwoDVector twoDVectorFromCGPoint:self.projectile.center]];
+        
+        double xOffset = self.projectileLaunchPoint.xComponent-self.cannon.center.x;
+        double yOffset = self.projectileLaunchPoint.yComponent-self.cannon.center.y;
+        double angle = -atan2(-endPoint.yComponent, endPoint.xComponent)+M_PI_2;
+
+        CGAffineTransform transform = CGAffineTransformMakeTranslation(xOffset, yOffset);
+        transform = CGAffineTransformRotate(transform,
+                                            angle);
+        self.cannon.transform = CGAffineTransformTranslate(transform,
+                                                           -xOffset,
+                                                           -yOffset);
+        self.cannonAngle = angle;
     }
 }
 
@@ -455,11 +559,11 @@
         return;
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
-        [self launchProjectileWithAbsoluteVector:[TwoDVector twoDVectorFromCGPoint:[sender locationInView:nil]]];
+        [self launchProjectileWithVector:[TwoDVector twoDVectorFromCGPoint:[sender locationInView:self.gameArea]]];
     }
 }
 
-- (void)launchProjectileWithAbsoluteVector:(TwoDVector *)point
+- (void)launchProjectileWithVector:(TwoDVector *)point
 // MODIFIES: self.projectileReady & self.projectileModel
 // EFFECT: launches the projectile
 {
@@ -467,8 +571,37 @@
     TwoDVector *velocity = [point subtractFromVector:[TwoDVector twoDVectorFromCGPoint:self.projectile.center]];
     velocity = [velocity normalizedVector];
     velocity = [velocity multiplyScalar:PROJECTILE_VELOCITY_MULTIPLIER];
-    self.projectileModel.physicsModel.velocityVector = velocity;
-    self.projectileReady = NO;
+    
+    
+    double xOffset = self.projectileLaunchPoint.xComponent-self.cannon.center.x;
+    double yOffset = self.projectileLaunchPoint.yComponent-self.cannon.center.y;
+    double angleToRotate = -atan2(-velocity.yComponent, velocity.xComponent)+M_PI_2;
+    double angleOffset = (angleToRotate - self.cannonAngle);
+    [UIView animateKeyframesWithDuration:0.3
+                                   delay:0
+                                 options:UIViewKeyframeAnimationOptionCalculationModePaced
+                              animations:^{
+                                  for (int i = 0; i < 100; i++) {
+                                      [UIView addKeyframeWithRelativeStartTime:i*0.3/100
+                                                              relativeDuration:0.3/100
+                                                                    animations:^{
+                                                                        CGAffineTransform transform = CGAffineTransformMakeTranslation(xOffset, yOffset);
+                                                                        transform = CGAffineTransformRotate(transform,
+                                                                                                            self.cannonAngle + angleOffset*i/100);
+                                                                        transform = CGAffineTransformTranslate(transform,
+                                                                                                               -xOffset,
+                                                                                                               -yOffset);
+                                                                        self.cannon.transform = transform;
+                                                                    }];
+                                  }
+                              }
+                              completion:^(BOOL finished) {
+                                  [self.cannon startAnimating];
+                                  self.projectileModel.physicsModel.velocityVector = velocity;
+                                  self.projectileReady = NO;
+                                  
+                              }];
+    self.cannonAngle = angleToRotate;
 }
 
 - (void)preventVeryLowHorizontalVelocityWith:(TwoDVector *)point
@@ -697,6 +830,5 @@
     }
     return nil;
 }
-
 
 @end

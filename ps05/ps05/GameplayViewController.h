@@ -14,8 +14,9 @@
 #import <UIKit/UIKit.h>
 #import "PhysicsEngineObjectDelegate.h"
 #import "GameBubbleModelDelegate.h"
-#import "ProjectileLaunchPath.h"
 
+@class GameBubbleBasicModel;
+@class ProjectileLaunchPath;
 @interface GameplayViewController : UIViewController <PhysicsEngineObjectDelegate, GameBubbleModelDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate>
 
 // Views
@@ -25,8 +26,13 @@
 @property (strong, nonatomic) IBOutlet UIImageView *hiddenReserveBubble;
 @property (strong, nonatomic) IBOutlet UIImageView *projectile;
 @property (strong, nonatomic) IBOutlet ProjectileLaunchPath *projectilePath;
+@property (strong, nonatomic) IBOutlet UIImageView *cannon;
+@property (strong, nonatomic) IBOutlet UIImageView *cannonBase;
 
 @property (strong, nonatomic) id loadedGrid;
+@property (strong, nonatomic) NSString *currentGridName;
+@property (nonatomic) GameBubbleBasicModel *projectileModel;
+@property (nonatomic) NSMutableArray *bubbleGridModels;
 
 - (IBAction)backButtonPressed:(UIButton *)sender;
 // MODIFIES: self

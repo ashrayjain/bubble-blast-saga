@@ -17,7 +17,7 @@
 
 // Constants
 typedef enum {kGameBubbleBasic} GameBubbleType;
-typedef enum {kBlue, kRed, kOrange, kGreen, kEmpty} GameBubbleColor;
+typedef enum {kBlue, kRed, kOrange, kGreen, kIndestructible, kLightning, kStar, kBomb, kEmpty} GameBubbleColor;
 
 @interface GameBubbleModel : NSObject <NSCoding>
 

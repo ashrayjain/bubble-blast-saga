@@ -17,7 +17,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 
 - (IBAction)playButtonPressed:(UIButton *)sender;
-- (IBAction)loadPuzzlePressed:(UIButton *)sender;
 - (IBAction)backButtonPressed:(UIButton *)sender;
 
 @end

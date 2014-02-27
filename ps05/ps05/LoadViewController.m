@@ -7,6 +7,7 @@
 //
 
 #import "LoadViewController.h"
+#import "Constants.h"
 
 @interface LoadViewController ()
 
@@ -21,10 +22,8 @@
 {
     [super viewDidLoad];
     
-    NSString *documentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    [[NSFileManager defaultManager] changeCurrentDirectoryPath:documentsDir];
-
-    self.fileList = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDir error:nil] mutableCopy];
+    [[NSFileManager defaultManager] changeCurrentDirectoryPath:documentsDirectoryPath()];
+    self.fileList = [fileListForLoading() mutableCopy];
 
     UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 70)];
     header.font = [header.font fontWithSize:40];

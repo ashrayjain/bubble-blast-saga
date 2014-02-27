@@ -15,11 +15,13 @@
 #define ERROR_TITLE                     @"Oops!"
 #define ERROR_MSG_NO_SAVED_FILES_FOUND  @"No saved files found!"
 #define GRID_DATA_KEY                   @"grid"
+#define GRID_NAME_KEY                   @"gridName"
 
 
 @interface MainScreenViewController ()
 
 @property (nonatomic, strong) id loadedData;
+@property (nonatomic, strong) NSString *gridName;
 
 @end
 
@@ -57,19 +59,6 @@
      ];
 }
 
-- (IBAction)loadPuzzlePressed:(UIButton *)sender
-{
-    NSString *documentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDir
-                                                                         error:nil];
-    if ([files count] > 0) {
-        [self performSegueWithIdentifier:@"loadPuzzleStarter" sender:self];
-    }
-    else {
-        popUpAlertWithDelay(ERROR_TITLE, ERROR_MSG_NO_SAVED_FILES_FOUND, ERROR_ALERT_DELAY);
-    }
-}
-
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
     [UIView animateWithDuration:0.2
@@ -97,15 +86,29 @@
         if (data != nil) {
             [self backButtonPressed:nil];
             self.loadedData = [data objectForKey:GRID_DATA_KEY];
+            self.gridName = [data objectForKey:GRID_NAME_KEY];
             [self performSegueWithIdentifier:@"startGamePlayWithLoad" sender:self];
         }
     }];
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if ([identifier isEqual:@"loadPuzzleStarter"]) {
+        NSArray *files = fileListForLoading();
+        if (files.count <= 0) {
+            popUpAlertWithDelay(ERROR_TITLE, ERROR_MSG_NO_SAVED_FILES_FOUND, ERROR_ALERT_DELAY);
+            return NO;
+        }
+    }
+    return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqual:@"startGamePlayWithLoad"]) {
         ((GameplayViewController *)segue.destinationViewController).loadedGrid = self.loadedData;
+        ((GameplayViewController *)segue.destinationViewController).currentGridName = self.gridName;
     }
 }
 

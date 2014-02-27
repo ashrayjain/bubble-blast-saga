@@ -13,6 +13,10 @@ NSString *const kRedBubbleImageName = @"bubble-red.png";
 NSString *const kOrangeBubbleImageName = @"bubble-orange.png";
 NSString *const kGreenBubbleImageName = @"bubble-green.png";
 NSString *const kEraserImageName = @"eraser-1.png";
+NSString *const kIndestructibleBubbleImageName = @"bubble-indestructible.png";
+NSString *const kLightningBubbleImageName = @"bubble-lightning.png";
+NSString *const kStarBubbleImageName = @"bubble-star.png";
+NSString *const kBombBubbleImageName = @"bubble-bomb.png";
 NSString *const kBackgroundImageName = @"background.png";
 
 double const kDefaultBubbleRadius = 32.0;
@@ -41,4 +45,18 @@ void popUpAlertWithDelay(NSString *title, NSString *errorMsg, NSTimeInterval del
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [alert dismissWithClickedButtonIndex:0 animated:YES];
     });
+}
+
+NSArray *fileListForLoading()
+{
+    return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath()
+                                                               error:nil];
+}
+
+NSString *documentsDirectoryPath()
+{
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                NSUserDomainMask,
+                                                YES)
+            firstObject];
 }

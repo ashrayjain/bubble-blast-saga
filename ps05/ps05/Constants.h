@@ -14,6 +14,10 @@ FOUNDATION_EXPORT NSString *const kRedBubbleImageName;
 FOUNDATION_EXPORT NSString *const kOrangeBubbleImageName;
 FOUNDATION_EXPORT NSString *const kGreenBubbleImageName;
 FOUNDATION_EXPORT NSString *const kEraserImageName;
+FOUNDATION_EXPORT NSString *const kIndestructibleBubbleImageName;
+FOUNDATION_EXPORT NSString *const kLightningBubbleImageName;
+FOUNDATION_EXPORT NSString *const kStarBubbleImageName;
+FOUNDATION_EXPORT NSString *const kBombBubbleImageName;
 FOUNDATION_EXPORT NSString *const kBackgroundImageName;
 
 
@@ -30,3 +34,7 @@ FOUNDATION_EXPORT unsigned const kDefaultNumberOfRowsInGameplay;
 FOUNDATION_EXPORT void popUpAlertWithDelay(NSString *title,
                                            NSString *errorMsg,
                                            NSTimeInterval delay);
+
+FOUNDATION_EXPORT NSArray *fileListForLoading();
+FOUNDATION_EXPORT NSString *documentsDirectoryPath();
+

@@ -10,6 +10,7 @@
 #import "LoadViewController.h"
 #import "GameBubbleBasicModel.h"
 #import "Constants.h"
+#import "SaveController.h"
 
 #define RESET_BUTTON_TITLE              @"RESET"
 #define SAVE_BUTTON_TITLE               @"SAVE"
@@ -37,38 +38,26 @@
 
 @implementation DesignerViewController (Extension)
 
-- (IBAction)buttonPressed:(id)sender
-// EFFECTS: appropriate method is called depending on the sender
+@dynamic saveController;
+
+- (IBAction)backButtonPressed:(UIButton *)sender
+// EFFECTS: moves to the previous screen in the application
 {
-    
-    UIButton *button = (UIButton *)sender;
-    if ([[button.titleLabel text]  isEqual: RESET_BUTTON_TITLE]) {
-        [self reset];
-    }
-    else if ([[button.titleLabel text]  isEqual: SAVE_BUTTON_TITLE]) {
-        [self save];
-    }
-    else if ([[button.titleLabel text]  isEqual: LOAD_BUTTON_TITLE]) {
-        [self load];
-    }
-    else if ([[button.titleLabel text]  isEqual: BACK_BUTTON_TITLE]) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)save
-// REQUIRES: game in designer mode
-// EFFECTS: game state (grid) is saved
+- (IBAction)saveButtonPressed:(UIButton *)sender
 {
-    [self popUpSaveDialog];
+    self.saveController = [SaveController saveControllerWithDelegate:self];
+    [self.saveController popUpSaveDialogWithPromptName:self.currentGridName andData:self.bubbleControllers];
 }
 
-- (void)reset
-// MODIFIES: self (game bubbles in the grid)
-// REQUIRES: game in designer mode
-// EFFECTS: current game bubbles in the grid are deleted
+- (void)didChangeNameTo:(NSString *)newName
+{
+    self.currentGridName = newName;
+}
 
+- (IBAction)resetButtonPressed:(UIButton *)sender
 {
     for (int i = 0; i < kDefaultNumberOfRowsInDesignerGrid ; i++) {
         int numberOfBubblesPerRow = kDefaultNumberOfBubblesPerRow;
@@ -80,77 +69,17 @@
     }
 }
 
-- (void)load
-// MODIFIES: self (game bubbles in the grid)
-// REQUIRES: game in designer mode
-// EFFECTS: game level is loaded in the grid
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-    NSString *documentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDir
-                                                                         error:nil];
-    if ([files count] == 0) {
-        popUpAlertWithDelay(ERROR_TITLE, ERROR_MSG_NO_SAVED_FILES_FOUND, ERROR_ALERT_DELAY);
-    }
-    else
-        [self performSegueWithIdentifier:LOAD_TABLE_SEGUE_IDENTIFIER sender: self];
-}
-
-- (void)popUpSaveDialog
-// EFFECTS: popup requesting save information is triggered
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:SAVE_ALERT_TITLE
-                                                    message:SAVE_ALERT_MSG
-                                                   delegate:self
-                                          cancelButtonTitle:CANCEL_BUTTON_LABEL
-                                          otherButtonTitles:SAVE_BUTTON_LABEL, nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    
-    UITextField *textField = [alert textFieldAtIndex:0];
-    textField.returnKeyType = UIReturnKeyDone;
-    textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-    textField.text = self.currentGridName;
-    textField.clearButtonMode = UITextFieldViewModeAlways;
-    
-    [alert show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-// REQUIRES: alertView != nil
-// EFFECTS: handles clicks on an AlertView appropriately
-{
-    if (buttonIndex == 1){
-        NSString *text = [alertView textFieldAtIndex:0].text;
-        if (text == nil || [text isEqualToString:@""]) {
-            popUpAlertWithDelay(ERROR_TITLE, ERROR_MSG_INVALID_NAME, ERROR_ALERT_DELAY);
-        }
-        else {
-            [self saveGridWithName:text];
+    if ([identifier isEqualToString:LOAD_TABLE_SEGUE_IDENTIFIER]) {
+        NSArray *files = fileListForLoading();
+        if (files.count <= 0) {
+            popUpAlertWithDelay(ERROR_TITLE, ERROR_MSG_NO_SAVED_FILES_FOUND, ERROR_ALERT_DELAY);
+            return NO;
         }
     }
+    return YES;
 }
-
-- (void)saveGridWithName:(NSString *)gridName
-// REQUIRES: gridName != nil
-// EFFECTS: saves the current grid in a file named gridName and
-//          gives the user appropriate feedback through an alert
-{
-    NSMutableData *data = [[NSMutableData alloc] init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    [archiver encodeObject:self.bubbleControllers forKey:GRID_DATA_KEY];
-    [archiver finishEncoding];
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    BOOL success = [data writeToFile:[NSString stringWithFormat:@"%@/%@", documentsPath , gridName]
-                          atomically:YES];
-    
-    if (success == YES) {
-        self.currentGridName = gridName;
-        popUpAlertWithDelay(INFO_MSG_SAVE_SUCCESSFUL, nil, INFO_ALERT_DELAY);
-    }
-    else {
-        popUpAlertWithDelay(ERROR_TITLE, ERROR_MSG_SAVE_UNSUCCESSFUL, ERROR_ALERT_DELAY);
-    }
-}
-
 
 - (void)unwindFromLoadView:(UIStoryboardSegue *)segue {
     NSDictionary *data = ((LoadViewController *)segue.sourceViewController).data;

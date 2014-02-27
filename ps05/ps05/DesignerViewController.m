@@ -10,6 +10,7 @@
 #import "GameBubbleBasicModel.h"
 #import "GameplayViewController.h"
 #import "Constants.h"
+#import "SaveController.h"
 
 #define GRID_CIRCLE_BORDER_SIZE                 2.5
 #define GRID_CIRCLE_TAG                         -1
@@ -20,6 +21,7 @@
 @interface DesignerViewController ()
 
 @property (strong, nonatomic) UIView *currentPaletteOption;
+@property (strong, nonatomic) SaveController *saveController;
 
 // utility function
 - (BOOL)isEven:(NSInteger)number;
@@ -36,12 +38,12 @@
     self.bubbleControllers = [NSMutableArray arrayWithCapacity:kDefaultNumberOfRowsInDesignerGrid];
     for (int i = 0; i < kDefaultNumberOfRowsInDesignerGrid; i++) {
         [self.bubbleControllers addObject:[NSMutableArray array]];
-
+        
         int numberOfBubblePerRow = kDefaultNumberOfBubblesPerRow;
         if (![self isEven:i]) {
             numberOfBubblePerRow--;
         }
-    
+        
         for (int j = 0; j < numberOfBubblePerRow; j++) {
             GameBubbleBasicModel *newBubble = [[GameBubbleBasicModel alloc] initWithColor:kEmpty row:i column:j physicsModel:nil delegate:self];
             [self.bubbleControllers[i] addObject:newBubble];
@@ -97,16 +99,16 @@
     cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"bubble"
                                                      forIndexPath:indexPath];
     //[[cell viewWithTag:GRID_CIRCLE_TAG] removeFromSuperview];
-
+    
     // initialize bubble-holding circle
-//    CGRect circleDimensions = CGRectMake(0, 0, kDefaultBubbleDiameter, kDefaultBubbleDiameter);
-//    UIView *circle = [[UIView alloc] initWithFrame:circleDimensions];
-//    circle.layer.cornerRadius   = kDefaultBubbleRadius;
-//    circle.layer.borderWidth    = GRID_CIRCLE_BORDER_SIZE;
-//    circle.layer.borderColor    = [[UIColor blackColor] CGColor];
-//    circle.backgroundColor      = [[UIColor grayColor] colorWithAlphaComponent:GRID_CIRCLE_BACKGROUND_OPACITY];
-//    circle.tag                  = GRID_CIRCLE_TAG;
-//    
+    //    CGRect circleDimensions = CGRectMake(0, 0, kDefaultBubbleDiameter, kDefaultBubbleDiameter);
+    //    UIView *circle = [[UIView alloc] initWithFrame:circleDimensions];
+    //    circle.layer.cornerRadius   = kDefaultBubbleRadius;
+    //    circle.layer.borderWidth    = GRID_CIRCLE_BORDER_SIZE;
+    //    circle.layer.borderColor    = [[UIColor blackColor] CGColor];
+    //    circle.backgroundColor      = [[UIColor grayColor] colorWithAlphaComponent:GRID_CIRCLE_BACKGROUND_OPACITY];
+    //    circle.tag                  = GRID_CIRCLE_TAG;
+    //
     // set cell's view
     GameBubbleModel *bubble = self.bubbleControllers[indexPath.section][indexPath.item];
     ((UIImageView *)[cell viewWithTag:1]).image = [self getImageForColor:bubble.color];
@@ -173,8 +175,8 @@
 //          handles long pressed in the design grid area
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
-    CGPoint pointOfPress = [sender locationInView:sender.view];
-    NSIndexPath *indexPath = [self.bubbleDesignerGrid indexPathForItemAtPoint:pointOfPress];
+        CGPoint pointOfPress = [sender locationInView:sender.view];
+        NSIndexPath *indexPath = [self.bubbleDesignerGrid indexPathForItemAtPoint:pointOfPress];
         GameBubbleBasicModel *bubble = self.bubbleControllers[indexPath.section][indexPath.item];
         bubble.color = kEmpty;
     }
@@ -200,9 +202,9 @@
 {
     if ([segue.identifier isEqual:@"testCurrentGrid"]) {
         ((GameplayViewController *)segue.destinationViewController).loadedGrid = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.bubbleControllers]];;
-
-        NSMutableArray *arr = ((GameplayViewController *)segue.destinationViewController).loadedGrid;
-        ((GameBubbleBasicModel *)arr[0][0]).delegate = nil;
+        
+        //NSMutableArray *arr = ((GameplayViewController *)segue.destinationViewController).loadedGrid;
+        //((GameBubbleBasicModel *)arr[0][0]).delegate = nil;
     }
 }
 
@@ -227,6 +229,18 @@
             break;
         case kGreen:
             filename = kGreenBubbleImageName;
+            break;
+        case kIndestructible:
+            filename = kIndestructibleBubbleImageName;
+            break;
+        case kLightning:
+            filename = kLightningBubbleImageName;
+            break;
+        case kStar:
+            filename = kStarBubbleImageName;
+            break;
+        case kBomb:
+            filename = kBombBubbleImageName;
             break;
         default:
             filename = nil;
