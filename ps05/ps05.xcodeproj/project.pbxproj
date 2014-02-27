@@ -15,6 +15,7 @@
 		0D4FDC1718BC7344008D1EF0 /* bubble-star.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC1018BC7344008D1EF0 /* bubble-star.png */; };
 		0D4FDC1818BC7344008D1EF0 /* cannon-base.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC1118BC7344008D1EF0 /* cannon-base.png */; };
 		0D4FDC1918BC7344008D1EF0 /* cannon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC1218BC7344008D1EF0 /* cannon.png */; };
+		0D64E47D18BF6CBD005B63FC /* GameBubbleStarModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E47C18BF6CBD005B63FC /* GameBubbleStarModel.m */; };
 		0DA05D2418B9DB58008F6E39 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA05D2318B9DB58008F6E39 /* Foundation.framework */; };
 		0DA05D2618B9DB58008F6E39 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA05D2518B9DB58008F6E39 /* CoreGraphics.framework */; };
 		0DA05D2818B9DB58008F6E39 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA05D2718B9DB58008F6E39 /* UIKit.framework */; };
@@ -72,6 +73,8 @@
 		0D4FDC1118BC7344008D1EF0 /* cannon-base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cannon-base.png"; sourceTree = "<group>"; };
 		0D4FDC1218BC7344008D1EF0 /* cannon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cannon.png; sourceTree = "<group>"; };
 		0D63B65318BB4704008A81E2 /* LoadViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadViewControllerDelegate.h; sourceTree = "<group>"; };
+		0D64E47B18BF6CBD005B63FC /* GameBubbleStarModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleStarModel.h; sourceTree = "<group>"; };
+		0D64E47C18BF6CBD005B63FC /* GameBubbleStarModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleStarModel.m; sourceTree = "<group>"; };
 		0DA05D2018B9DB58008F6E39 /* ps05.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ps05.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DA05D2318B9DB58008F6E39 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0DA05D2518B9DB58008F6E39 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -93,7 +96,7 @@
 		0DA05D5B18B9DC2D008F6E39 /* bubble-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-green.png"; sourceTree = "<group>"; };
 		0DA05D5C18B9DC2D008F6E39 /* bubble-orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-orange.png"; sourceTree = "<group>"; };
 		0DA05D5D18B9DC2D008F6E39 /* bubble-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-red.png"; sourceTree = "<group>"; };
-		0DA05D6018B9DC2D008F6E39 /* GameBubbleModelDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleModelDelegate.h; sourceTree = "<group>"; };
+		0DA05D6018B9DC2D008F6E39 /* GameBubbleBasicModelDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleBasicModelDelegate.h; sourceTree = "<group>"; };
 		0DA05D6718B9DC3D008F6E39 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		0DA05D6818B9DC3D008F6E39 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		0DA05D6B18B9DC3D008F6E39 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -216,7 +219,9 @@
 				0DA05D8A18B9FD4C008F6E39 /* GameBubbleBasicModel.m */,
 				0DA05D9A18B9FFDF008F6E39 /* GameBubbleModel.h */,
 				0DA05D8818B9FD4C008F6E39 /* GameBubbleModel.m */,
-				0DA05D6018B9DC2D008F6E39 /* GameBubbleModelDelegate.h */,
+				0DA05D6018B9DC2D008F6E39 /* GameBubbleBasicModelDelegate.h */,
+				0D64E47B18BF6CBD005B63FC /* GameBubbleStarModel.h */,
+				0D64E47C18BF6CBD005B63FC /* GameBubbleStarModel.m */,
 				0DCA215318BE420D006D9DA7 /* GameplayViewController+PersistenceManagement.h */,
 				0DCA215418BE420D006D9DA7 /* GameplayViewController+PersistenceManagement.m */,
 				0DA05D7618B9DC3D008F6E39 /* GameplayViewController.h */,
@@ -228,8 +233,6 @@
 				0DA05D9718B9FF8D008F6E39 /* Main.storyboard */,
 				0D02484E18BA5A1D00D824CB /* MainScreenViewController.h */,
 				0D02484F18BA5A1D00D824CB /* MainScreenViewController.m */,
-				0DCA215618BE795E006D9DA7 /* SaveController.h */,
-				0DCA215718BE795E006D9DA7 /* SaveController.m */,
 				0DA05D6D18B9DC3D008F6E39 /* PhysicsEngine.h */,
 				0DA05D6E18B9DC3D008F6E39 /* PhysicsEngine.m */,
 				0DA05D6F18B9DC3D008F6E39 /* PhysicsEngineObject.h */,
@@ -237,10 +240,12 @@
 				0DA05D7118B9DC3D008F6E39 /* PhysicsEngineObjectDelegate.h */,
 				0DA05D7218B9DC3D008F6E39 /* ProjectileLaunchPath.h */,
 				0DA05D7318B9DC3D008F6E39 /* ProjectileLaunchPath.m */,
+				0DCA215618BE795E006D9DA7 /* SaveController.h */,
+				0DCA215718BE795E006D9DA7 /* SaveController.m */,
+				0DCA215918BE7C3C006D9DA7 /* SaveControllerDelegate.h */,
 				0DA05D2A18B9DB58008F6E39 /* Supporting Files */,
 				0DA05D7418B9DC3D008F6E39 /* TwoDVector.h */,
 				0DA05D7518B9DC3D008F6E39 /* TwoDVector.m */,
-				0DCA215918BE7C3C006D9DA7 /* SaveControllerDelegate.h */,
 			);
 			path = ps05;
 			sourceTree = "<group>";
@@ -406,6 +411,7 @@
 				0DCA215818BE795E006D9DA7 /* SaveController.m in Sources */,
 				0D02485018BA5A1D00D824CB /* MainScreenViewController.m in Sources */,
 				0DA05D9218B9FD4C008F6E39 /* GameBubbleModel.m in Sources */,
+				0D64E47D18BF6CBD005B63FC /* GameBubbleStarModel.m in Sources */,
 				0DA05D7B18B9DC3D008F6E39 /* PhysicsEngine.m in Sources */,
 				0DA05D3018B9DB58008F6E39 /* main.m in Sources */,
 				0DA05D9618B9FD4C008F6E39 /* LoadViewController.m in Sources */,

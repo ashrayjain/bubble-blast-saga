@@ -395,40 +395,40 @@
                                             <outletCollection property="gestureRecognizers" destination="pm7-Gd-H8S" appends="YES" id="XnQ-sj-kbU"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-lightning.png" id="Zng-ey-h95">
-                                        <rect key="frame" x="350" y="11" width="58" height="57"/>
+                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-lightning.png" id="Zng-ey-h95">
+                                        <rect key="frame" x="558" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="fFG-1e-Oem" appends="YES" id="xa4-cR-avu"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="6" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-star.png" id="3q6-YQ-cmu">
-                                        <rect key="frame" x="416" y="11" width="58" height="57"/>
+                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-star.png" id="3q6-YQ-cmu">
+                                        <rect key="frame" x="624" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="7g0-PF-IwZ" appends="YES" id="RxV-YK-NYp"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="7" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-bomb.png" id="10l-MH-bSy">
-                                        <rect key="frame" x="482" y="11" width="58" height="57"/>
+                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-bomb.png" id="10l-MH-bSy">
+                                        <rect key="frame" x="690" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="cys-R8-Yhw" appends="YES" id="cNO-hd-wIl"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="4" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-indestructible.png" id="p7R-9f-YxS">
-                                        <rect key="frame" x="284" y="11" width="58" height="57"/>
+                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-indestructible.png" id="p7R-9f-YxS">
+                                        <rect key="frame" x="492" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="Gnr-mN-kEK" appends="YES" id="x0h-iX-VTW"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="8" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eraser-1.png" id="L24-0K-upI">
-                                        <rect key="frame" x="548" y="8" width="69" height="63"/>
+                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="4" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eraser-1.png" id="L24-0K-upI">
+                                        <rect key="frame" x="284" y="8" width="69" height="63"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>

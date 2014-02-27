@@ -4,7 +4,7 @@
 
 #define BUBBLE_ROW_KEY      @"row"
 #define BUBBLE_COLUMN_KEY   @"column"
-#define BUBBLE_COLOR_KEY    @"color"
+#define BUBBLE_TYPE_KEY     @"type"
 
 @interface GameBubbleModel ()
 
@@ -12,11 +12,9 @@
 
 @implementation GameBubbleModel
 
-- (id)initWithColor:(GameBubbleColor)color
-                row:(int)row
-             column:(int)column
-       physicsModel:(CircularObjectModel *)model
-           delegate:(id<GameBubbleModelDelegate>)delegate
+- (id)initWithRow:(int)row
+           column:(int)column
+     physicsModel:(CircularObjectModel *)model
 // MODIFIES: self
 // EFFECTS: initialises and retuns an instance
 {
@@ -25,16 +23,8 @@
         self.row = row;
         self.column = column;
         self.physicsModel = model;
-        self.delegate = delegate;
-        _color = color;
     }
     return self;
-}
-
-- (void)setColor:(GameBubbleColor)color
-{
-    _color = color;
-    [self.delegate didBubbleColorChange:self];
 }
 
 - (BOOL)isEqual:(id)object
@@ -43,7 +33,6 @@
 {
     GameBubbleModel * obj = object;
     return obj.type == self.type &&
-        obj.color == self.color &&
         obj.row == self.row &&
         obj.column == self.column;
 }
@@ -55,9 +44,9 @@
 {
     self = [super init];
     if (self) {
-        self.color    = [aDecoder decodeIntForKey:BUBBLE_COLOR_KEY];
         self.row            = [aDecoder decodeIntForKey:BUBBLE_ROW_KEY];
         self.column         = [aDecoder decodeIntForKey:BUBBLE_COLUMN_KEY];
+        self.type     = [aDecoder decodeIntForKey:BUBBLE_TYPE_KEY];
     }
     return self;
 }
@@ -68,7 +57,7 @@
 {
     [aCoder encodeInt:self.row forKey:BUBBLE_ROW_KEY];
     [aCoder encodeInt:self.column forKey:BUBBLE_COLUMN_KEY];
-    [aCoder encodeInt:self.color forKey:BUBBLE_COLOR_KEY];
+    [aCoder encodeInt:self.type forKey:BUBBLE_TYPE_KEY];
 }
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GameBubbleModelDelegate.h"
+#import "GameBubbleBasicModelDelegate.h"
 
 /*
  This is the main Controller of the Application and has the main visual elements as its
@@ -16,7 +16,7 @@
  It handles all the user interactions on these objects.
 */
 
-@interface DesignerViewController : UIViewController <GameBubbleModelDelegate>
+@interface DesignerViewController : UIViewController <GameBubbleBasicModelDelegate>
 
 // GameViewController View
 @property (strong, nonatomic) IBOutlet UIView *gameArea;

@@ -13,11 +13,11 @@
 
 #import <UIKit/UIKit.h>
 #import "PhysicsEngineObjectDelegate.h"
-#import "GameBubbleModelDelegate.h"
+#import "GameBubbleBasicModelDelegate.h"
 
 @class GameBubbleBasicModel;
 @class ProjectileLaunchPath;
-@interface GameplayViewController : UIViewController <PhysicsEngineObjectDelegate, GameBubbleModelDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate>
+@interface GameplayViewController : UIViewController <PhysicsEngineObjectDelegate, GameBubbleBasicModelDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate>
 
 // Views
 @property (strong, nonatomic) IBOutlet UIView *gameArea;

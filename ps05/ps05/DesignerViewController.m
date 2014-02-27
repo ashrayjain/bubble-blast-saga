@@ -8,6 +8,7 @@
 
 #import "DesignerViewController.h"
 #import "GameBubbleBasicModel.h"
+#import "GameBubbleStarModel.h"
 #import "GameplayViewController.h"
 #import "Constants.h"
 #import "SaveController.h"
@@ -111,8 +112,7 @@
     //
     // set cell's view
     GameBubbleModel *bubble = self.bubbleControllers[indexPath.section][indexPath.item];
-    ((UIImageView *)[cell viewWithTag:1]).image = [self getImageForColor:bubble.color];
-    
+    ((UIImageView *)[cell viewWithTag:1]).image = [self getViewForBubble:bubble];
     //[cell.contentView addSubview:circle];
     return cell;
 }
@@ -124,8 +124,11 @@
 
 {
     GameBubbleModel *bubble = self.bubbleControllers[indexPath.section][indexPath.item];
-    if (bubble.color != kEmpty) {
-        bubble.color = (bubble.color+1)%kEmpty;
+    if (bubble.type == kGameBubbleBasic) {
+        GameBubbleBasicModel * basicBubble = (GameBubbleBasicModel *)bubble;
+        if (basicBubble.color != kEmpty) {
+            basicBubble.color = (basicBubble.color+1)%kEmpty;
+        }
     }
 }
 
@@ -191,7 +194,7 @@
             CGPoint pointOfPress = [sender locationOfTouch:i inView:sender.view];
             NSIndexPath *indexPath = [self.bubbleDesignerGrid indexPathForItemAtPoint:pointOfPress];
             if (indexPath != nil) {
-                GameBubbleModel * bubble = self.bubbleControllers[indexPath.section][indexPath.item];
+                GameBubbleBasicModel * bubble = self.bubbleControllers[indexPath.section][indexPath.item];
                 bubble.color = self.currentPaletteOption.tag;
             }
         }
@@ -214,45 +217,49 @@
     return number%2==0;
 }
 
-- (UIImage *)getImageForColor:(GameBubbleColor)color
+- (UIImage *)getViewForBubble:(GameBubbleModel *)bubble
 {
-    NSString *filename = [NSString string];
-    switch (color) {
-        case kBlue:
-            filename = kBlueBubbleImageName;
-            break;
-        case kRed:
-            filename = kRedBubbleImageName;
-            break;
-        case kOrange:
-            filename = kOrangeBubbleImageName;
-            break;
-        case kGreen:
-            filename = kGreenBubbleImageName;
-            break;
-        case kIndestructible:
-            filename = kIndestructibleBubbleImageName;
-            break;
-        case kLightning:
-            filename = kLightningBubbleImageName;
-            break;
-        case kStar:
-            filename = kStarBubbleImageName;
-            break;
-        case kBomb:
-            filename = kBombBubbleImageName;
-            break;
-        default:
-            filename = nil;
-            break;
+    if (bubble.type == kGameBubbleBasic) {
+        NSString *filename = [NSString string];
+        GameBubbleColor color = ((GameBubbleBasicModel *)bubble).color;
+        switch (color) {
+            case kBlue:
+                filename = kBlueBubbleImageName;
+                break;
+            case kRed:
+                filename = kRedBubbleImageName;
+                break;
+            case kOrange:
+                filename = kOrangeBubbleImageName;
+                break;
+            case kGreen:
+                filename = kGreenBubbleImageName;
+                break;
+            default:
+                filename = nil;
+                break;
+        }
+        if (filename != nil) {
+            return [UIImage imageNamed:filename];
+        }
     }
-    if (filename != nil) {
-        return [UIImage imageNamed:filename];
+    else if (bubble.type == kGameBubbleStar) {
+        return [UIImage imageNamed:kStarBubbleImageName];
+    }
+    else if (bubble.type == kGameBubbleIndestructible) {
+        return [UIImage imageNamed:kIndestructibleBubbleImageName];
+    }
+    else if (bubble.type == kGameBubbleLightning) {
+        return [UIImage imageNamed:kLightningBubbleImageName];
+    }
+    else if (bubble.type == kGameBubbleBomb) {
+        return [UIImage imageNamed:kBombBubbleImageName];
     }
     return nil;
 }
 
-- (void)didBubbleColorChange:(GameBubbleModel *)sender
+
+- (void)didBubbleColorChange:(GameBubbleBasicModel *)sender
 // MODIFIES: self.bubbleGrid
 // EFFECTS: updates the view related to the sender model (BubbleModelDelegate)
 {
@@ -263,7 +270,7 @@
         if (row.count > item) {
             NSIndexPath *path = [NSIndexPath indexPathForItem:item inSection:section];
             UICollectionViewCell *cell = [self.bubbleDesignerGrid cellForItemAtIndexPath:path];
-            ((UIImageView *)[cell viewWithTag:1]).image = [self getImageForColor:sender.color];
+            ((UIImageView *)[cell viewWithTag:1]).image = [self getViewForBubble:sender];
         }
     }
 }

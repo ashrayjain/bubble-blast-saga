@@ -8,7 +8,7 @@
 
 #import "GameBubbleBasicModel.h"
 
-#define BUBBLE_TYPE_KEY     @"type"
+#define BUBBLE_COLOR_KEY    @"color"
 
 @interface GameBubbleBasicModel ()
 
@@ -20,17 +20,23 @@
                 row:(int)row
              column:(int)column
        physicsModel:(CircularObjectModel *)model
-           delegate:(id<GameBubbleModelDelegate>)delegate;
+           delegate:(id<GameBubbleBasicModelDelegate>)delegate;
 {
-    self = [super initWithColor:color
-                            row:row
-                         column:column
-                   physicsModel:model
-                       delegate:delegate];
+    self = [super initWithRow:row
+                       column:column
+                 physicsModel:model];
     if (self) {
         self.type = kGameBubbleBasic;
+        self.delegate = delegate;
+        _color = color;
     }
     return self;
+}
+
+- (void)setColor:(GameBubbleColor)color
+{
+    _color = color;
+    [self.delegate didBubbleColorChange:self];
 }
 
  - (id)initWithCoder:(NSCoder *)aDecoder
@@ -40,7 +46,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.type     = [aDecoder decodeIntForKey:BUBBLE_TYPE_KEY];
+        self.color    = [aDecoder decodeIntForKey:BUBBLE_COLOR_KEY];
     }
     return self;
 }
@@ -50,7 +56,7 @@
 //          Encodes values in self to aCoder
 {
     [super encodeWithCoder:aCoder];
-    [aCoder encodeInt:self.type forKey:BUBBLE_TYPE_KEY];
+    [aCoder encodeInt:self.color forKey:BUBBLE_COLOR_KEY];
 }
 
 @end

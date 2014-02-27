@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 // BubbleModel Protocol
-@protocol GameBubbleModelDelegate <NSObject>
+@protocol GameBubbleBasicModelDelegate <NSObject>
 
 - (void)didBubbleColorChange:(id)sender;
 
