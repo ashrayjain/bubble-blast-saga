@@ -15,7 +15,12 @@
 		0D4FDC1718BC7344008D1EF0 /* bubble-star.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC1018BC7344008D1EF0 /* bubble-star.png */; };
 		0D4FDC1818BC7344008D1EF0 /* cannon-base.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC1118BC7344008D1EF0 /* cannon-base.png */; };
 		0D4FDC1918BC7344008D1EF0 /* cannon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC1218BC7344008D1EF0 /* cannon.png */; };
-		0D64E47D18BF6CBD005B63FC /* GameBubbleStarModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E47C18BF6CBD005B63FC /* GameBubbleStarModel.m */; };
+		0D64E48818BF74EE005B63FC /* GameBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E48518BF74ED005B63FC /* GameBubble.m */; };
+		0D64E48918BF74EE005B63FC /* GameBubbleBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E48718BF74ED005B63FC /* GameBubbleBasic.m */; };
+		0D64E48E18BFA3A9005B63FC /* GameBubbleLightning.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E48D18BFA3A9005B63FC /* GameBubbleLightning.m */; };
+		0D64E49118BFA56C005B63FC /* GameBubbleBomb.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E49018BFA56C005B63FC /* GameBubbleBomb.m */; };
+		0D64E49418BFA57E005B63FC /* GameBubbleIndestructible.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E49318BFA57E005B63FC /* GameBubbleIndestructible.m */; };
+		0D64E49718BFA58D005B63FC /* GameBubbleStar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D64E49618BFA58D005B63FC /* GameBubbleStar.m */; };
 		0DA05D2418B9DB58008F6E39 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA05D2318B9DB58008F6E39 /* Foundation.framework */; };
 		0DA05D2618B9DB58008F6E39 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA05D2518B9DB58008F6E39 /* CoreGraphics.framework */; };
 		0DA05D2818B9DB58008F6E39 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA05D2718B9DB58008F6E39 /* UIKit.framework */; };
@@ -73,8 +78,18 @@
 		0D4FDC1118BC7344008D1EF0 /* cannon-base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cannon-base.png"; sourceTree = "<group>"; };
 		0D4FDC1218BC7344008D1EF0 /* cannon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cannon.png; sourceTree = "<group>"; };
 		0D63B65318BB4704008A81E2 /* LoadViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadViewControllerDelegate.h; sourceTree = "<group>"; };
-		0D64E47B18BF6CBD005B63FC /* GameBubbleStarModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleStarModel.h; sourceTree = "<group>"; };
-		0D64E47C18BF6CBD005B63FC /* GameBubbleStarModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleStarModel.m; sourceTree = "<group>"; };
+		0D64E48418BF7482005B63FC /* GameBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubble.h; sourceTree = "<group>"; };
+		0D64E48518BF74ED005B63FC /* GameBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubble.m; sourceTree = "<group>"; };
+		0D64E48618BF74ED005B63FC /* GameBubbleBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleBasic.h; sourceTree = "<group>"; };
+		0D64E48718BF74ED005B63FC /* GameBubbleBasic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleBasic.m; sourceTree = "<group>"; };
+		0D64E48C18BFA3A9005B63FC /* GameBubbleLightning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleLightning.h; sourceTree = "<group>"; };
+		0D64E48D18BFA3A9005B63FC /* GameBubbleLightning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleLightning.m; sourceTree = "<group>"; };
+		0D64E48F18BFA56C005B63FC /* GameBubbleBomb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleBomb.h; sourceTree = "<group>"; };
+		0D64E49018BFA56C005B63FC /* GameBubbleBomb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleBomb.m; sourceTree = "<group>"; };
+		0D64E49218BFA57E005B63FC /* GameBubbleIndestructible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleIndestructible.h; sourceTree = "<group>"; };
+		0D64E49318BFA57E005B63FC /* GameBubbleIndestructible.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleIndestructible.m; sourceTree = "<group>"; };
+		0D64E49518BFA58D005B63FC /* GameBubbleStar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleStar.h; sourceTree = "<group>"; };
+		0D64E49618BFA58D005B63FC /* GameBubbleStar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleStar.m; sourceTree = "<group>"; };
 		0DA05D2018B9DB58008F6E39 /* ps05.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ps05.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DA05D2318B9DB58008F6E39 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0DA05D2518B9DB58008F6E39 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -215,13 +230,23 @@
 				0DA05D8E18B9FD4C008F6E39 /* DesignerViewControllerExtension.m */,
 				0DA05D6918B9DC3D008F6E39 /* en.lproj */,
 				0DA05D8718B9FD4C008F6E39 /* eraser-1.png */,
+				0D64E48418BF7482005B63FC /* GameBubble.h */,
+				0D64E48518BF74ED005B63FC /* GameBubble.m */,
+				0D64E48618BF74ED005B63FC /* GameBubbleBasic.h */,
+				0D64E48718BF74ED005B63FC /* GameBubbleBasic.m */,
 				0DA05D8918B9FD4C008F6E39 /* GameBubbleBasicModel.h */,
 				0DA05D8A18B9FD4C008F6E39 /* GameBubbleBasicModel.m */,
+				0DA05D6018B9DC2D008F6E39 /* GameBubbleBasicModelDelegate.h */,
+				0D64E48F18BFA56C005B63FC /* GameBubbleBomb.h */,
+				0D64E49018BFA56C005B63FC /* GameBubbleBomb.m */,
+				0D64E49218BFA57E005B63FC /* GameBubbleIndestructible.h */,
+				0D64E49318BFA57E005B63FC /* GameBubbleIndestructible.m */,
+				0D64E48C18BFA3A9005B63FC /* GameBubbleLightning.h */,
+				0D64E48D18BFA3A9005B63FC /* GameBubbleLightning.m */,
 				0DA05D9A18B9FFDF008F6E39 /* GameBubbleModel.h */,
 				0DA05D8818B9FD4C008F6E39 /* GameBubbleModel.m */,
-				0DA05D6018B9DC2D008F6E39 /* GameBubbleBasicModelDelegate.h */,
-				0D64E47B18BF6CBD005B63FC /* GameBubbleStarModel.h */,
-				0D64E47C18BF6CBD005B63FC /* GameBubbleStarModel.m */,
+				0D64E49518BFA58D005B63FC /* GameBubbleStar.h */,
+				0D64E49618BFA58D005B63FC /* GameBubbleStar.m */,
 				0DCA215318BE420D006D9DA7 /* GameplayViewController+PersistenceManagement.h */,
 				0DCA215418BE420D006D9DA7 /* GameplayViewController+PersistenceManagement.m */,
 				0DA05D7618B9DC3D008F6E39 /* GameplayViewController.h */,
@@ -401,7 +426,9 @@
 				0DA05D9518B9FD4C008F6E39 /* DesignerViewControllerExtension.m in Sources */,
 				0DA05D9318B9FD4C008F6E39 /* GameBubbleBasicModel.m in Sources */,
 				0DA05D7C18B9DC3D008F6E39 /* PhysicsEngineObject.m in Sources */,
+				0D64E49718BFA58D005B63FC /* GameBubbleStar.m in Sources */,
 				0DA05D7818B9DC3D008F6E39 /* Constants.m in Sources */,
+				0D64E48918BF74EE005B63FC /* GameBubbleBasic.m in Sources */,
 				0DA05D7E18B9DC3D008F6E39 /* TwoDVector.m in Sources */,
 				0DCA215518BE420D006D9DA7 /* GameplayViewController+PersistenceManagement.m in Sources */,
 				0DA05D7D18B9DC3D008F6E39 /* ProjectileLaunchPath.m in Sources */,
@@ -411,11 +438,14 @@
 				0DCA215818BE795E006D9DA7 /* SaveController.m in Sources */,
 				0D02485018BA5A1D00D824CB /* MainScreenViewController.m in Sources */,
 				0DA05D9218B9FD4C008F6E39 /* GameBubbleModel.m in Sources */,
-				0D64E47D18BF6CBD005B63FC /* GameBubbleStarModel.m in Sources */,
+				0D64E49118BFA56C005B63FC /* GameBubbleBomb.m in Sources */,
 				0DA05D7B18B9DC3D008F6E39 /* PhysicsEngine.m in Sources */,
 				0DA05D3018B9DB58008F6E39 /* main.m in Sources */,
+				0D64E48E18BFA3A9005B63FC /* GameBubbleLightning.m in Sources */,
 				0DA05D9618B9FD4C008F6E39 /* LoadViewController.m in Sources */,
 				0DA05D5818B9DC18008F6E39 /* CircularObjectModel.m in Sources */,
+				0D64E49418BFA57E005B63FC /* GameBubbleIndestructible.m in Sources */,
+				0D64E48818BF74EE005B63FC /* GameBubble.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

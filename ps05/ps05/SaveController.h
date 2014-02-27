@@ -16,6 +16,6 @@
 + (id)saveControllerWithDelegate:(id<SaveControllerDelegate>)delegate;
 
 - initWithDelegate:(id<SaveControllerDelegate>)delegate;
-- (void)popUpSaveDialogWithPromptName:(NSString *)name andData:(id)data;
+- (void)popUpSaveDialogWithPromptName:(NSString *)name data:(id)data image:(UIImage *)image;
 
 @end

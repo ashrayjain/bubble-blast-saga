@@ -24,13 +24,6 @@
     
     [[NSFileManager defaultManager] changeCurrentDirectoryPath:documentsDirectoryPath()];
     self.fileList = [fileListForLoading() mutableCopy];
-
-    UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 70)];
-    header.font = [header.font fontWithSize:40];
-    header.textAlignment = NSTextAlignmentCenter;
-    header.text = @"Select a file to load";
-    header.backgroundColor = [UIColor lightGrayColor];
-    self.tableView.tableHeaderView = header;
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,7 +34,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *fileName = [self.fileList objectAtIndex:[indexPath row]];
+    NSString *fileName = [self.fileList objectAtIndex:indexPath.row/2];
     NSData *data = [[NSFileManager defaultManager] contentsAtPath:fileName];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     
@@ -54,7 +47,16 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.fileList count];
+    return [self.fileList count]*2;
+}
+
+- (UIImage *) imageForFileName:(NSString *)file
+{
+    NSData *data = [[NSFileManager defaultManager] contentsAtPath:file];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    UIImage *image = [UIImage imageWithData:[unarchiver decodeObjectForKey:@"image"]];
+    [unarchiver finishDecoding];
+    return image;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -63,21 +65,42 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
-    cell.textLabel.text = [self.fileList objectAtIndex:[indexPath row]];
-    cell.textLabel.font = [cell.textLabel.font fontWithSize:30];
-    //cell.textLabel.textAlignment = NSTextAlignmentCenter;
-    cell.imageView.image = [UIImage imageNamed:@"bubble-blue.png"];
-    
+    if (indexPath.row %2 != 0) {
+        
+        
+        NSString *fileName = [self.fileList objectAtIndex:indexPath.row/2];
+        cell.textLabel.text = fileName;
+        cell.textLabel.font = [cell.textLabel.font fontWithSize:40];
+        //cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.imageView.image = [self imageForFileName:fileName];
+    }
+    else {
+        cell.userInteractionEnabled = NO;
+        cell.backgroundColor = [UIColor clearColor];
+    }
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row%2 != 0) {
+        return 100;
+    }
+    else {
+        return 10;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self removeFileAtIndex:[indexPath row]];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    if (indexPath.row%2 != 0 && editingStyle == UITableViewCellEditingStyleDelete) {
+        [self removeFileAtIndex:indexPath.row/2];
+        [tableView deleteRowsAtIndexPaths:@[indexPath, [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+
     }
 }
+
 
 - (void)removeFileAtIndex:(NSUInteger)index
 {

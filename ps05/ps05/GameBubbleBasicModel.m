@@ -28,7 +28,7 @@
     if (self) {
         self.type = kGameBubbleBasic;
         self.delegate = delegate;
-        _color = color;
+        self.color = color;
     }
     return self;
 }

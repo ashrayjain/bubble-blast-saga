@@ -8,7 +8,7 @@
 
 #import "DesignerViewControllerExtension.h"
 #import "LoadViewController.h"
-#import "GameBubbleBasicModel.h"
+#import "GameBubble.h"
 #import "Constants.h"
 #import "SaveController.h"
 
@@ -48,8 +48,26 @@
 
 - (IBAction)saveButtonPressed:(UIButton *)sender
 {
+    CGRect imageBounds = self.gameArea.bounds;
+    imageBounds.size.height -= 190;
+    UIGraphicsBeginImageContextWithOptions(imageBounds.size, YES, [UIScreen mainScreen].scale);
+    
+    [self.gameArea drawViewHierarchyInRect:self.gameArea.bounds afterScreenUpdates:NO];
+    UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
     self.saveController = [SaveController saveControllerWithDelegate:self];
-    [self.saveController popUpSaveDialogWithPromptName:self.currentGridName andData:self.bubbleControllers];
+
+//    NSMutableArray *models = [NSMutableArray array];
+//    for (int i = 0; i < kDefaultNumberOfRowsInDesignerGrid ; i++) {
+//        NSMutableArray *row = self.bubbleControllers[i];
+//        [models addObject:[NSMutableArray array]];
+//        for (int j = 0; j < row.count; j++) {
+//            [models[i] addObject:((GameBubble *)self.bubbleControllers[i][j]).model];
+//        }
+//    }
+
+    [self.saveController popUpSaveDialogWithPromptName:self.currentGridName data:self.bubbleControllers image:screenShot];
 }
 
 - (void)didChangeNameTo:(NSString *)newName
@@ -60,12 +78,16 @@
 - (IBAction)resetButtonPressed:(UIButton *)sender
 {
     for (int i = 0; i < kDefaultNumberOfRowsInDesignerGrid ; i++) {
-        int numberOfBubblesPerRow = kDefaultNumberOfBubblesPerRow;
-        if (i%2 != 0) {
-            numberOfBubblesPerRow--;
+        NSMutableArray *row = self.bubbleControllers[i];
+        for (int j = 0; j < row.count; j++) {
+            [((GameBubble *)row[j]).view removeFromSuperview];
+            
+            GameBubble *defaultBubble = [[GameBubble alloc] initWithRow:i
+                                                                 column:j
+                                                           physicsModel:nil];
+            row[j] = defaultBubble;
+            [self.gameArea addSubview:defaultBubble.view];
         }
-        for (int j = 0; j < numberOfBubblesPerRow; j++)
-            ((GameBubbleBasicModel *)self.bubbleControllers[i][j]).color = kEmpty;
     }
 }
 
@@ -92,15 +114,19 @@
 
 - (void)reloadBubbleControllersWithNewData:(id)data
 {
-    self.bubbleControllers = data;
+//    NSMutableArray *newData = data;
     for (int i = 0; i < self.bubbleControllers.count; i++) {
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0; j < row.count; j++) {
-            GameBubbleBasicModel *bubble = row[j];
-            bubble.delegate = self;
+            [((GameBubble *)self.bubbleControllers[i][j]).view removeFromSuperview];
+            self.bubbleControllers[i][j] = data[i][j];
+//            GameBubble *newBubble = newData[i][j];
+            [self.gameArea addSubview:((GameBubble *)data[i][j]).view];
+//            NSLog(@"%d, %d\n", newBubble.model.row, newBubble.model.column);
+//            NSLog(@"%f, %f\n", newBubble.view.frame.origin.x, newBubble.view.frame.origin.y);
         }
     }
-    [self.bubbleDesignerGrid reloadData];
+    //[self.bubbleDesignerGrid reloadData];
 }
 
 @end

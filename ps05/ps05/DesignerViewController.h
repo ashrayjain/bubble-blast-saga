@@ -16,12 +16,12 @@
  It handles all the user interactions on these objects.
 */
 
-@interface DesignerViewController : UIViewController <GameBubbleBasicModelDelegate>
+@interface DesignerViewController : UIViewController
 
 // GameViewController View
 @property (strong, nonatomic) IBOutlet UIView *gameArea;
 @property (strong, nonatomic) IBOutlet UIView *palette;
-@property (strong, nonatomic) IBOutlet UICollectionView *bubbleDesignerGrid;
+//@property (strong, nonatomic) IBOutlet UICollectionView *bubbleDesignerGrid;
 
 // GameViewController Model
 @property (strong, nonatomic) NSMutableArray *bubbleControllers;
@@ -30,10 +30,6 @@
 - (IBAction)paletteTapHandler:(UITapGestureRecognizer *)sender;
 // EFFECTS: implements the UITapGestureRecognizer Delegate and
 //          handles taps in the palette area
-
-- (IBAction)longPressHandler:(UILongPressGestureRecognizer *)sender;
-// EFFECTS: implements the UILongPressGestureRecognizer Delegate and
-//          handles long pressed in the design grid area
 
 - (IBAction)panHandler:(UIPanGestureRecognizer *)sender;
 // EFFECTS: implements the UIPanGestureRecognizer Delegate and

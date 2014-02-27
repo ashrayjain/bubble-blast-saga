@@ -44,8 +44,8 @@
 {
     self = [super init];
     if (self) {
-        self.row            = [aDecoder decodeIntForKey:BUBBLE_ROW_KEY];
-        self.column         = [aDecoder decodeIntForKey:BUBBLE_COLUMN_KEY];
+        self.row      = [aDecoder decodeIntForKey:BUBBLE_ROW_KEY];
+        self.column   = [aDecoder decodeIntForKey:BUBBLE_COLUMN_KEY];
         self.type     = [aDecoder decodeIntForKey:BUBBLE_TYPE_KEY];
     }
     return self;

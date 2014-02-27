@@ -300,17 +300,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="80" sectionHeaderHeight="22" sectionFooterHeight="22" id="RFi-cP-Qqg">
-                                <rect key="frame" x="0.0" y="0.0" width="540" height="552"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" id="RFi-cP-Qqg">
+                                <rect key="frame" x="0.0" y="82" width="540" height="473"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.93392042022430399" green="1" blue="0.57586032364293782" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <view key="tableFooterView" hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" id="ZKg-dQ-loH">
+                                    <rect key="frame" x="0.0" y="122" width="540" height="0.0"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="tableCell" rowHeight="80" id="alq-ve-Chp">
-                                        <rect key="frame" x="0.0" y="22" width="540" height="80"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="tableCell" rowHeight="100" id="alq-ve-Chp">
+                                        <rect key="frame" x="0.0" y="22" width="540" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="alq-ve-Chp" id="1AB-xX-nXa">
-                                            <rect key="frame" x="0.0" y="0.0" width="540" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -320,11 +326,11 @@
                                     <outlet property="delegate" destination="wil-74-Gwx" id="fQY-hN-JnP"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ckC-7g-Zs6">
-                                <rect key="frame" x="0.0" y="552" width="540" height="68"/>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ckC-7g-Zs6">
+                                <rect key="frame" x="0.0" y="553" width="540" height="67"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                <color key="backgroundColor" red="0.94117653369999998" green="0.1215686351" blue="0.1411764771" alpha="1" colorSpace="deviceRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                 <state key="normal" title="Cancel">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -333,6 +339,14 @@
                                     <segue destination="5eG-gJ-tUN" kind="unwind" unwindAction="unwindFromLoadView:" id="hgZ-Ho-tng"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Existing Saved Files" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eBO-n6-A1B">
+                                <rect key="frame" x="0.0" y="0.0" width="540" height="84"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="45"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -395,7 +409,7 @@
                                             <outletCollection property="gestureRecognizers" destination="pm7-Gd-H8S" appends="YES" id="XnQ-sj-kbU"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-lightning.png" id="Zng-ey-h95">
+                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="6" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-lightning.png" id="Zng-ey-h95">
                                         <rect key="frame" x="558" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
@@ -403,7 +417,7 @@
                                             <outletCollection property="gestureRecognizers" destination="fFG-1e-Oem" appends="YES" id="xa4-cR-avu"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-star.png" id="3q6-YQ-cmu">
+                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="7" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-star.png" id="3q6-YQ-cmu">
                                         <rect key="frame" x="624" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
@@ -411,7 +425,7 @@
                                             <outletCollection property="gestureRecognizers" destination="7g0-PF-IwZ" appends="YES" id="RxV-YK-NYp"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-bomb.png" id="10l-MH-bSy">
+                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="8" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-bomb.png" id="10l-MH-bSy">
                                         <rect key="frame" x="690" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
@@ -419,7 +433,7 @@
                                             <outletCollection property="gestureRecognizers" destination="cys-R8-Yhw" appends="YES" id="cNO-hd-wIl"/>
                                         </connections>
                                     </imageView>
-                                    <imageView opaque="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-indestructible.png" id="p7R-9f-YxS">
+                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-indestructible.png" id="p7R-9f-YxS">
                                         <rect key="frame" x="492" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
@@ -503,49 +517,16 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
                             </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" bouncesZoom="NO" dataMode="prototypes" id="KIO-Pg-63B">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="904"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="vJ5-Wl-d5B">
-                                    <size key="itemSize" width="64" height="64"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="bubble" id="S9x-Hs-qIJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="ltJ-aB-3Fg">
-                                                    <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <gestureRecognizers/>
-                                                </imageView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </collectionViewCell>
-                                </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="lfc-hQ-nT5" id="GYX-xZ-mwS"/>
-                                    <outlet property="delegate" destination="lfc-hQ-nT5" id="IYY-r9-0Ld"/>
-                                    <outletCollection property="gestureRecognizers" destination="b4o-cu-6Xg" appends="YES" id="Cdt-cM-y31"/>
-                                    <outletCollection property="gestureRecognizers" destination="pvR-us-83k" appends="YES" id="RMp-vt-mzk"/>
-                                </connections>
-                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="1"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="b4o-cu-6Xg" appends="YES" id="9Y4-uo-BcF"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="rLG-KH-4Xe"/>
                     <connections>
-                        <outlet property="bubbleDesignerGrid" destination="KIO-Pg-63B" id="Ddc-wS-86s"/>
                         <outlet property="gameArea" destination="jTn-cB-xj6" id="V0p-TM-Sct"/>
                         <outlet property="palette" destination="RYs-nD-NcR" id="jE4-dw-Mgh"/>
                     </connections>
@@ -596,11 +577,6 @@
                         <action selector="paletteTapHandler:" destination="lfc-hQ-nT5" id="9NH-w4-ftI"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="pvR-us-83k">
-                    <connections>
-                        <action selector="longPressHandler:" destination="lfc-hQ-nT5" id="3WQ-dv-ap3"/>
-                    </connections>
-                </pongPressGestureRecognizer>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="b4o-cu-6Xg">
                     <connections>
                         <action selector="panHandler:" destination="lfc-hQ-nT5" id="ePy-aC-Nzn"/>

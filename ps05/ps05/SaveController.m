@@ -28,6 +28,7 @@
 @interface SaveController () <UIAlertViewDelegate>
 
 @property (strong, nonatomic) id data;
+@property (nonatomic) UIImage *image;
 
 @end
 
@@ -47,10 +48,11 @@
     return self;
 }
 
-- (void)popUpSaveDialogWithPromptName:(NSString *)name andData:(id)data
+- (void)popUpSaveDialogWithPromptName:(NSString *)name data:(id)data image:(UIImage *)image
 // EFFECTS: popup requesting save information is triggered
 {
     self.data = data;
+    self.image = image;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:SAVE_ALERT_TITLE
                                                     message:SAVE_ALERT_MSG
                                                    delegate:self
@@ -90,6 +92,7 @@
     NSMutableData *data = [[NSMutableData alloc] init];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:self.data forKey:GRID_DATA_KEY];
+    [archiver encodeObject:UIImagePNGRepresentation(self.image) forKey:@"image"];
     [archiver finishEncoding];
     BOOL success = [data writeToFile:[NSString stringWithFormat:@"%@/%@", documentsDirectoryPath(), gridName]
                           atomically:YES];

@@ -23,7 +23,7 @@
 - (IBAction)saveButtonPressed:(UIButton *)sender {
 
     self.saveController = [SaveController saveControllerWithDelegate:self];
-    [self.saveController popUpSaveDialogWithPromptName:self.currentGridName andData:self.bubbleGridModels];
+    [self.saveController popUpSaveDialogWithPromptName:self.currentGridName data:self.bubbleGridModels image:nil];
 }
 
 - (void)didChangeNameTo:(NSString *)newName
