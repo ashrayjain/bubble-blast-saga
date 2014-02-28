@@ -11,20 +11,20 @@
 {
     if (isDesignerMode) {
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longpressHandler:)];
-        [self.view addGestureRecognizer:longPress];
+        [self.bubbleView addGestureRecognizer:longPress];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler:)];
-        [self.view addGestureRecognizer:tap];
+        [self.bubbleView addGestureRecognizer:tap];
     }
 }
 
 - (void)initializeView
 {
-    self.view = [[UIImageView alloc] init];
+    self.bubbleView = [[UIImageView alloc] init];
     int x = self.model.column*kDefaultBubbleDiameter + ((self.model.row % 2 != 0)?kDefaultBubbleRadius:0);
     int y = self.model.row*(kDefaultBubbleDiameter-kDefaultBubbleUpshiftForIsometricGrid);
-    self.view.frame = CGRectMake(x, y, kDefaultBubbleDiameter, kDefaultBubbleDiameter);
-    self.view.userInteractionEnabled = YES;
+    self.bubbleView.frame = CGRectMake(x, y, kDefaultBubbleDiameter, kDefaultBubbleDiameter);
+    self.bubbleView.userInteractionEnabled = YES;
 }
 
 - (id)initWithRow:(int)row column:(int)column physicsModel:(CircularObjectModel *)physicsModel
@@ -44,9 +44,9 @@
 {
     self = [super init];
     if (self) {
-        self.view = [[UIImageView alloc] init];
-        self.view.frame = CGRectMake(0, 0, kDefaultBubbleDiameter, kDefaultBubbleDiameter);
-        self.view.center = position;
+        self.bubbleView = [[UIImageView alloc] init];
+        self.bubbleView.frame = CGRectMake(0, 0, kDefaultBubbleDiameter, kDefaultBubbleDiameter);
+        self.bubbleView.center = position;
         self.model = [[GameBubbleModel alloc] initWithRow:-1 column:-1 physicsModel:physicsModel];
         [self initializeGestures];
     }
@@ -97,7 +97,7 @@
 - (void)didUpdatePosition:(id)sender
 {
     PhysicsEngineObject *obj = sender;
-    self.view.center = obj.positionVector.scalarComponents;
+    self.bubbleView.center = obj.positionVector.scalarComponents;
 }
 
 - (void)didCollide:(id)sender withObject:(id)object

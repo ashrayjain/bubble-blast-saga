@@ -20,6 +20,8 @@
 #import "SaveController.h"
 
 
+#define CANNON_ANIMATION_SPRITE                 @"cannon.png"
+
 #define COLLECTION_VIEW_CELL_IDENTIFIER         @"bubbleCell"
 #define MAX_NUMBER_OF_NEIGHBOURS_FOR_GRID_CELL  6
 #define MINIMUM_BUBBLE_BURSTING_THRESHOLD       3
@@ -41,6 +43,7 @@
 // utility properties
 @property (nonatomic) TwoDVector *projectileLaunchPoint;
 @property (nonatomic) PhysicsEngine *engine;
+@property (nonatomic) NSMutableArray *physicsModels;
 @property (nonatomic) BOOL panStarted;
 @property (nonatomic) BOOL projectileReady;
 @property (nonatomic) double cannonAngle;
@@ -64,7 +67,7 @@
     self.engine = [[PhysicsEngine alloc] initWithTimeStep:kDefaultPhysicsEngineSpeed];
     
     [self loadProjectileWithColor:self.currentVisibleColor+1];
-    self.projectile = self.projectileBubble.view;
+    self.projectile = self.projectileBubble.bubbleView;
     [self.gameArea insertSubview:self.projectile belowSubview:self.projectilePath];
     [self loadBubbleGridModel];
     
@@ -121,6 +124,7 @@
     if (self.loadedGrid != nil) {
         [self loadBubbleGridModelFromLoadedData];
     }
+    [self dropInitialHangingBubbles];
 }
 
 - (void)didReceiveMemoryWarning
@@ -145,17 +149,27 @@
 // MODIFIES: self.cannon, self.cannonAngle
 // EFFECTS: loads up the cannon sprites and sets up the animation parameters
 {
-    UIImage *image = [UIImage imageNamed:@"cannon.png"];
+    UIImage *image = [UIImage imageNamed:CANNON_ANIMATION_SPRITE];
     CGImageRef img = image.CGImage;
     NSMutableArray *images = [NSMutableArray array];
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 6; j++) {
+            // clip sprite into individual frames
             CGImageRef clip = CGImageCreateWithImageInRect(img, CGRectMake(j*400, i*800+100, 400, 700));
-            [images addObject:[UIImage imageWithCGImage:clip]];
+            UIImage *clipImg = [UIImage imageWithCGImage:clip];
             CFRelease(clip);
+            
+            // pre-render all the animation frames to avoid lag later on
+            UIGraphicsBeginImageContext(clipImg.size);
+            CGRect rect = CGRectMake(0, 0, clipImg.size.width, clipImg.size.height);
+            [clipImg drawInRect:rect];
+            UIImage *renderedClipImg = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            [images addObject:renderedClipImg];
+
         }
     }
-    CFRelease(img);
     self.cannonAngle = 0;
     self.cannon.image = [images firstObject];
     self.cannon.animationImages = images;
@@ -190,10 +204,11 @@
 // REQUIRES: self.engine is not running
 // EFFECTS: loads the main grid with randomly colored bubbles and adds them to the game engine.
 {
-    self.bubbleControllers = [NSMutableArray array];
-    
+    self.bubbleControllers = [NSMutableArray arrayWithCapacity:kDefaultNumberOfRowsInGameplay];
+    self.physicsModels = [NSMutableArray arrayWithCapacity:kDefaultNumberOfRowsInGameplay];
     for (int i = 0; i < kDefaultNumberOfRowsInGameplay; i++) {
         [self.bubbleControllers addObject:[NSMutableArray array]];
+        [self.physicsModels addObject:[NSMutableArray array]];
         
         int numberOfBubblePerRow = kDefaultNumberOfBubblesPerRow;
         if (i%2 != 0) {
@@ -201,49 +216,56 @@
         }
         
         for (int j = 0; j < numberOfBubblePerRow; j++) {
-            CircularObjectModel *bubblePhysicsModel;
-            bubblePhysicsModel = [[CircularObjectModel alloc] initWithRadius:kDefaultBubbleRadius
-                                                                    position:[TwoDVector nullVector]
-                                                                    velocity:[TwoDVector nullVector]
-                                                                   isEnabled:NO
-                                                                    delegate:nil];
+            CircularObjectModel *physicsModel;
+            physicsModel = [[CircularObjectModel alloc] initWithRadius:kDefaultBubbleRadius
+                                                              position:[TwoDVector nullVector]
+                                                              velocity:[TwoDVector nullVector]
+                                                             isEnabled:NO
+                                                              delegate:nil];
+            [self.physicsModels[i] addObject:physicsModel];
+            [self.engine addObject:physicsModel isImmovable:YES];
+            
             GameBubble *newBubble;
             if (i < kDefaultNumberOfFilledRowsAtGameplayStart) {
-                bubblePhysicsModel.enabled = YES;
                 newBubble = [[GameBubbleBasic alloc] initWithColor:arc4random_uniform(kEmpty)
                                                                row:i
                                                             column:j
-                                                      physicsModel:bubblePhysicsModel];
+                                                      physicsModel:physicsModel];
+                physicsModel.enabled = YES;
             }
             else {
                 newBubble = [[GameBubble alloc] initWithRow:i
                                                      column:j
-                                               physicsModel:bubblePhysicsModel];
+                                               physicsModel:physicsModel];
             }
+            physicsModel.positionVector = [TwoDVector twoDVectorFromCGPoint:newBubble.bubbleView.center];
+            physicsModel.delegate = newBubble;
             
             [self.bubbleControllers[i] addObject:newBubble];
-            [self.gameArea addSubview:newBubble.view];
-            bubblePhysicsModel.positionVector = [TwoDVector twoDVectorFromCGPoint:newBubble.view.center];
-            bubblePhysicsModel.delegate = newBubble;
-            [self.engine addObject:bubblePhysicsModel isImmovable:YES];
+            [self.gameArea addSubview:newBubble.bubbleView];
         }
     }
 }
 
 - (void)loadBubbleGridModelFromLoadedData
 {
-    //self.bubbleGridModels = self.loadedGrid;
+    NSMutableArray *data = self.loadedGrid;
     for (int i = 0; i < self.bubbleControllers.count; i++) {
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0; j < row.count; j++) {
-            @try {
-                [self switchBubbleAtRow:i column:j withBubble:self.loadedGrid[i][j]];
+            if (data.count > i && ((NSMutableArray *)data[i]).count > j) {
+                [self switchBubbleAtRow:i column:j withBubble:data[i][j]];
             }
-            @catch (NSException *exception) {
+            else {
                 [self emptyBubbleAtRow:i column:j];
             }
         }
     }
+}
+
+- (void)dropInitialHangingBubbles
+{
+    
 }
 
 
@@ -251,12 +273,22 @@
  Graph Algorithm related methods
  */
 
+- (BOOL)isGameEnd
+{
+    for (GameBubble *bubble in self.bubbleControllers[0]) {
+        if (![bubble isEmpty]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 - (NSArray *)neighboursForNodeAtColumn:(NSUInteger)item row:(NSUInteger)section
 // EFFECTS: returns all the neighbours of node in the grid at given section and item.
 {
     NSMutableArray *neighbours = [NSMutableArray array];
     
-    int flipIndex = section%2==0?-1:1;
+    int flipIndex = (section%2 == 0)?-1:1;
     int possibleNeighbourIndices[MAX_NUMBER_OF_NEIGHBOURS_FOR_GRID_CELL][2] = {
         {0, 1},
         {1, 0},
@@ -268,20 +300,21 @@
     
     for (int i = 0; i < MAX_NUMBER_OF_NEIGHBOURS_FOR_GRID_CELL; i++) {
         // try to access bubble model at index
-        @try {
-            int interimSection = section + possibleNeighbourIndices[i][0];
-            int interimItem = item + possibleNeighbourIndices[i][1];
-            [neighbours addObject:self.bubbleControllers[interimSection][interimItem]];
-        }
-        // catch out of bounds exception
-        @catch (NSException *exception) {
+        int interimSection = section + possibleNeighbourIndices[i][0];
+        if (interimSection < 0 || interimSection >= kDefaultNumberOfRowsInGameplay) {
             continue;
         }
+        int itemBound = (interimSection%2 == 0)?kDefaultNumberOfBubblesPerRow:kDefaultNumberOfBubblesPerRow-1;
+        int interimItem = item + possibleNeighbourIndices[i][1];
+        if (interimItem < 0 || interimItem >= itemBound) {
+            continue;
+        }
+        [neighbours addObject:self.bubbleControllers[interimSection][interimItem]];
     }
     return [neighbours copy];
 }
 
-- (NSArray *)getAllHangingBubblesForBurstBubbles:(NSArray *)burstBubbles
+- (NSMutableSet *)getAllHangingBubblesForBurstBubbles:(NSMutableSet *)burstBubbles
 // EFFECTS: returns all the unconnected (hanging) bubbles in the grid
 
 {
@@ -302,26 +335,26 @@
             // check if not already in cache
             if (![connected containsObject:neighbour] && ![nonConnected containsObject:neighbour]) {
                 // run dfs
-                NSMutableArray *visited = [NSMutableArray array];
+                NSMutableSet *visited = [NSMutableSet set];
                 BOOL isConnected = [self depthFirstSearchReachesTopWithBubble:neighbour
                                                                       visited:visited
                                                                     connected:connected
                                                                  nonConnected:nonConnected];
                 // add result to cache
                 if (isConnected) {
-                    [connected addObjectsFromArray:visited];
+                    [connected unionSet:visited];
                 }
                 else {
-                    [nonConnected addObjectsFromArray:visited];
+                    [nonConnected unionSet:visited];
                 }
             }
         }
     }
-    return [nonConnected allObjects];
+    return nonConnected;
 }
 
 - (BOOL)depthFirstSearchReachesTopWithBubble:(GameBubble *)bubble
-                                     visited:(NSMutableArray *)visited
+                                     visited:(NSMutableSet *)visited
                                    connected:(NSMutableSet *)connected
                                 nonConnected:(NSMutableSet *)nonConnected
 // MODIFIES: visited
@@ -358,12 +391,12 @@
     return isConnected;
 }
 
-- (NSArray *)getBubbleGroupForBubble:(GameBubble *)bubble
+- (NSMutableSet *)getGroupableSetForBubble:(GameBubble *)bubble
 // REQUIRES: bubble != nil
 // EFFECTS: runs dfs and returns all the same colored bubbles reachable from the current bubble
 
 {
-    NSMutableArray *groupBubbles = [NSMutableArray array];
+    NSMutableSet *visitedSet = [NSMutableSet set];
     NSMutableArray *stack = [NSMutableArray array];
     [stack addObject:bubble];
     while (stack.count > 0) {
@@ -371,15 +404,15 @@
         [stack removeLastObject];
         
         // only explore same colored neighbours
-        if (![groupBubbles containsObject:curr] && [bubble canBeGroupedWithBubble:curr]) {
-            [groupBubbles addObject:curr];
+        if (![visitedSet containsObject:curr] && [bubble canBeGroupedWithBubble:curr]) {
+            [visitedSet addObject:curr];
             for (GameBubble *neighbour in [self neighboursForNodeAtColumn:curr.model.column
                                                                       row:curr.model.row]) {
                 [stack addObject:neighbour];
             }
         }
     }
-    return [groupBubbles copy];
+    return visitedSet;
 }
 
 - (NSArray *)getSpecialBubblesAroundBubble:(GameBubble *)bubble
@@ -394,8 +427,8 @@
     return [specialBubbles copy];
 }
 
-- (NSArray *)getBubblesBurstBySpecialBubbles:(NSArray *)specialBubbles
-                                 triggeredBy:(GameBubble *)trigger
+- (NSMutableSet *)getBubblesBurstBySpecialBubbles:(NSArray *)specialBubbles
+                                      triggeredBy:(GameBubble *)trigger
 {
     NSMutableSet *burstBubbles = [NSMutableSet set];
     for (int i = 0; i < self.bubbleControllers.count; i++) {
@@ -412,7 +445,7 @@
             }
         }
     }
-    return [burstBubbles allObjects];
+    return burstBubbles;
 }
 
 /*
@@ -544,7 +577,7 @@
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0; j < row.count; j++) {
             GameBubble *bubble = row[j];
-            if (bubble.view == view) {
+            if (bubble.bubbleView == view) {
                 return [NSIndexPath indexPathForItem:j inSection:i];
             }
         }
@@ -563,24 +596,6 @@
     self.projectile.center = obj.positionVector.scalarComponents;
 }
 
-/*
- - (void)didBubbleColorChange:(id)sender
- // MODIFIES: self.bubbleGrid
- // EFFECTS: updates the view related to the sender model (BubbleModelDelegate)
- {
- GameBubbleBasicModel *obj = sender;
- int section = obj.row;
- int item = obj.column;
- if (self.bubbleControllers.count > section) {
- NSMutableArray *row = self.bubbleControllers[section];
- if (row.count > item) {
- NSIndexPath *path = [NSIndexPath indexPathForItem:item inSection:section];
- UICollectionViewCell *cell = [self.bubbleGrid cellForItemAtIndexPath:path];
- ((UIImageView *)[cell viewWithTag:1]).image = [self getImageForColor:obj.color];
- }
- }
- }
- */
 - (void)didCollide:(id)sender withObject:(id)object
 // MODIFIES: self.projectile, self.bubbleGrid, self.bubbleGridModels
 // EFFECTS: updates the view related to the sender model (PhysicsEngineObjectDelegate)
@@ -616,16 +631,20 @@
     if (positionInGrid != nil) {
         projectile.velocityVector = [TwoDVector nullVector];
         [self snapProjectileToGridAtIndexPath:positionInGrid];
+        
         GameBubble *bubble = self.bubbleControllers[positionInGrid.section][positionInGrid.item];
-        NSArray *bubbleGroup = [self getBubbleGroupForBubble:bubble];
-        NSArray *specialBubblesTriggered = [self getSpecialBubblesAroundBubble:bubble];
-        NSArray *bubblesBurstBySpecialBubbles = [self getBubblesBurstBySpecialBubbles:specialBubblesTriggered triggeredBy: bubble];
-        NSMutableArray *bubblesToBurst = [NSMutableArray arrayWithArray:bubblesBurstBySpecialBubbles];
-        if (bubbleGroup.count >= MINIMUM_BUBBLE_BURSTING_THRESHOLD) {
-            [bubblesToBurst addObjectsFromArray:bubbleGroup];
+        
+        NSMutableSet *bubblesToBurst = [self getBubblesBurstBySpecialBubbles:[self getSpecialBubblesAroundBubble:bubble]
+                                                                 triggeredBy: bubble];
+        
+        NSMutableSet *groupableBubblesToBurst = [self getGroupableSetForBubble:bubble];
+        if (groupableBubblesToBurst.count >= MINIMUM_BUBBLE_BURSTING_THRESHOLD) {
+            [bubblesToBurst unionSet:groupableBubblesToBurst];
         }
+        
         [self burstBubbles:bubblesToBurst];
         [self dropOutBubbles:[self getAllHangingBubblesForBurstBubbles:bubblesToBurst]];
+        
         [self reloadReserve];
     }
     else {
@@ -640,13 +659,12 @@
  Animation related methods
  */
 
-- (void)burstBubbles:(NSArray *)bubbles
+- (void)burstBubbles:(NSMutableSet *)bubbles
 // EFFECTS: animates the bursting of bubbles
 {
     for (GameBubble *bubble in bubbles) {
         UIView *droppedBubble = [self addAnimationBubbleForBubble:bubble];
         [self emptyBubbleAtRow:bubble.model.row column:bubble.model.column];
-        
         [UIView animateWithDuration:BUBBLE_BURST_DURATION
                               delay:0
                             options:UIViewAnimationOptionCurveEaseIn
@@ -659,7 +677,7 @@
                          }
                          completion:^(BOOL finished) {}];
     }
-
+    
 }
 
 
@@ -674,30 +692,27 @@
     else if (projectileClass == [GameBubbleIndestructible class]) {
         bubble = [[GameBubbleIndestructible alloc] initWithRow:row
                                                         column:column
-                                                  physicsModel:nil];
+                                                  physicsModel:self.physicsModels[row][column]];
     }
     else if (projectileClass == [GameBubbleLightning class]) {
         bubble = [[GameBubbleLightning alloc] initWithRow:row
                                                    column:column
-                                             physicsModel:nil];
+                                             physicsModel:self.physicsModels[row][column]];
     }
     else if (projectileClass == [GameBubbleStar class]) {
         bubble = [[GameBubbleStar alloc] initWithRow:row
                                               column:column
-                                        physicsModel:nil];
+                                        physicsModel:self.physicsModels[row][column]];
     }
     else if (projectileClass == [GameBubbleBomb class]) {
         bubble = [[GameBubbleBomb alloc] initWithRow:row
                                               column:column
-                                        physicsModel:nil];
+                                        physicsModel:self.physicsModels[row][column]];
     }
     
     if (bubble != nil) {
-        CircularObjectModel *physicsModel;
-        physicsModel = ((GameBubble *)self.bubbleControllers[row][column]).model.physicsModel;
-        physicsModel.enabled = YES;
-        physicsModel.delegate = bubble;
-        bubble.model.physicsModel = physicsModel;
+        bubble.model.physicsModel.delegate = bubble;
+        bubble.model.physicsModel.enabled = YES;
     }
     return bubble;
 }
@@ -708,7 +723,7 @@
     GameBubbleBasic *newBubble = [[GameBubbleBasic alloc] initWithColor:color
                                                                     row:row
                                                                  column:column
-                                                           physicsModel:nil];
+                                                           physicsModel:self.physicsModels[row][column]];
     return newBubble;
 }
 
@@ -717,9 +732,9 @@
 // EFFECTS: snape the projectile to the grid at given index path
 {
     GameBubble *oldBubble = self.bubbleControllers[path.section][path.item];
-    [oldBubble.view removeFromSuperview];
+    [oldBubble.bubbleView removeFromSuperview];
     GameBubble *newBubble = [self updatedBubbleAtRow:path.section column:path.item];
-    [self.gameArea addSubview:newBubble.view];
+    [self.gameArea addSubview:newBubble.bubbleView];
     self.bubbleControllers[path.section][path.item] = newBubble;
     
     
@@ -769,7 +784,7 @@
 - (UIView *)addAnimationBubbleForBubble:(GameBubble *)bubble
 // EFFECTS: add a temporary view over the collection view to animate on
 {
-    UIView *dropOutBubble = [bubble.view snapshotViewAfterScreenUpdates:YES];
+    UIImageView *dropOutBubble = [[UIImageView alloc] initWithImage:bubble.bubbleView.image];//snapshotViewAfterScreenUpdates:NO];
     dropOutBubble.frame = CGRectMake(bubble.model.physicsModel.positionVector.xComponent - kDefaultBubbleRadius,
                                      bubble.model.physicsModel.positionVector.yComponent - kDefaultBubbleRadius,
                                      kDefaultBubbleDiameter,
@@ -778,7 +793,7 @@
     return dropOutBubble;
 }
 
-- (void)dropOutBubbles:(NSArray *)bubbles
+- (void)dropOutBubbles:(NSMutableSet *)bubbles
 // EFFECTS: drops out bubbles below the screeen
 {
     for (GameBubble *bubble in bubbles) {
@@ -809,10 +824,8 @@
 
 - (void)switchBubbleAtRow:(int)row column:(int)column withBubble:(GameBubble *)bubble
 {
-    GameBubble *oldBubble= self.bubbleControllers[row][column];
-    bubble.model.physicsModel = oldBubble.model.physicsModel;
+    bubble.model.physicsModel = self.physicsModels[row][column];
     bubble.model.physicsModel.delegate = bubble;
-    
     if ([bubble isEmpty]) {
         bubble.model.physicsModel.enabled = NO;
     }
@@ -820,9 +833,9 @@
         bubble.model.physicsModel.enabled = YES;
     }
     
-    [oldBubble.view removeFromSuperview];
-    [self.gameArea addSubview:bubble.view];
-    
+    GameBubble *oldBubble= self.bubbleControllers[row][column];
+    [oldBubble.bubbleView removeFromSuperview];
+    [self.gameArea addSubview:bubble.bubbleView];
     self.bubbleControllers[row][column] = bubble;
 }
 
@@ -840,7 +853,7 @@
 
 - (UIImage *)getImageForColor:(GameBubbleColor)color
 {
-    NSString *filename = [NSString string];
+    NSString *filename;
     switch (color) {
         case kBlue:
             filename = kBlueBubbleImageName;

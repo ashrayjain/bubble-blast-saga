@@ -19,14 +19,14 @@
 {
     self = [super initWithRow:row column:column physicsModel:physicsModel];
     if (self) {
-        self.view.image = [UIImage imageNamed:kLightningBubbleImageName];
+        self.bubbleView.image = [UIImage imageNamed:kLightningBubbleImageName];
     }
     return self;
 }
 
 - (void)longpressHandler:(UIGestureRecognizer *)gesture
 {
-    self.view.image = nil;
+    self.bubbleView.image = nil;
 }
 
 - (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger
@@ -51,7 +51,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.view.image = [UIImage imageNamed:kLightningBubbleImageName];
+        self.bubbleView.image = [UIImage imageNamed:kLightningBubbleImageName];
     }
     return self;
 }

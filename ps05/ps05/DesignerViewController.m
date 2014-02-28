@@ -59,7 +59,7 @@
                                                              column:j
                                                        physicsModel:nil];
             [self.bubbleControllers[i] addObject:newBubble];
-            [self.gameArea addSubview:newBubble.view];
+            [self.gameArea addSubview:newBubble.bubbleView];
         }
     }
 }
@@ -114,11 +114,11 @@
                 int column = gridLocation.item;
                 
                 GameBubble *oldBubble = self.bubbleControllers[row][column];
-                [oldBubble.view removeFromSuperview];
+                [oldBubble.bubbleView removeFromSuperview];
                 
                 GameBubble *newBubble =  [self updateBubbleAtRow:row column:column];
                 self.bubbleControllers[row][column] = newBubble;
-                [self.gameArea addSubview:newBubble.view];
+                [self.gameArea addSubview:newBubble.bubbleView];
             }
         }
     }
@@ -195,7 +195,7 @@
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0; j < row.count; j++) {
             GameBubble *bubble = row[j];
-            if (bubble.view == view) {
+            if (bubble.bubbleView == view) {
                 return [NSIndexPath indexPathForItem:j inSection:i];
             }
         }
@@ -207,7 +207,7 @@
 {
     if ([segue.identifier isEqual:@"testCurrentGrid"]) {
         isDesignerMode = NO;
-        ((GameplayViewController *)segue.destinationViewController).loadedGrid = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.bubbleControllers]];;
+        ((GameplayViewController *)segue.destinationViewController).loadedGrid = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.bubbleControllers]];
     }
 }
 

@@ -60,13 +60,13 @@
     for (int i = 0; i < kDefaultNumberOfRowsInDesignerGrid ; i++) {
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0; j < row.count; j++) {
-            [((GameBubble *)row[j]).view removeFromSuperview];
+            [((GameBubble *)row[j]).bubbleView removeFromSuperview];
             
             GameBubble *defaultBubble = [[GameBubble alloc] initWithRow:i
                                                                  column:j
                                                            physicsModel:nil];
             row[j] = defaultBubble;
-            [self.gameArea addSubview:defaultBubble.view];
+            [self.gameArea addSubview:defaultBubble.bubbleView];
         }
     }
 }
@@ -97,9 +97,9 @@
     for (int i = 0; i < self.bubbleControllers.count; i++) {
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0; j < row.count; j++) {
-            [((GameBubble *)self.bubbleControllers[i][j]).view removeFromSuperview];
+            [((GameBubble *)self.bubbleControllers[i][j]).bubbleView removeFromSuperview];
             self.bubbleControllers[i][j] = data[i][j];
-            [self.gameArea addSubview:((GameBubble *)data[i][j]).view];
+            [self.gameArea addSubview:((GameBubble *)data[i][j]).bubbleView];
         }
     }
 }

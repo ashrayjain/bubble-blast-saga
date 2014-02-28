@@ -98,10 +98,10 @@
             break;
     }
     if (filename == nil) {
-        self.view.image = nil;
+        self.bubbleView.image = nil;
     }
     else {
-        self.view.image = [UIImage imageNamed:filename];
+        self.bubbleView.image = [UIImage imageNamed:filename];
     }
 }
 

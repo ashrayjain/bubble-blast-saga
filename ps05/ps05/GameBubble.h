@@ -18,8 +18,7 @@
 @interface GameBubble : UIViewController <NSCoding, PhysicsEngineObjectDelegate>
 
 @property (nonatomic) GameBubbleModel *model;
-@property (nonatomic) UIImageView *view;
-@property (nonatomic) NSMutableArray *neighbours;
+@property (nonatomic) UIImageView *bubbleView;
 
 - (id)initWithRow:(int)row
            column:(int)column
