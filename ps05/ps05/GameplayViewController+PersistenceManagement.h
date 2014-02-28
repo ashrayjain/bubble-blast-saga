@@ -15,6 +15,7 @@
 @interface GameplayViewController (PersistenceManagement) <LoadViewControllerDelegate, SaveControllerDelegate>
 
 @property (nonatomic, strong) SaveController *saveController;
+
 - (IBAction)saveButtonPressed:(UIButton *)sender;
 
 @end

@@ -29,6 +29,24 @@
     self.view.image = nil;
 }
 
+- (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger
+{
+    if (![bubble isEmpty] && bubble.model.row == self.model.row) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isEmpty
+{
+    return NO;
+}
+
+- (BOOL)isSpecial
+{
+    return YES;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];

@@ -9,6 +9,12 @@
 #import "GameBubbleBasic.h"
 #import "Constants.h"
 
+@interface GameBubbleBasic () {
+    GameBubbleBasicModel *basicModel;
+}
+
+@end
+
 @implementation GameBubbleBasic : GameBubble
 
 - (id)initWithColor:(GameBubbleColor)color
@@ -26,6 +32,23 @@
                                                           column:column
                                                     physicsModel:model
                                                         delegate:self];
+        basicModel = (GameBubbleBasicModel *)self.model;
+    }
+    return self;
+}
+
+- (id)initWithColor:(GameBubbleColor)color
+   absolutePosition:(CGPoint)position
+       physicsModel:(CircularObjectModel *)physicsModel
+{
+    self = [super initWithAbsolutePosition:position physicsModel:physicsModel];
+    if (self) {
+        self.model = [[GameBubbleBasicModel alloc] initWithColor:color
+                                                             row:-1
+                                                          column:-1
+                                                    physicsModel:physicsModel
+                                                        delegate:self];
+        basicModel = (GameBubbleBasicModel *)self.model;
     }
     return self;
 }
@@ -36,9 +59,8 @@
 // EFFECTS: the user taps the bubble with one finger
 //          if the bubble is active, it will change its color
 {
-    GameBubbleBasicModel *model = (GameBubbleBasicModel *)self.model;
-    if (model.color != kEmpty) {
-        model.color = (model.color + 1)%kEmpty;
+    if (basicModel.color != kEmpty) {
+        basicModel.color = (basicModel.color + 1)%kEmpty;
     }
 }
 
@@ -47,8 +69,12 @@
 // REQUIRES: game in designer mode, bubble active in the grid
 // EFFECTS: the bubble is 'erased' after being long-pressed
 {
-    GameBubbleBasicModel *model = (GameBubbleBasicModel *)self.model;
-    model.color = kEmpty;    
+    basicModel.color = kEmpty;
+}
+
+- (BOOL)isEmpty
+{
+    return basicModel.color==kEmpty;
 }
 
 - (void)didBubbleColorChange:(GameBubbleBasicModel *)sender
@@ -79,12 +105,24 @@
     }
 }
 
+- (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble
+{
+    if ([bubble isKindOfClass:[self class]]) {
+        GameBubbleBasicModel *model = (GameBubbleBasicModel *)bubble.model;
+        if (model.color == basicModel.color) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.model = [[GameBubbleBasicModel alloc] initWithCoder:aDecoder];
-        ((GameBubbleBasicModel *)self.model).delegate = self;
+        basicModel = (GameBubbleBasicModel *)self.model;
+        basicModel.delegate = self;
         [self didBubbleColorChange:self.model];
     }
     return self;
@@ -92,7 +130,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [(GameBubbleBasicModel *)self.model encodeWithCoder:aCoder];
+    [basicModel encodeWithCoder:aCoder];
 }
 
 @end

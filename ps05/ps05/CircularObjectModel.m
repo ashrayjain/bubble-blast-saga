@@ -36,7 +36,7 @@
 {
     if ([object isKindOfClass:[CircularObjectModel class]]) {
         CircularObjectModel *obj = (CircularObjectModel *)object;
-        double minimumDistance = self.radius + obj.radius;
+        double minimumDistance = self.radius + obj.radius - 2;
         minimumDistance *= minimumDistance;
         if (minimumDistance >= [self.positionVector distanceSquaredFromVector:object.positionVector]) {
             /*
@@ -55,7 +55,9 @@
             self.velocityVector = reflectedVector;
             
              */
-            [self.delegate didCollide:self withObject:object];
+            //dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate didCollide:self withObject:object];
+            //});
         }
     }
 }

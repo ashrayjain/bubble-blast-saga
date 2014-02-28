@@ -6,6 +6,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GameBubbleModel.h"
+#import "PhysicsEngineObjectDelegate.h"
 
 /*
  This is the base class for all bubble objects in the Game. Every type of bubble in the game must subclass this class.
@@ -14,14 +15,18 @@
  */
 
 
-@interface GameBubble : UIViewController <NSCoding>
+@interface GameBubble : UIViewController <NSCoding, PhysicsEngineObjectDelegate>
 
 @property (nonatomic) GameBubbleModel *model;
 @property (nonatomic) UIImageView *view;
+@property (nonatomic) NSMutableArray *neighbours;
 
 - (id)initWithRow:(int)row
            column:(int)column
      physicsModel:(CircularObjectModel *)physicsModel;
+
+- (id)initWithAbsolutePosition:(CGPoint)position
+                  physicsModel:(CircularObjectModel *)physicsModel;
 
 - (id)initWithModel:(GameBubbleModel *)model;
 
@@ -35,5 +40,11 @@
   // MODIFIES: bubble model (state from active to inactive)
   // REQUIRES: game in designer mode, bubble active in the grid
   // EFFECTS: the bubble is 'erased' after being long-pressed
+
+- (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble;
+- (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger;
+
+- (BOOL)isEmpty;
+- (BOOL)isSpecial;
 
 @end

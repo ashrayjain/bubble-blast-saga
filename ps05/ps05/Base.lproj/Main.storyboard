@@ -144,40 +144,6 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Zqb-xh-1Hd">
-                                        <rect key="frame" x="0.0" y="0.0" width="768" height="970"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="WkC-3Q-Jnx">
-                                            <size key="itemSize" width="64" height="64"/>
-                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        </collectionViewFlowLayout>
-                                        <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="bubbleCell" id="5xt-e5-fZr">
-                                                <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <imageView tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Sxz-e2-JSR">
-                                                            <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <gestureRecognizers/>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
-                                                <size key="customSize" width="64" height="64"/>
-                                            </collectionViewCell>
-                                        </cells>
-                                        <connections>
-                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="er9-Ga-HiL"/>
-                                            <outlet property="delegate" destination="BYZ-38-t0r" id="rgc-6k-yKR"/>
-                                        </connections>
-                                    </collectionView>
                                     <view contentMode="scaleToFill" id="wZx-Fn-do2" userLabel="Reserves">
                                         <rect key="frame" x="0.0" y="0.0" width="768" height="970"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -189,11 +155,6 @@
                                             </imageView>
                                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-blue.png" id="c3V-Df-Lap">
                                                 <rect key="frame" x="637" y="906" width="64" height="64"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <gestureRecognizers/>
-                                            </imageView>
-                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-blue.png" id="G3y-gF-Duf">
-                                                <rect key="frame" x="352" y="906" width="64" height="64"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <gestureRecognizers/>
                                             </imageView>
@@ -211,8 +172,8 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="LcB-ym-C5b" appends="YES" id="2hN-Uf-ziZ"/>
                                     <outletCollection property="gestureRecognizers" destination="aj5-RA-gtL" appends="YES" id="uzW-2r-bSj"/>
+                                    <outletCollection property="gestureRecognizers" destination="LcB-ym-C5b" appends="YES" id="lMH-57-Ow2"/>
                                 </connections>
                             </view>
                             <view opaque="NO" contentMode="scaleToFill" id="FS5-aZ-pnE">
@@ -268,27 +229,25 @@
                     <navigationItem key="navigationItem" id="fOX-x6-Dtn"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="bubbleGrid" destination="Zqb-xh-1Hd" id="km8-3i-1RY"/>
                         <outlet property="cannon" destination="fVr-DP-3i8" id="S4T-VX-5y5"/>
                         <outlet property="cannonBase" destination="V8K-Gi-BlG" id="gtL-iJ-drL"/>
                         <outlet property="gameArea" destination="L1q-pB-VWg" id="Ylr-gg-ESR"/>
                         <outlet property="hiddenReserveBubble" destination="i8A-eO-zUf" id="BhN-r4-yiH"/>
-                        <outlet property="projectile" destination="G3y-gF-Duf" id="cyG-xT-1X3"/>
                         <outlet property="projectilePath" destination="fHN-ut-9CQ" id="qB8-Nx-Qms"/>
                         <outlet property="visibleReserveBubble" destination="c3V-Df-Lap" id="c07-LV-n9Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="LcB-ym-C5b">
-                    <connections>
-                        <action selector="tapHandler:" destination="BYZ-38-t0r" id="IdQ-kY-iQj"/>
-                    </connections>
-                </tapGestureRecognizer>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="aj5-RA-gtL">
                     <connections>
                         <action selector="panHandler:" destination="BYZ-38-t0r" id="2P8-hG-l8d"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer id="LcB-ym-C5b">
+                    <connections>
+                        <action selector="tapHandler:" destination="BYZ-38-t0r" id="IdQ-kY-iQj"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="813" y="-361"/>
         </scene>
@@ -605,7 +564,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="d9x-0w-ZnA"/>
         <segue reference="zgz-ZH-GqB"/>
-        <segue reference="MiH-sd-lcC"/>
     </inferredMetricsTieBreakers>
 </document>

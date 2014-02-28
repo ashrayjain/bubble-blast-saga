@@ -7,6 +7,7 @@
 //
 
 #import "GameBubbleStar.h"
+#import "GameBubbleBasic.h"
 #import "Constants.h"
 
 @interface GameBubbleStar ()
@@ -27,6 +28,32 @@
 - (void)longpressHandler:(UIGestureRecognizer *)gesture
 {
     self.view.image = nil;
+}
+
+- (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger
+{
+    if ([bubble canBeGroupedWithBubble:trigger]) {
+        return YES;
+    }
+    if (bubble == self) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isEmpty
+{
+    return NO;
+}
+
+- (BOOL)isSpecial
+{
+    return YES;
+}
+
+-(NSArray *)neighboursToBurstWhenBursting
+{
+    return nil;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder

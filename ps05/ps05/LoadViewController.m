@@ -96,8 +96,6 @@
     if (indexPath.row%2 != 0 && editingStyle == UITableViewCellEditingStyleDelete) {
         [self removeFileAtIndex:indexPath.row/2];
         [tableView deleteRowsAtIndexPaths:@[indexPath, [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        
-
     }
 }
 

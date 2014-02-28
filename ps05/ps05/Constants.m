@@ -29,6 +29,7 @@ unsigned const kDefaultNumberOfBubblesPerRow = 12;
 unsigned const kDefaultNumberOfFilledRowsAtGameplayStart = 13;
 unsigned const kDefaultNumberOfRowsInGameplay = kDefaultNumberOfRowsInDesignerGrid + 1;
 
+BOOL isDesignerMode = NO;
 void popUpAlertWithDelay(NSString *title, NSString *errorMsg, NSTimeInterval delay)
 // EFFECTS: pops up an alert with the given title and message
 //          automatically dismisses the alert after delay seconds

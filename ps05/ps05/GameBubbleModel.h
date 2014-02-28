@@ -15,11 +15,14 @@
 @class CircularObjectModel;
 
 // Constants
-typedef enum {kGameBubbleBasic,
+typedef enum {
+    kGameBubbleUndefined,
+    kGameBubbleBasic,
     kGameBubbleStar,
     kGameBubbleLightning,
     kGameBubbleBomb,
-    kGameBubbleIndestructible} GameBubbleType;
+    kGameBubbleIndestructible
+} GameBubbleType;
 
 //typedef enum {kBlue, kRed, kOrange, kGreen, kIndestructible, kLightning, kStar, kBomb, kEmpty} GameBubbleColor;
 

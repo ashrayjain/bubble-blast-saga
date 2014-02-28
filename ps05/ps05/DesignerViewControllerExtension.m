@@ -12,29 +12,15 @@
 #import "Constants.h"
 #import "SaveController.h"
 
-#define RESET_BUTTON_TITLE              @"RESET"
-#define SAVE_BUTTON_TITLE               @"SAVE"
-#define LOAD_BUTTON_TITLE               @"LOAD"
-#define BACK_BUTTON_TITLE               @"BACK"
-
 #define ERROR_ALERT_DELAY               1
-#define INFO_ALERT_DELAY                1
-
 #define ERROR_TITLE                     @"Oops!"
 #define ERROR_MSG_NO_SAVED_FILES_FOUND  @"No saved files found!"
-#define ERROR_MSG_INVALID_NAME          @"Invalid name provided!"
-#define ERROR_MSG_SAVE_UNSUCCESSFUL     @"Unable to save! Please try again!"
-#define INFO_MSG_SAVE_SUCCESSFUL        @"The design was saved successfully!"
-
-#define SAVE_ALERT_TITLE                @"Save Design"
-#define SAVE_ALERT_MSG                  @"Enter a name for the design: "
-#define SAVE_BUTTON_LABEL               @"Save"
-#define CANCEL_BUTTON_LABEL             @"Cancel"
 
 #define LOAD_TABLE_SEGUE_IDENTIFIER     @"loadTableView"
 #define GRID_DATA_KEY                   @"grid"
 #define GRID_NAME_KEY                   @"gridName"
 
+#define SCREENSHOT_OFFSET               190
 
 @implementation DesignerViewController (Extension)
 
@@ -48,26 +34,20 @@
 
 - (IBAction)saveButtonPressed:(UIButton *)sender
 {
+    self.saveController = [SaveController saveControllerWithDelegate:self];
+    [self.saveController popUpSaveDialogWithPromptName:self.currentGridName data:self.bubbleControllers image:[self captureScreenshot]];
+}
+
+- (UIImage *)captureScreenshot
+{
     CGRect imageBounds = self.gameArea.bounds;
-    imageBounds.size.height -= 190;
+    imageBounds.size.height -= SCREENSHOT_OFFSET;
     UIGraphicsBeginImageContextWithOptions(imageBounds.size, YES, [UIScreen mainScreen].scale);
     
     [self.gameArea drawViewHierarchyInRect:self.gameArea.bounds afterScreenUpdates:NO];
     UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    self.saveController = [SaveController saveControllerWithDelegate:self];
-
-//    NSMutableArray *models = [NSMutableArray array];
-//    for (int i = 0; i < kDefaultNumberOfRowsInDesignerGrid ; i++) {
-//        NSMutableArray *row = self.bubbleControllers[i];
-//        [models addObject:[NSMutableArray array]];
-//        for (int j = 0; j < row.count; j++) {
-//            [models[i] addObject:((GameBubble *)self.bubbleControllers[i][j]).model];
-//        }
-//    }
-
-    [self.saveController popUpSaveDialogWithPromptName:self.currentGridName data:self.bubbleControllers image:screenShot];
+    return screenShot;
 }
 
 - (void)didChangeNameTo:(NSString *)newName
@@ -114,19 +94,14 @@
 
 - (void)reloadBubbleControllersWithNewData:(id)data
 {
-//    NSMutableArray *newData = data;
     for (int i = 0; i < self.bubbleControllers.count; i++) {
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0; j < row.count; j++) {
             [((GameBubble *)self.bubbleControllers[i][j]).view removeFromSuperview];
             self.bubbleControllers[i][j] = data[i][j];
-//            GameBubble *newBubble = newData[i][j];
             [self.gameArea addSubview:((GameBubble *)data[i][j]).view];
-//            NSLog(@"%d, %d\n", newBubble.model.row, newBubble.model.column);
-//            NSLog(@"%f, %f\n", newBubble.view.frame.origin.x, newBubble.view.frame.origin.y);
         }
     }
-    //[self.bubbleDesignerGrid reloadData];
 }
 
 @end

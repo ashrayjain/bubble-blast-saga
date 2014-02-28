@@ -15,24 +15,23 @@
 #import "PhysicsEngineObjectDelegate.h"
 #import "GameBubbleBasicModelDelegate.h"
 
-@class GameBubbleBasicModel;
+@class GameBubble;
 @class ProjectileLaunchPath;
-@interface GameplayViewController : UIViewController <PhysicsEngineObjectDelegate, GameBubbleBasicModelDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate>
+@interface GameplayViewController : UIViewController <UIAlertViewDelegate, PhysicsEngineObjectDelegate>
 
 // Views
 @property (strong, nonatomic) IBOutlet UIView *gameArea;
-@property (strong, nonatomic) IBOutlet UICollectionView *bubbleGrid;
 @property (strong, nonatomic) IBOutlet UIImageView *visibleReserveBubble;
 @property (strong, nonatomic) IBOutlet UIImageView *hiddenReserveBubble;
-@property (strong, nonatomic) IBOutlet UIImageView *projectile;
+@property (strong, nonatomic) UIImageView *projectile;
 @property (strong, nonatomic) IBOutlet ProjectileLaunchPath *projectilePath;
 @property (strong, nonatomic) IBOutlet UIImageView *cannon;
 @property (strong, nonatomic) IBOutlet UIImageView *cannonBase;
 
 @property (strong, nonatomic) id loadedGrid;
 @property (strong, nonatomic) NSString *currentGridName;
-@property (nonatomic) GameBubbleBasicModel *projectileModel;
-@property (nonatomic) NSMutableArray *bubbleGridModels;
+@property (nonatomic) GameBubble *projectileBubble;
+@property (nonatomic) NSMutableArray *bubbleControllers;
 
 - (IBAction)backButtonPressed:(UIButton *)sender;
 // MODIFIES: self

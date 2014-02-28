@@ -29,6 +29,16 @@
     self.view.image = nil;
 }
 
+- (BOOL)isEmpty
+{
+    return NO;
+}
+
+- (BOOL)isSpecial
+{
+    return NO;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];

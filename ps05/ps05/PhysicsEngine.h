@@ -18,6 +18,7 @@
 @interface PhysicsEngine : NSObject
 
 @property (nonatomic, readonly) double timeStep;
+@property dispatch_queue_t queue;
 
 - (id)initWithTimeStep:(double)timeStep;
 // MODIFIES: self

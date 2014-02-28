@@ -23,6 +23,7 @@
         self.row = row;
         self.column = column;
         self.physicsModel = model;
+        self.type = kGameBubbleUndefined;
     }
     return self;
 }

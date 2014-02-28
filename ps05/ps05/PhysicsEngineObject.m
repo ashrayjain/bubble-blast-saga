@@ -38,7 +38,9 @@
 
 {
     self.positionVector = [self.positionVector addToVector:[self.velocityVector multiplyScalar:timeStep]];
-    [self.delegate didUpdatePosition:self];
+    //dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate didUpdatePosition:self];
+    //});
 }
 
 - (void)resolveCollisionWithObject:(PhysicsEngineObject *)object

@@ -28,4 +28,7 @@
 // EFFECTS: initializes self with provided row, column and color and
 //          returns self
 
+- (id)initWithColor:(GameBubbleColor)color
+   absolutePosition:(CGPoint)position
+       physicsModel:(CircularObjectModel *)physicsModel;
 @end

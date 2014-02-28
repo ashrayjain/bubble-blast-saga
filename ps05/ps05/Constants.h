@@ -31,6 +31,8 @@ FOUNDATION_EXPORT unsigned const kDefaultNumberOfBubblesPerRow;
 FOUNDATION_EXPORT unsigned const kDefaultNumberOfFilledRowsAtGameplayStart;
 FOUNDATION_EXPORT unsigned const kDefaultNumberOfRowsInGameplay;
 
+FOUNDATION_EXPORT BOOL isDesignerMode;
+
 FOUNDATION_EXPORT void popUpAlertWithDelay(NSString *title,
                                            NSString *errorMsg,
                                            NSTimeInterval delay);
