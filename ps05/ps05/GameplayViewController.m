@@ -167,7 +167,7 @@
             UIGraphicsEndImageContext();
             
             [images addObject:renderedClipImg];
-
+            
         }
     }
     self.cannonAngle = 0;
@@ -265,7 +265,45 @@
 
 - (void)dropInitialHangingBubbles
 {
+    NSMutableSet *nonConnected = [NSMutableSet set];
+    NSMutableSet *connected = [NSMutableSet set];
     
+    // add top row bubbles to connected
+    for (GameBubble *bubble in self.bubbleControllers[0]) {
+        if (![bubble isEmpty]) {
+            [connected addObject:bubble];
+        }
+    }
+    
+    NSMutableSet *notVisited = [NSMutableSet set];
+    for (int i = 1; i < self.bubbleControllers.count; i++) {
+        NSMutableArray *row = self.bubbleControllers[i];
+        for (int j = 0; j < row.count; j++) {
+            if (![((GameBubble *)self.bubbleControllers[i][j]) isEmpty]) {
+                [notVisited addObject:self.bubbleControllers[i][j]];
+            }
+        }
+    }
+    
+    while (notVisited.count > 0) {
+        GameBubble *curr = [notVisited anyObject];
+        NSMutableSet *visited = [NSMutableSet set];
+        
+        BOOL isConnected = [self depthFirstSearchReachesTopWithBubble:curr
+                                                              visited:visited
+                                                            connected:connected
+                                                         nonConnected:nonConnected];
+        // add result to cache
+        if (isConnected) {
+            [connected unionSet:visited];
+        }
+        else {
+            [nonConnected unionSet:visited];
+        }
+        [notVisited minusSet:visited];
+    }
+    
+    [self dropOutBubbles:nonConnected];
 }
 
 
