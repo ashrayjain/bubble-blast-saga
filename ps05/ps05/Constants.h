@@ -18,6 +18,7 @@ FOUNDATION_EXPORT NSString *const kIndestructibleBubbleImageName;
 FOUNDATION_EXPORT NSString *const kLightningBubbleImageName;
 FOUNDATION_EXPORT NSString *const kStarBubbleImageName;
 FOUNDATION_EXPORT NSString *const kBombBubbleImageName;
+FOUNDATION_EXPORT NSString *const kRainbowBubbleImageName;
 FOUNDATION_EXPORT NSString *const kBackgroundImageName;
 
 

@@ -27,6 +27,7 @@
 @property (strong, nonatomic) IBOutlet ProjectileLaunchPath *projectilePath;
 @property (strong, nonatomic) IBOutlet UIImageView *cannon;
 @property (strong, nonatomic) IBOutlet UIImageView *cannonBase;
+@property (strong, nonatomic) IBOutlet UIImageView *backgroundView;
 
 @property (strong, nonatomic) id loadedGrid;
 @property (strong, nonatomic) NSString *currentGridName;

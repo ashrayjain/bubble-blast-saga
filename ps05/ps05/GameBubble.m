@@ -5,6 +5,13 @@
 
 #define MAX_NUMBER_OF_NEIGHBOURS_FOR_GRID_CELL  6
 
+@interface GameBubble ()
+
+@property (nonatomic) UIInterpolatingMotionEffect *parallaxEffectHorizontal;
+@property (nonatomic) UIInterpolatingMotionEffect *parallaxEffectVertical;
+
+@end
+
 @implementation GameBubble
 
 - (void)initializeGestures

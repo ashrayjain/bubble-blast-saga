@@ -12,6 +12,7 @@
 #import "GameBubbleIndestructible.h"
 #import "GameBubbleBomb.h"
 #import "GameBubbleStar.h"
+#import "GameBubbleRainbow.h"
 #import "GameplayViewController.h"
 #import "Constants.h"
 #import "SaveController.h"
@@ -29,6 +30,7 @@
 #define LIGHTNING_PALETTE       6
 #define STAR_PALETTE            7
 #define BOMB_PALETTE            8
+#define RAINBOW_PALETTE         9
 
 
 @interface DesignerViewController ()
@@ -155,6 +157,11 @@
             bubble = [[GameBubbleBomb alloc] initWithRow:row
                                                   column:column
                                             physicsModel:nil];
+            break;
+        case RAINBOW_PALETTE:
+            bubble = [[GameBubbleRainbow alloc] initWithRow:row
+                                                     column:column
+                                               physicsModel:nil];
             break;
         default:
             break;

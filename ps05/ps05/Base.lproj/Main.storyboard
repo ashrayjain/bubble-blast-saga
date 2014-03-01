@@ -27,83 +27,101 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.png" id="bZX-Zd-rDg">
+                            <imageView userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="back2.jpg" id="bZX-Zd-rDg">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AzE-Mc-77Y">
-                                <rect key="frame" x="295" y="480" width="178" height="94"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AzE-Mc-77Y">
+                                <rect key="frame" x="288" y="522" width="178" height="113"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="70"/>
+                                <inset key="titleEdgeInsets" minX="0.0" minY="-25" maxX="0.0" maxY="0.0"/>
+                                <size key="titleShadowOffset" width="0.0" height="5"/>
                                 <state key="normal" title="Play">
                                     <color key="titleColor" red="0.99607849120000003" green="0.0" blue="0.023529414089999999" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="playButtonPressed:" destination="dZs-QD-W4o" eventType="touchUpInside" id="ych-XU-8AD"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="d4p-Pd-pFM">
-                                <rect key="frame" x="328" y="792" width="112" height="55"/>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" id="d4p-Pd-pFM">
+                                <rect key="frame" x="321" y="834" width="112" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="40"/>
+                                <size key="titleShadowOffset" width="0.0" height="5"/>
                                 <state key="normal" title="Back">
                                     <color key="titleColor" red="0.99607849120000003" green="0.0" blue="0.023529414089999999" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="backButtonPressed:" destination="dZs-QD-W4o" eventType="touchUpInside" id="fJG-5M-fCw"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gbf-Px-3FX">
-                                <rect key="frame" x="256" y="667" width="256" height="94"/>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xt6-t8-qch">
+                                <rect key="frame" x="155" y="518" width="458" height="101"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="70"/>
-                                <state key="normal" title="Design">
+                                <size key="titleShadowOffset" width="0.0" height="5"/>
+                                <state key="normal" title="New Puzzle">
                                     <color key="titleColor" red="0.99607849120000003" green="0.11372549830000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="lfc-hQ-nT5" kind="push" id="Fua-I8-sfg"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0BC-YD-cMY">
-                                <rect key="frame" x="138" y="667" width="492" height="101"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="70"/>
-                                <state key="normal" title="Load Puzzle">
-                                    <color key="titleColor" red="0.99607849120000003" green="0.11372549830000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="wil-74-Gwx" kind="modal" identifier="loadPuzzleStarter" modalPresentationStyle="formSheet" id="LqQ-kx-LnQ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xt6-t8-qch">
-                                <rect key="frame" x="70" y="473" width="628" height="101"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="70"/>
-                                <state key="normal" title="Random Puzzle">
-                                    <color key="titleColor" red="0.99607849120000003" green="0.11372549830000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <segue destination="BYZ-38-t0r" kind="push" id="qbS-Kp-iQ8"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bubble Blast Saga" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="38" id="wDR-vs-MNg">
-                                <rect key="frame" x="104" y="117" width="560" height="252"/>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0BC-YD-cMY">
+                                <rect key="frame" x="138" y="709" width="492" height="101"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="112"/>
-                                <color key="textColor" red="0.96862751245498657" green="0.96078437566757202" blue="0.019607843831181526" alpha="1" colorSpace="deviceRGB"/>
+                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="70"/>
+                                <size key="titleShadowOffset" width="0.0" height="5"/>
+                                <state key="normal" title="Load Puzzle">
+                                    <color key="titleColor" red="0.99607849120000003" green="0.11372549830000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="wil-74-Gwx" kind="modal" identifier="loadPuzzleStarter" modalPresentationStyle="formSheet" id="LqQ-kx-LnQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gbf-Px-3FX">
+                                <rect key="frame" x="251" y="716" width="266" height="94"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="70"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="-20" maxX="0.0" maxY="0.0"/>
+                                <size key="titleShadowOffset" width="0.0" height="5"/>
+                                <state key="normal" title="Design">
+                                    <color key="titleColor" red="0.99607849120000003" green="0.11372549830000001" blue="0.0" alpha="1" colorSpace="deviceRGB"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="lfc-hQ-nT5" kind="push" id="Fua-I8-sfg"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" id="wDR-vs-MNg">
+                                <rect key="frame" x="40" y="65" width="689" height="353"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Bubble Blast Saga">
+                                        <attributes>
+                                            <color key="NSColor" red="0.47058826684951782" green="0.23137256503105164" blue="0.92156869173049927" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="125" name="Chalkduster"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" red="0.96432393149999995" green="0.96844172480000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <size key="shadowOffset" width="0.0" height="6"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-OR-" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="38" id="UfP-5s-t2i">
-                                <rect key="frame" x="303" y="582" width="162" height="77"/>
+                                <rect key="frame" x="296" y="622" width="162" height="77"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="112"/>
-                                <color key="textColor" red="0.96862751250000001" green="0.96078437569999997" blue="0.019607843829999999" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="textColor" red="0.47058826679999999" green="0.231372565" blue="0.9215686917" alpha="1" colorSpace="deviceRGB"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" red="0.96432393149999995" green="0.96844172480000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <size key="shadowOffset" width="0.0" height="4"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -131,7 +149,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.png" id="DXo-pj-alZ">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="DXo-pj-alZ">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
@@ -229,6 +247,7 @@
                     <navigationItem key="navigationItem" id="fOX-x6-Dtn"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="backgroundView" destination="DXo-pj-alZ" id="GFp-ur-7x9"/>
                         <outlet property="cannon" destination="fVr-DP-3i8" id="S4T-VX-5y5"/>
                         <outlet property="cannonBase" destination="V8K-Gi-BlG" id="gtL-iJ-drL"/>
                         <outlet property="gameArea" destination="L1q-pB-VWg" id="Ylr-gg-ESR"/>
@@ -328,7 +347,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.png" id="2MT-0Z-5MG">
+                            <imageView userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="back2.jpg" id="2MT-0Z-5MG">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -369,7 +388,7 @@
                                         </connections>
                                     </imageView>
                                     <imageView opaque="NO" alpha="0.30000001192092896" tag="6" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-lightning.png" id="Zng-ey-h95">
-                                        <rect key="frame" x="558" y="11" width="58" height="57"/>
+                                        <rect key="frame" x="492" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
@@ -377,7 +396,7 @@
                                         </connections>
                                     </imageView>
                                     <imageView opaque="NO" alpha="0.30000001192092896" tag="7" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-star.png" id="3q6-YQ-cmu">
-                                        <rect key="frame" x="624" y="11" width="58" height="57"/>
+                                        <rect key="frame" x="558" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
@@ -385,15 +404,23 @@
                                         </connections>
                                     </imageView>
                                     <imageView opaque="NO" alpha="0.30000001192092896" tag="8" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-bomb.png" id="10l-MH-bSy">
-                                        <rect key="frame" x="690" y="11" width="58" height="57"/>
+                                        <rect key="frame" x="624" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="cys-R8-Yhw" appends="YES" id="cNO-hd-wIl"/>
                                         </connections>
                                     </imageView>
+                                    <imageView opaque="NO" alpha="0.30000001192092896" tag="9" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-rainbow.png" id="azN-P6-8Ed">
+                                        <rect key="frame" x="690" y="11" width="58" height="57"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="qlW-ju-C2l" appends="YES" id="nL6-Tt-F4y"/>
+                                        </connections>
+                                    </imageView>
                                     <imageView opaque="NO" alpha="0.30000001192092896" tag="5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bubble-indestructible.png" id="p7R-9f-YxS">
-                                        <rect key="frame" x="492" y="11" width="58" height="57"/>
+                                        <rect key="frame" x="426" y="11" width="58" height="57"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <gestureRecognizers/>
                                         <connections>
@@ -541,18 +568,24 @@
                         <action selector="panHandler:" destination="lfc-hQ-nT5" id="ePy-aC-Nzn"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer id="qlW-ju-C2l">
+                    <connections>
+                        <action selector="paletteTapHandler:" destination="lfc-hQ-nT5" id="msd-Dc-alL"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-425" y="-2149"/>
         </scene>
     </scenes>
     <resources>
-        <image name="background.png" width="768" height="1024"/>
+        <image name="back2.jpg" width="1024" height="1024"/>
         <image name="bubble-blue.png" width="160" height="160"/>
         <image name="bubble-bomb.png" width="160" height="160"/>
         <image name="bubble-green.png" width="160" height="160"/>
         <image name="bubble-indestructible.png" width="160" height="160"/>
         <image name="bubble-lightning.png" width="160" height="160"/>
         <image name="bubble-orange.png" width="160" height="160"/>
+        <image name="bubble-rainbow.png" width="160" height="160"/>
         <image name="bubble-red.png" width="160" height="160"/>
         <image name="bubble-star.png" width="160" height="160"/>
         <image name="cannon-base.png" width="400" height="200"/>
@@ -564,7 +597,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="d9x-0w-ZnA"/>
-        <segue reference="zgz-ZH-GqB"/>
+        <segue reference="qbS-Kp-iQ8"/>
+        <segue reference="LqQ-kx-LnQ"/>
     </inferredMetricsTieBreakers>
 </document>

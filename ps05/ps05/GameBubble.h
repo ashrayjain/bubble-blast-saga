@@ -42,7 +42,6 @@
 
 - (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble;
 - (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger;
-
 - (BOOL)isEmpty;
 - (BOOL)isSpecial;
 

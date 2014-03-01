@@ -1,26 +1,26 @@
 //
-//  GameBubbleStar.m
+//  GameBubbleRainbow.m
 //  ps05
 //
-//  Created by Ashray Jain on 2/28/14.
+//  Created by Ashray Jain on 3/1/14.
 //  Copyright (c) 2014 nus.cs3217. All rights reserved.
 //
 
-#import "GameBubbleStar.h"
-#import "GameBubbleBasic.h"
+#import "GameBubbleRainbow.h"
 #import "Constants.h"
+#import "GameBubbleBasic.h"
 
-@interface GameBubbleStar ()
+@interface GameBubbleRainbow ()
 
 @end
 
-@implementation GameBubbleStar
+@implementation GameBubbleRainbow
 
 - (id)initWithRow:(int)row column:(int)column physicsModel:(CircularObjectModel *)physicsModel
 {
     self = [super initWithRow:row column:column physicsModel:physicsModel];
     if (self) {
-        self.bubbleView.image = [UIImage imageNamed:kStarBubbleImageName];
+        self.bubbleView.image = [UIImage imageNamed:kRainbowBubbleImageName];
     }
     return self;
 }
@@ -30,12 +30,12 @@
     self.bubbleView.image = nil;
 }
 
-- (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger
+- (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble
 {
-    if ([bubble canBeGroupedWithBubble:trigger]) {
+    if ([bubble isKindOfClass:[self class]]) {
         return YES;
     }
-    if (bubble == self) {
+    else if ([bubble isKindOfClass:[GameBubbleBasic class]]) {
         return YES;
     }
     return NO;
@@ -55,7 +55,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.bubbleView.image = [UIImage imageNamed:kStarBubbleImageName];
+        self.bubbleView.image = [UIImage imageNamed:kRainbowBubbleImageName];
     }
     return self;
 }

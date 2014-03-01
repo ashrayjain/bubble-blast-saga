@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0D02485018BA5A1D00D824CB /* MainScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D02484F18BA5A1D00D824CB /* MainScreenViewController.m */; };
+		0D0D644918C1FB870092D005 /* bubble-rainbow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D0D644718C1FB870092D005 /* bubble-rainbow.png */; };
+		0D0D644A18C1FB870092D005 /* back2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0D0D644818C1FB870092D005 /* back2.jpg */; };
+		0D16B16718C230540011C6F7 /* GameBubbleRainbow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D16B16618C230540011C6F7 /* GameBubbleRainbow.m */; };
 		0D4FDC1318BC7344008D1EF0 /* bubble-bomb.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC0C18BC7344008D1EF0 /* bubble-bomb.png */; };
 		0D4FDC1418BC7344008D1EF0 /* bubble-burst.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC0D18BC7344008D1EF0 /* bubble-burst.png */; };
 		0D4FDC1518BC7344008D1EF0 /* bubble-indestructible.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D4FDC0E18BC7344008D1EF0 /* bubble-indestructible.png */; };
@@ -70,6 +73,10 @@
 /* Begin PBXFileReference section */
 		0D02484E18BA5A1D00D824CB /* MainScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreenViewController.h; sourceTree = "<group>"; };
 		0D02484F18BA5A1D00D824CB /* MainScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainScreenViewController.m; sourceTree = "<group>"; };
+		0D0D644718C1FB870092D005 /* bubble-rainbow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-rainbow.png"; sourceTree = "<group>"; };
+		0D0D644818C1FB870092D005 /* back2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = back2.jpg; sourceTree = "<group>"; };
+		0D16B16518C230540011C6F7 /* GameBubbleRainbow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleRainbow.h; sourceTree = "<group>"; };
+		0D16B16618C230540011C6F7 /* GameBubbleRainbow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleRainbow.m; sourceTree = "<group>"; };
 		0D4FDC0C18BC7344008D1EF0 /* bubble-bomb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-bomb.png"; sourceTree = "<group>"; };
 		0D4FDC0D18BC7344008D1EF0 /* bubble-burst.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-burst.png"; sourceTree = "<group>"; };
 		0D4FDC0E18BC7344008D1EF0 /* bubble-indestructible.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble-indestructible.png"; sourceTree = "<group>"; };
@@ -206,6 +213,8 @@
 		0DA05D2918B9DB58008F6E39 /* ps05 */ = {
 			isa = PBXGroup;
 			children = (
+				0D0D644718C1FB870092D005 /* bubble-rainbow.png */,
+				0D0D644818C1FB870092D005 /* back2.jpg */,
 				0DA05D8418B9DD3D008F6E39 /* AppDelegate.h */,
 				0DA05D8518B9DD3D008F6E39 /* AppDelegate.m */,
 				0DA05D5918B9DC2D008F6E39 /* background.png */,
@@ -219,7 +228,6 @@
 				0DA05D5D18B9DC2D008F6E39 /* bubble-red.png */,
 				0D4FDC1018BC7344008D1EF0 /* bubble-star.png */,
 				0D4FDC1118BC7344008D1EF0 /* cannon-base.png */,
-				0D4FDC1218BC7344008D1EF0 /* cannon.png */,
 				0DA05D5618B9DC18008F6E39 /* CircularObjectModel.h */,
 				0DA05D5718B9DC18008F6E39 /* CircularObjectModel.m */,
 				0DA05D6718B9DC3D008F6E39 /* Constants.h */,
@@ -251,6 +259,7 @@
 				0DCA215418BE420D006D9DA7 /* GameplayViewController+PersistenceManagement.m */,
 				0DA05D7618B9DC3D008F6E39 /* GameplayViewController.h */,
 				0DA05D7718B9DC3D008F6E39 /* GameplayViewController.m */,
+				0D4FDC1218BC7344008D1EF0 /* cannon.png */,
 				0DA05D3518B9DB58008F6E39 /* Images.xcassets */,
 				0DA05D8F18B9FD4C008F6E39 /* LoadViewController.h */,
 				0DA05D9018B9FD4C008F6E39 /* LoadViewController.m */,
@@ -271,6 +280,8 @@
 				0DA05D2A18B9DB58008F6E39 /* Supporting Files */,
 				0DA05D7418B9DC3D008F6E39 /* TwoDVector.h */,
 				0DA05D7518B9DC3D008F6E39 /* TwoDVector.m */,
+				0D16B16518C230540011C6F7 /* GameBubbleRainbow.h */,
+				0D16B16618C230540011C6F7 /* GameBubbleRainbow.m */,
 			);
 			path = ps05;
 			sourceTree = "<group>";
@@ -359,6 +370,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = nus.cs3217;
 				TargetAttributes = {
+					0DA05D1F18B9DB58008F6E39 = {
+						DevelopmentTeam = W76H98A34A;
+					};
 					0DA05D3A18B9DB58008F6E39 = {
 						TestTargetID = 0DA05D1F18B9DB58008F6E39;
 					};
@@ -394,10 +408,12 @@
 				0DA05D7918B9DC3D008F6E39 /* InfoPlist.strings in Resources */,
 				0DA05D6318B9DC2D008F6E39 /* bubble-green.png in Resources */,
 				0DA05D2E18B9DB58008F6E39 /* InfoPlist.strings in Resources */,
+				0D0D644A18C1FB870092D005 /* back2.jpg in Resources */,
 				0D4FDC1418BC7344008D1EF0 /* bubble-burst.png in Resources */,
 				0DA05D9918B9FF8D008F6E39 /* Main.storyboard in Resources */,
 				0D4FDC1818BC7344008D1EF0 /* cannon-base.png in Resources */,
 				0DA05D6118B9DC2D008F6E39 /* background.png in Resources */,
+				0D0D644918C1FB870092D005 /* bubble-rainbow.png in Resources */,
 				0DA05D6418B9DC2D008F6E39 /* bubble-orange.png in Resources */,
 				0D4FDC1718BC7344008D1EF0 /* bubble-star.png in Resources */,
 				0DA05D9118B9FD4C008F6E39 /* eraser-1.png in Resources */,
@@ -445,6 +461,7 @@
 				0DA05D9618B9FD4C008F6E39 /* LoadViewController.m in Sources */,
 				0DA05D5818B9DC18008F6E39 /* CircularObjectModel.m in Sources */,
 				0D64E49418BFA57E005B63FC /* GameBubbleIndestructible.m in Sources */,
+				0D16B16718C230540011C6F7 /* GameBubbleRainbow.m in Sources */,
 				0D64E48818BF74EE005B63FC /* GameBubble.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,6 +599,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ps05/ps05-Prefix.pch";
 				INFOPLIST_FILE = "ps05/ps05-Info.plist";
@@ -595,6 +613,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ps05/ps05-Prefix.pch";
 				INFOPLIST_FILE = "ps05/ps05-Info.plist";

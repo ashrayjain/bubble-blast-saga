@@ -1,13 +1,13 @@
 //
-//  GameBubbleBomb.h
+//  GameBubbleRainbow.h
 //  ps05
 //
-//  Created by Ashray Jain on 2/28/14.
+//  Created by Ashray Jain on 3/1/14.
 //  Copyright (c) 2014 nus.cs3217. All rights reserved.
 //
 
 #import "GameBubble.h"
 
-@interface GameBubbleBomb : GameBubble
+@interface GameBubbleRainbow : GameBubble
 
 @end

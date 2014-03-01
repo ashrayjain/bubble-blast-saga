@@ -34,7 +34,10 @@
 #define BURST_BUBBLE_ORIGIN_OFFSET              80
 #define BUBBLE_DROP_OUT_OFFSET                  100
 
-@interface GameplayViewController ()
+@interface GameplayViewController () {
+    CALayer *cloudLayer;
+    CABasicAnimation *cloudLayerAnimation;
+}
 
 // Models
 @property (nonatomic) GameBubbleColor currentVisibleColor;
@@ -54,10 +57,62 @@
 
 @implementation GameplayViewController
 
+
+-(void)cloudScroll {
+    UIImage *cloudsImage = [UIImage imageNamed:kBackgroundImageName];
+    UIColor *cloudPattern = [UIColor colorWithPatternImage:cloudsImage];
+    self.backgroundView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    cloudLayer = [CALayer layer];
+    cloudLayer.backgroundColor = cloudPattern.CGColor;
+    
+    cloudLayer.transform = CATransform3DMakeScale(1, -1, 1);
+    
+    cloudLayer.anchorPoint = CGPointMake(0, 1);
+    
+    CGSize viewSize = self.backgroundView.bounds.size;
+    cloudLayer.frame = CGRectMake(0, 0, cloudsImage.size.width + viewSize.width, cloudsImage.size.height);
+    
+    [self.backgroundView.layer addSublayer:cloudLayer];
+    
+    CGPoint startPoint = CGPointZero;
+    CGPoint endPoint = CGPointMake(-cloudsImage.size.width, 0);
+    cloudLayerAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+    cloudLayerAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    cloudLayerAnimation.fromValue = [NSValue valueWithCGPoint:startPoint];
+    cloudLayerAnimation.toValue = [NSValue valueWithCGPoint:endPoint];
+    cloudLayerAnimation.repeatCount = HUGE_VALF;
+    cloudLayerAnimation.duration = 60.0;
+    [self applyCloudLayerAnimation];
+}
+
+- (void)applyCloudLayerAnimation {
+    [cloudLayer addAnimation:cloudLayerAnimation forKey:@"position"];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)applicationWillEnterForeground:(NSNotification *)note {
+    [self applyCloudLayerAnimation];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    [self cloudScroll];
 	// Do any additional setup after loading the view, typically from a nib.
     isDesignerMode = NO;
     self.currentVisibleColor = kBlue;
@@ -73,8 +128,52 @@
     
     [self.engine startEngine];
     [self initializeCannon];
-    
+
     /*
+    UIImage *image = [UIImage imageNamed:@"bubble-burst.png"];
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 0; i < 4; i++) {
+        CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage, CGRectMake(i*160, 0, 160, 160));
+        [images addObject:[UIImage imageWithCGImage:clip]];
+    }
+    
+    UIImage *imageToProcess = images[0];
+    CIFilter *map = [CIFilter filterWithName:@"CIColorMap"];
+    [map setValue:imageToProcess.CIImage forKey:@"Image"];
+    [map setValue:imageToProcess.CIImage forKey:@"Gradient Image"];
+*/
+
+    /*
+    UIImage *im = images[0];
+    CGSize si = im.size;
+    CGFloat arr[] = {0.0, 0.5, 0.0, 1.0, 0.0, 1.0};
+    CGDataProviderRef data = CGDataProviderCreateWithFilename("bubble-red.png");
+    CGImageRef imgRef = CGImageCreateWithPNGDataProvider(
+                                                         CGDataProviderCreateWithFilename("bubble-red.png"),
+                                                         arr,
+                                                         NO,
+                                                         NULL);
+    
+    CGImageRef maskRef = [[UIImage imageNamed:@"bubble-red.png"] CGImage];
+    CGFloat * de = CGImageGetDecode(imgRef);
+    CGSize i = [UIImage imageNamed:@"bubble-red.png"].size;
+    CGImageRef actualMask = CGImageMaskCreate(CGImageGetWidth(maskRef),
+                                              CGImageGetHeight(maskRef),
+                                              1,
+                                              CGImageGetBitsPerPixel(maskRef),
+                                              CGImageGetBytesPerRow(maskRef),
+                                              CGImageGetDataProvider(maskRef), NULL, false);
+
+    CGImageRef masked = CGImageCreateWithMask(imgRef, actualMask);
+
+    //CGImageRef im = image.CGImage;
+    //CGImageRef masked = CGImageCreateWithMask(im, [UIImage imageNamed:@"bubble-blue.png"].CGImage);
+
+    UIImage *mask = [UIImage imageWithCGImage:imgRef];
+    UIImageView *mas = [[UIImageView alloc] initWithImage:mask];
+    mas.backgroundColor = [UIColor blackColor];
+    [self.gameArea addSubview:mas];
+    
      
      UIImage *image = [UIImage imageNamed:@"bubble-burst.png"];
      UIGraphicsBeginImageContextWithOptions (image.size, NO, [[UIScreen mainScreen] scale]); // for correct resolution on retina, thanks @MobileVet
@@ -125,6 +224,9 @@
         [self loadBubbleGridModelFromLoadedData];
     }
     [self dropInitialHangingBubbles];
+    if ([self isGameEnd]) {
+        [self backButtonPressed:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -442,7 +544,7 @@
         [stack removeLastObject];
         
         // only explore same colored neighbours
-        if (![visitedSet containsObject:curr] && [bubble canBeGroupedWithBubble:curr]) {
+        if (![visitedSet containsObject:curr] && [curr canBeGroupedWithBubble:bubble]) {
             [visitedSet addObject:curr];
             for (GameBubble *neighbour in [self neighboursForNodeAtColumn:curr.model.column
                                                                       row:curr.model.row]) {
@@ -498,6 +600,9 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
+        UIView * snap = [self.backgroundView snapshotViewAfterScreenUpdates:NO];
+        [self.gameArea addSubview:snap];
+        [cloudLayer removeFromSuperlayer];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -642,7 +747,7 @@
     NSIndexPath *positionInGrid = [self gridLocationAtPoint:projectile.positionVector.scalarComponents];
     
     if (positionInGrid == nil || [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == NO) {
-        for (int deg = 0; deg <= 360; deg++) {
+        for (int deg = 0; deg <= 360; deg+=2) {
             double x = 15 * cos(M_PI/180.0 * deg);
             double y = 15 * sin(M_PI/180.0 * deg);
             TwoDVector *point = [projectile.positionVector addToVector:[TwoDVector twoDVectorFromXComponent:x yComponent:y]];
@@ -683,6 +788,9 @@
         [self burstBubbles:bubblesToBurst];
         [self dropOutBubbles:[self getAllHangingBubblesForBurstBubbles:bubblesToBurst]];
         
+        if ([self isGameEnd]) {
+            [self backButtonPressed:nil];
+        }
         [self reloadReserve];
     }
     else {

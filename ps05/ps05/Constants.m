@@ -17,16 +17,17 @@ NSString *const kIndestructibleBubbleImageName = @"bubble-indestructible.png";
 NSString *const kLightningBubbleImageName = @"bubble-lightning.png";
 NSString *const kStarBubbleImageName = @"bubble-star.png";
 NSString *const kBombBubbleImageName = @"bubble-bomb.png";
-NSString *const kBackgroundImageName = @"background.png";
+NSString *const kRainbowBubbleImageName = @"bubble-rainbow.png";
+NSString *const kBackgroundImageName = @"back2.jpg";
 
 double const kDefaultBubbleRadius = 32.0;
 double const kDefaultBubbleDiameter = kDefaultBubbleRadius * 2;
 double const kDefaultBubbleUpshiftForIsometricGrid = 0.28 * kDefaultBubbleRadius;
 double const kDefaultPhysicsEngineSpeed = 1.0/60;
 
-unsigned const kDefaultNumberOfRowsInDesignerGrid = 15;
+unsigned const kDefaultNumberOfRowsInDesignerGrid = 14;
 unsigned const kDefaultNumberOfBubblesPerRow = 12;
-unsigned const kDefaultNumberOfFilledRowsAtGameplayStart = 13;
+unsigned const kDefaultNumberOfFilledRowsAtGameplayStart = 10;
 unsigned const kDefaultNumberOfRowsInGameplay = kDefaultNumberOfRowsInDesignerGrid + 1;
 
 BOOL isDesignerMode = NO;

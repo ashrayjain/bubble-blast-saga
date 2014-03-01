@@ -10,8 +10,4 @@
 
 @interface GameBubbleLightning : GameBubble
 
-- (id)initWithRow:(int)row
-           column:(int)column
-     physicsModel:(CircularObjectModel *)physicsModel;
-
 @end
