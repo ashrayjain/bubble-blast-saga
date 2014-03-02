@@ -7,12 +7,42 @@
 //
 
 #import "AppDelegate.h"
+#import "Constants.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"Design 1"
+                                                           ofType:@""];
+    NSString *docPath = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath(), @"Design 1"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:docPath]) {
+    [[NSFileManager defaultManager] copyItemAtPath:bundlePath
+                                            toPath:docPath
+                                             error:nil];
+    }
+    
+    bundlePath = [[NSBundle mainBundle] pathForResource:@"Design 2"
+                                                           ofType:@""];
+    docPath = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath(), @"Design 2"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:docPath]) {
+        [[NSFileManager defaultManager] copyItemAtPath:bundlePath
+                                                toPath:docPath
+                                                 error:nil];
+    }
+
+
+    bundlePath = [[NSBundle mainBundle] pathForResource:@"Design 3"
+                                                           ofType:@""];
+    docPath = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath(), @"Design 3"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:docPath]) {
+        [[NSFileManager defaultManager] copyItemAtPath:bundlePath
+                                                toPath:docPath
+                                                 error:nil];
+    }
+
     return YES;
 }
 							

@@ -52,7 +52,7 @@
         [self.bubbleControllers addObject:[NSMutableArray array]];
         
         int numberOfBubblePerRow = kDefaultNumberOfBubblesPerRow;
-        if (![self isEven:i]) {
+        if (i % 2 != 0) {
             numberOfBubblePerRow--;
         }
         
@@ -69,6 +69,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.view insertSubview:self.backgroundView atIndex:0];
+    
   	// Do any additional setup after loading the view, typically from a nib.
     isDesignerMode = YES;
     
@@ -128,45 +130,37 @@
 
 - (GameBubble *)updateBubbleAtRow:(int)row column:(int)column
 {
-    GameBubble *bubble = nil;
+    Class bubbleType = [GameBubble class];
     switch (self.currentPaletteOption.tag) {
-        case BLUE_PALETTE:  // Fall through for basic bubbles
-        case RED_PALETTE:   // Fall through for basic bubbles
+        case BLUE_PALETTE:  //
+        case RED_PALETTE:   //
         case ORANGE_PALETTE:// Fall through for basic bubbles
-        case GREEN_PALETTE: // Fall through for basic bubbles
-        case EMPTY_PALETTE: // Fall through for basic bubbles
-            bubble = [self basicBubbleWithRow:row
-                                       column:column];
+        case GREEN_PALETTE: //
+        case EMPTY_PALETTE: //
+            return [self basicBubbleWithRow:row
+                                     column:column];
             break;
         case INDESTRUCTIBLE_PALETTE:
-            bubble = [[GameBubbleIndestructible alloc] initWithRow:row
-                                                            column:column
-                                                      physicsModel:nil];
+            bubbleType = [GameBubbleIndestructible class];
             break;
         case LIGHTNING_PALETTE:
-            bubble = [[GameBubbleLightning alloc] initWithRow:row
-                                                       column:column
-                                                 physicsModel:nil];
+            bubbleType = [GameBubbleLightning class];
             break;
         case STAR_PALETTE:
-            bubble = [[GameBubbleStar alloc] initWithRow:row
-                                                  column:column
-                                            physicsModel:nil];
+            bubbleType = [GameBubbleStar class];
             break;
         case BOMB_PALETTE:
-            bubble = [[GameBubbleBomb alloc] initWithRow:row
-                                                  column:column
-                                            physicsModel:nil];
+            bubbleType = [GameBubbleBomb class];
             break;
         case RAINBOW_PALETTE:
-            bubble = [[GameBubbleRainbow alloc] initWithRow:row
-                                                     column:column
-                                               physicsModel:nil];
+            bubbleType = [GameBubbleRainbow class];
             break;
         default:
             break;
     }
-    return bubble;
+    return [[bubbleType alloc] initWithRow:row
+                                    column:column
+                              physicsModel:nil];
 }
 
 - (GameBubbleBasic *)basicBubbleWithRow:(int)row column:(int)column
@@ -216,12 +210,6 @@
         isDesignerMode = NO;
         ((GameplayViewController *)segue.destinationViewController).loadedGrid = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:self.bubbleControllers]];
     }
-}
-
-// utility function
-- (BOOL)isEven:(NSInteger)number
-{
-    return number%2==0;
 }
 
 @end

@@ -9,10 +9,6 @@
 #import "GameBubbleLightning.h"
 #import "Constants.h"
 
-@interface GameBubbleLightning ()
-
-@end
-
 @implementation GameBubbleLightning
 
 - (id)initWithRow:(int)row column:(int)column physicsModel:(CircularObjectModel *)physicsModel

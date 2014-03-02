@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "LoadViewControllerDelegate.h"
-@interface MainScreenViewController : UIViewController <LoadViewControllerDelegate>
+#import "SkyBackgroundViewController.h"
+
+@interface MainScreenViewController : SkyBackgroundViewController <LoadViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIButton *loadPuzzleButton;
 @property (strong, nonatomic) IBOutlet UIButton *randomPuzzleButton;
 @property (strong, nonatomic) IBOutlet UIButton *playButton;
 @property (strong, nonatomic) IBOutlet UIButton *designButton;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
+@property (strong, nonatomic) IBOutlet UIView *mainView;
 
 - (IBAction)playButtonPressed:(UIButton *)sender;
 - (IBAction)backButtonPressed:(UIButton *)sender;

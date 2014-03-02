@@ -10,9 +10,6 @@
 #import "Constants.h"
 #import "GameBubbleBasic.h"
 
-@interface GameBubbleRainbow ()
-
-@end
 
 @implementation GameBubbleRainbow
 

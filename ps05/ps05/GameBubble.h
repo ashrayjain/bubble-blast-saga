@@ -19,6 +19,8 @@
 
 @property (nonatomic) GameBubbleModel *model;
 @property (nonatomic) UIImageView *bubbleView;
+@property (nonatomic, readonly) BOOL isEmpty;
+@property (nonatomic, readonly) BOOL isSpecial;
 
 - (id)initWithRow:(int)row
            column:(int)column
@@ -42,7 +44,8 @@
 
 - (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble;
 - (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger;
-- (BOOL)isEmpty;
-- (BOOL)isSpecial;
+
+//- (BOOL)isEmpty;
+//- (BOOL)isSpecial;
 
 @end

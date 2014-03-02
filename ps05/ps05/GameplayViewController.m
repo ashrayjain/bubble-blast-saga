@@ -34,14 +34,11 @@
 #define BURST_BUBBLE_ORIGIN_OFFSET              80
 #define BUBBLE_DROP_OUT_OFFSET                  100
 
-@interface GameplayViewController () {
-    CALayer *cloudLayer;
-    CABasicAnimation *cloudLayerAnimation;
-}
+@interface GameplayViewController ()
 
-// Models
-@property (nonatomic) GameBubbleColor currentVisibleColor;
-@property (nonatomic) GameBubbleColor currentHiddenColor;
+// ReserveModels
+@property (nonatomic) GameBubbleColor primaryReserveGameBubble;
+@property (nonatomic) GameBubbleColor secondaryReserveGameBubble;
 
 // utility properties
 @property (nonatomic) TwoDVector *projectileLaunchPoint;
@@ -50,183 +47,76 @@
 @property (nonatomic) BOOL panStarted;
 @property (nonatomic) BOOL projectileReady;
 @property (nonatomic) double cannonAngle;
-@property (nonatomic, strong) SaveController *saveController;
+@property (nonatomic) SaveController *saveController;
+@property (nonatomic) UIDynamicAnimator *animator;
+@property (nonatomic) UIGravityBehavior *gravity;
+@property (nonatomic) UICollisionBehavior *collisions;
+@property (nonatomic) NSArray *explodingAnimation;
+@property (nonatomic) NSMutableArray *explodingBubbles;
+@property (nonatomic) unsigned bottomMostFilledRow;
 
 @end
 
 
 @implementation GameplayViewController
 
-
--(void)cloudScroll {
-    UIImage *cloudsImage = [UIImage imageNamed:kBackgroundImageName];
-    UIColor *cloudPattern = [UIColor colorWithPatternImage:cloudsImage];
-    self.backgroundView.contentMode = UIViewContentModeScaleAspectFill;
-    
-    cloudLayer = [CALayer layer];
-    cloudLayer.backgroundColor = cloudPattern.CGColor;
-    
-    cloudLayer.transform = CATransform3DMakeScale(1, -1, 1);
-    
-    cloudLayer.anchorPoint = CGPointMake(0, 1);
-    
-    CGSize viewSize = self.backgroundView.bounds.size;
-    cloudLayer.frame = CGRectMake(0, 0, cloudsImage.size.width + viewSize.width, cloudsImage.size.height);
-    
-    [self.backgroundView.layer addSublayer:cloudLayer];
-    
-    CGPoint startPoint = CGPointZero;
-    CGPoint endPoint = CGPointMake(-cloudsImage.size.width, 0);
-    cloudLayerAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
-    cloudLayerAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    cloudLayerAnimation.fromValue = [NSValue valueWithCGPoint:startPoint];
-    cloudLayerAnimation.toValue = [NSValue valueWithCGPoint:endPoint];
-    cloudLayerAnimation.repeatCount = HUGE_VALF;
-    cloudLayerAnimation.duration = 60.0;
-    [self applyCloudLayerAnimation];
-}
-
-- (void)applyCloudLayerAnimation {
-    [cloudLayer addAnimation:cloudLayerAnimation forKey:@"position"];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
-}
-
-- (void)applicationWillEnterForeground:(NSNotification *)note {
-    [self applyCloudLayerAnimation];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    [self cloudScroll];
-	// Do any additional setup after loading the view, typically from a nib.
+    [self.view insertSubview:self.backgroundView atIndex:0];
+    
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.gameArea];
+    self.gravity = [[UIGravityBehavior alloc] initWithItems:nil];
+    self.collisions = [[UICollisionBehavior alloc] initWithItems:nil];
+    self.collisions.translatesReferenceBoundsIntoBoundary = YES;
+    [self.animator addBehavior:self.gravity];
+    [self.animator addBehavior:self.collisions];
+    self.animator.delegate = self;
+    
+    
     isDesignerMode = NO;
-    self.currentVisibleColor = kBlue;
-    self.currentHiddenColor = kRed;
     self.projectileLaunchPoint = [TwoDVector twoDVectorFromXComponent:self.gameArea.frame.size.width/2
                                                            yComponent:self.gameArea.frame.size.height-kDefaultBubbleRadius];
     self.engine = [[PhysicsEngine alloc] initWithTimeStep:kDefaultPhysicsEngineSpeed];
     
-    [self loadProjectileWithColor:self.currentVisibleColor+1];
-    self.projectile = self.projectileBubble.bubbleView;
-    [self.gameArea insertSubview:self.projectile belowSubview:self.projectilePath];
     [self loadBubbleGridModel];
-    
-    [self.engine startEngine];
     [self initializeCannon];
-
-    /*
-    UIImage *image = [UIImage imageNamed:@"bubble-burst.png"];
+    
+    UIImage *image = [UIImage imageNamed:@"burst.png"];
     NSMutableArray *images = [NSMutableArray array];
-    for (int i = 0; i < 4; i++) {
-        CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage, CGRectMake(i*160, 0, 160, 160));
-        [images addObject:[UIImage imageWithCGImage:clip]];
+    //    for (int i = 0; i < 4; i++) {
+    //        for (int j = 0; j < 5; j++) {
+    //            CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
+    //                                                           CGRectMake(j*192, i*192, 192, 192));
+    //            [images addObject:[UIImage imageWithCGImage:clip]];
+    //        }
+    //    }
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
+                                                           CGRectMake(j*192, i*192, 192, 192));
+            [images addObject:[UIImage imageWithCGImage:clip]];
+            CFRelease(clip);
+        }
     }
-    
-    UIImage *imageToProcess = images[0];
-    CIFilter *map = [CIFilter filterWithName:@"CIColorMap"];
-    [map setValue:imageToProcess.CIImage forKey:@"Image"];
-    [map setValue:imageToProcess.CIImage forKey:@"Gradient Image"];
-*/
-
-    /*
-    UIImage *im = images[0];
-    CGSize si = im.size;
-    CGFloat arr[] = {0.0, 0.5, 0.0, 1.0, 0.0, 1.0};
-    CGDataProviderRef data = CGDataProviderCreateWithFilename("bubble-red.png");
-    CGImageRef imgRef = CGImageCreateWithPNGDataProvider(
-                                                         CGDataProviderCreateWithFilename("bubble-red.png"),
-                                                         arr,
-                                                         NO,
-                                                         NULL);
-    
-    CGImageRef maskRef = [[UIImage imageNamed:@"bubble-red.png"] CGImage];
-    CGFloat * de = CGImageGetDecode(imgRef);
-    CGSize i = [UIImage imageNamed:@"bubble-red.png"].size;
-    CGImageRef actualMask = CGImageMaskCreate(CGImageGetWidth(maskRef),
-                                              CGImageGetHeight(maskRef),
-                                              1,
-                                              CGImageGetBitsPerPixel(maskRef),
-                                              CGImageGetBytesPerRow(maskRef),
-                                              CGImageGetDataProvider(maskRef), NULL, false);
-
-    CGImageRef masked = CGImageCreateWithMask(imgRef, actualMask);
-
-    //CGImageRef im = image.CGImage;
-    //CGImageRef masked = CGImageCreateWithMask(im, [UIImage imageNamed:@"bubble-blue.png"].CGImage);
-
-    UIImage *mask = [UIImage imageWithCGImage:imgRef];
-    UIImageView *mas = [[UIImageView alloc] initWithImage:mask];
-    mas.backgroundColor = [UIColor blackColor];
-    [self.gameArea addSubview:mas];
-    
-     
-     UIImage *image = [UIImage imageNamed:@"bubble-burst.png"];
-     UIGraphicsBeginImageContextWithOptions (image.size, NO, [[UIScreen mainScreen] scale]); // for correct resolution on retina, thanks @MobileVet
-     CGContextRef context = UIGraphicsGetCurrentContext();
-     
-     CGContextTranslateCTM(context, 0, image.size.height);
-     CGContextScaleCTM(context, 1.0, -1.0);
-     
-     CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
-     
-     // draw black background to preserve color of transparent pixels
-     CGContextSetBlendMode(context, kCGBlendModeNormal);
-     [[UIColor blackColor] setFill];
-     CGContextFillRect(context, rect);
-     
-     // draw original image
-     CGContextSetBlendMode(context, kCGBlendModeNormal);
-     CGContextDrawImage(context, rect, image.CGImage);
-     
-     // tint image (loosing alpha) - the luminosity of the original image is preserved
-     CGContextSetBlendMode(context, kCGBlendModeColor);
-     [[UIColor colorWithRed:155.0f/255.0f green:0.0f/255.0f blue:41.0f/255.0f alpha:1.0] setFill];
-     CGContextFillRect(context, rect);
-     
-     // mask by alpha values of original image
-     CGContextSetBlendMode(context, kCGBlendModeDestinationIn);
-     CGContextDrawImage(context, rect, image.CGImage);
-     
-     UIImage *coloredImage = UIGraphicsGetImageFromCurrentImageContext();
-     UIGraphicsEndImageContext();
-     
-     UIImageView *v = [[UIImageView alloc] initWithImage:coloredImage];
-     [self.gameArea addSubview:v];
-     
-     CGImageRef img = coloredImage.CGImage;
-     NSMutableArray *images = [NSMutableArray array];
-     for (int i = 0; i < 4; i++) {
-     CGImageRef clip = CGImageCreateWithImageInRect(img, CGRectMake(i*160, 0, 160, 160));
-     [images addObject:[UIImage imageWithCGImage:clip]];
-     }
-     self.visibleReserveBubble.tintColor = [UIColor redColor];
-     self.visibleReserveBubble.animationImages = images;
-     self.visibleReserveBubble.animationRepeatCount = 10;
-     self.visibleReserveBubble.animationDuration = 0.5;
-     [self.visibleReserveBubble startAnimating];*/
+    self.explodingAnimation = [images copy];
+    self.explodingBubbles = [NSMutableArray array];
     
     if (self.loadedGrid != nil) {
         [self loadBubbleGridModelFromLoadedData];
     }
     [self dropInitialHangingBubbles];
     if ([self isGameEnd]) {
-        [self backButtonPressed:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congrats!"
+                                                        message:@"You completed this level successfully!"
+                                                       delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
     }
+    [self generateReserveBubbles];
+    [self loadProjectileWithColor:self.primaryReserveGameBubble];
+    self.projectile = self.projectileBubble.bubbleView;
+    [self.gameArea insertSubview:self.projectile belowSubview:self.projectilePath];
+    [self.engine startEngine];
 }
 
 - (void)didReceiveMemoryWarning
@@ -243,9 +133,131 @@
     }
 }
 
+- (void)setBottomMostFilledRow:(unsigned int)bottomMostFilledRow
+{
+    if (bottomMostFilledRow > _bottomMostFilledRow) {
+        _bottomMostFilledRow = bottomMostFilledRow;
+    }
+}
+
+- (void)lowerRowSet:(unsigned int)bottomMostFilledRow
+{
+    if (bottomMostFilledRow < _bottomMostFilledRow) {
+        for (int i = 0; i < ((NSMutableArray *)self.bubbleControllers[_bottomMostFilledRow]).count; i++) {
+            GameBubble *bubble = self.bubbleControllers[_bottomMostFilledRow][i];
+            if (![bubble isEmpty]) {
+                return;
+            }
+        }
+        _bottomMostFilledRow = bottomMostFilledRow;
+    }
+}
+
 /*
  Initialization related methods
  */
+
+- (void)generateReserveBubbles
+{
+    // Only generates GameBubbleBasic for PS 5 Requirement
+    NSMutableDictionary *componentsCount = [[NSMutableDictionary alloc] init];
+    
+    int columns = kDefaultNumberOfBubblesPerRow;
+    if (self.bottomMostFilledRow % 2 != 0) {
+        columns--;
+    }
+    int row = self.bottomMostFilledRow;
+    for (int column = 0; column < columns; column++) {
+        GameBubble *bubble = self.bubbleControllers[row][column];
+        NSNumber *key = [NSNumber numberWithInt:bubble.model.type];
+        if (![bubble isEmpty]) {
+            BOOL isVisited = NO;
+            NSMutableArray *existingComponents = [componentsCount objectForKey:key];
+            for (NSMutableSet * component in existingComponents) {
+                if ([component containsObject:bubble]) {
+                    isVisited = YES;
+                    break;
+                }
+            }
+            if (!isVisited) {
+                if (existingComponents != nil) {
+                    [existingComponents addObject:[self getGroupableSetForBubble:bubble]];
+                }
+                else {
+                    existingComponents = [NSMutableArray arrayWithObject:[self getGroupableSetForBubble:bubble]];
+                    [componentsCount setObject:existingComponents forKey:key];
+                }
+            }
+        }
+    }
+    
+    // For this PS requirements
+    NSMutableArray *basicBubbles = [componentsCount objectForKey:[NSNumber numberWithInt:kGameBubbleBasic]];
+    
+    
+    NSArray *sorted = [basicBubbles sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSMutableSet *set1 = obj1;
+        NSMutableSet *set2 = obj2;
+        if (set1.count > set2.count) {
+            return NSOrderedAscending;
+        }
+        else if (set1.count < set2.count) {
+            return NSOrderedDescending;
+        }
+        else {
+            return NSOrderedSame;
+        }
+    }];
+    
+    NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    NSMutableSet *colorsInLastRow = [NSMutableSet set];
+    for (NSMutableSet *set in sorted) {
+        NSNumber *key = [NSNumber numberWithInt:set.count];
+        NSNumber *color = [self getColorForComponent:set];
+        if ([data objectForKey:key] == nil) {
+            [data setObject:[NSMutableArray arrayWithObject:color] forKey:key];
+        }
+        else {
+            NSMutableArray *value = [data objectForKey:key];
+            [value addObject:color];
+        }
+        [colorsInLastRow addObject:color];
+    }
+    
+    NSSortDescriptor *descending = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
+    NSArray *allKeys = [data.allKeys sortedArrayUsingDescriptors:[NSArray arrayWithObject:descending]];
+    
+    GameBubbleBasicModel *projectileModel = (GameBubbleBasicModel *)self.projectileBubble.model;
+    GameBubbleColor projectileColor = projectileModel.color;
+    
+    NSMutableArray *chosenColors = [NSMutableArray array];
+    for (int i = 0; i < MIN(allKeys.count, 3); i++) {
+        NSMutableArray *choices = [data objectForKey:allKeys[i]];
+        [chosenColors addObject:choices[arc4random_uniform(choices.count)]];
+    }
+    while (chosenColors.count < 3) {
+        [chosenColors addObject:[NSNumber numberWithInt:arc4random_uniform(kEmpty)]];
+    }
+    
+    int assignedIndex = 0;
+    if (![colorsInLastRow containsObject:[NSNumber numberWithInt:projectileColor]]) {
+        projectileModel.color = [chosenColors[assignedIndex++] integerValue];
+    }
+    if (![colorsInLastRow containsObject:[NSNumber numberWithInt:self.primaryReserveGameBubble]]) {
+        self.primaryReserveGameBubble = [chosenColors[assignedIndex++] integerValue];
+    }
+    self.secondaryReserveGameBubble = [chosenColors[assignedIndex] integerValue];
+}
+
+- (NSNumber *)getColorForComponent:(NSMutableSet *)set
+{
+    for (GameBubble *bubble in set) {
+        if ([bubble isKindOfClass:[GameBubbleBasic class]]) {
+            return [NSNumber numberWithInt:((GameBubbleBasicModel *)bubble.model).color];
+        }
+    }
+    return nil;
+}
 
 - (void)initializeCannon
 // MODIFIES: self.cannon, self.cannonAngle
@@ -347,6 +359,7 @@
             [self.gameArea addSubview:newBubble.bubbleView];
         }
     }
+    self.bottomMostFilledRow = kDefaultNumberOfFilledRowsAtGameplayStart - 1;
 }
 
 - (void)loadBubbleGridModelFromLoadedData
@@ -357,6 +370,7 @@
         for (int j = 0; j < row.count; j++) {
             if (data.count > i && ((NSMutableArray *)data[i]).count > j) {
                 [self switchBubbleAtRow:i column:j withBubble:data[i][j]];
+                self.bottomMostFilledRow = i;
             }
             else {
                 [self emptyBubbleAtRow:i column:j];
@@ -593,16 +607,17 @@
  */
 
 - (IBAction)backButtonPressed:(UIButton *)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Do you really wanna go back?" message:@"This will clear your current progress!" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Do you really wanna go back?" message:@"Your unsaved progress will be lost forever!" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    if ([title isEqual:@"Yes"] || [title isEqual:@"End Game"] || [title isEqual:@"Ok"]) {
         UIView * snap = [self.backgroundView snapshotViewAfterScreenUpdates:NO];
-        [self.gameArea addSubview:snap];
-        [cloudLayer removeFromSuperlayer];
+        [self.backgroundView removeFromSuperview];
+        [self.view insertSubview:snap atIndex:0];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -733,10 +748,54 @@
  Implemented Protocols related methods
  */
 
+- (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
+{
+    [animator removeAllBehaviors];
+    for (UIView *view in self.gravity.items) {
+        [view removeFromSuperview];
+    }
+    for (UIView *view in self.collisions.items) {
+        [view removeFromSuperview];
+    }
+    
+    self.gravity = [[UIGravityBehavior alloc] initWithItems:nil];
+    self.collisions = [[UICollisionBehavior alloc] initWithItems:nil];
+    self.collisions.translatesReferenceBoundsIntoBoundary = YES;
+    [self.animator addBehavior:self.gravity];
+    [self.animator addBehavior:self.collisions];
+    //    NSArray *items = self.gravity.items;
+    //    for (UIView *item in items) {
+    //        [self.gravity removeItem:item];
+    //        [item removeFromSuperview];
+    //    }
+    //
+    //    items = self.collisions.items;
+    //    for (UIView *item in items) {
+    //        [self.gravity removeItem:item];
+    //        [item removeFromSuperview];
+    //    }
+}
+
+
 - (void)didUpdatePosition:(id)sender
 {
     PhysicsEngineObject *obj = sender;
     self.projectile.center = obj.positionVector.scalarComponents;
+}
+
+- (NSIndexPath *)gridLocationAtPoint:(CGPoint)point WithSearchRadius:(double)radius
+{
+    NSIndexPath *positionInGrid;
+    for (int deg = 0; deg <= 360; deg++) {
+        double x = radius * cos(M_PI/180.0 * deg);
+        double y = radius * sin(M_PI/180.0 * deg);
+        CGPoint searchPoint = CGPointMake(point.x + x, point.y + y);
+        positionInGrid = [self gridLocationAtPoint:searchPoint];
+        if (positionInGrid != nil && [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == YES) {
+            return positionInGrid;
+        }
+    }
+    return nil;
 }
 
 - (void)didCollide:(id)sender withObject:(id)object
@@ -747,27 +806,15 @@
     NSIndexPath *positionInGrid = [self gridLocationAtPoint:projectile.positionVector.scalarComponents];
     
     if (positionInGrid == nil || [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == NO) {
-        for (int deg = 0; deg <= 360; deg+=2) {
-            double x = 15 * cos(M_PI/180.0 * deg);
-            double y = 15 * sin(M_PI/180.0 * deg);
-            TwoDVector *point = [projectile.positionVector addToVector:[TwoDVector twoDVectorFromXComponent:x yComponent:y]];
-            positionInGrid = [self gridLocationAtPoint:point.scalarComponents];
-            if (positionInGrid != nil && [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == YES) {
-                break;
-            }
-        }
+        positionInGrid = [self gridLocationAtPoint:projectile.positionVector.scalarComponents
+                 WithSearchRadius:15];
     }
     
-    if (positionInGrid == nil || [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == NO) {
-        for (int deg = 0; deg <= 360; deg++) {
-            double x = 32 * cos(M_PI/180.0 * deg);
-            double y = 32 * sin(M_PI/180.0 * deg);
-            TwoDVector *point = [projectile.positionVector addToVector:[TwoDVector twoDVectorFromXComponent:x yComponent:y]];
-            positionInGrid = [self gridLocationAtPoint:point.scalarComponents];
-            if (positionInGrid != nil && [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == YES) {
-                break;
-            }
-        }
+    if ((positionInGrid == nil ||
+         [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == NO) &&
+        (projectile.positionVector.yComponent <= 770.56)) {
+        positionInGrid = [self gridLocationAtPoint:projectile.positionVector.scalarComponents
+                 WithSearchRadius:kDefaultBubbleRadius];
     }
     
     
@@ -797,6 +844,12 @@
         self.projectileBubble.model.physicsModel.velocityVector = [TwoDVector nullVector];
         self.projectileBubble.model.physicsModel.positionVector = self.projectileLaunchPoint;
         self.projectileReady = YES;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
+                                                        message:@"That last move ends the game! Would you like to undo and try again?"
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"End Game", @"Undo move", nil];
+        [alert show];
     }
 }
 
@@ -808,21 +861,32 @@
 - (void)burstBubbles:(NSMutableSet *)bubbles
 // EFFECTS: animates the bursting of bubbles
 {
-    for (GameBubble *bubble in bubbles) {
-        UIView *droppedBubble = [self addAnimationBubbleForBubble:bubble];
+    NSArray *sortedByRowBubbles;
+    sortedByRowBubbles = [self sortBubblesByRowDescending:bubbles];
+    
+    for (GameBubble *bubble in sortedByRowBubbles) {
         [self emptyBubbleAtRow:bubble.model.row column:bubble.model.column];
-        [UIView animateWithDuration:BUBBLE_BURST_DURATION
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseIn
-                         animations:^{
-                             droppedBubble.frame = CGRectMake(droppedBubble.frame.origin.x - BURST_BUBBLE_ORIGIN_OFFSET,
-                                                              droppedBubble.frame.origin.y - BURST_BUBBLE_ORIGIN_OFFSET,
-                                                              BURST_BUBBLE_SIZE,
-                                                              BURST_BUBBLE_SIZE);
-                             droppedBubble.alpha = 0;
-                         }
-                         completion:^(BOOL finished) {}];
+        UIImageView * explosion = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        explosion.center = bubble.bubbleView.center;
+        explosion.animationImages = self.explodingAnimation;
+        explosion.animationDuration = 0.75;
+        explosion.animationRepeatCount = 1;
+        [self.view addSubview:explosion];
+        [explosion startAnimating];
+        
+
+        /*double delayInSeconds = 0.75;
+         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+         dispatch_after(popTime,
+         dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+         ^(void){
+         while (explosion.isAnimating == YES) {}
+         dispatch_async(dispatch_get_main_queue(), ^{                                                    [explosion removeFromSuperview];
+         });
+         });
+         */
     }
+    
     
 }
 
@@ -835,30 +899,10 @@
     if (projectileClass == [GameBubbleBasic class]) {
         bubble = [self basicBubbleWithRow:row column:column];
     }
-    else if (projectileClass == [GameBubbleIndestructible class]) {
-        bubble = [[GameBubbleIndestructible alloc] initWithRow:row
-                                                        column:column
-                                                  physicsModel:self.physicsModels[row][column]];
-    }
-    else if (projectileClass == [GameBubbleLightning class]) {
-        bubble = [[GameBubbleLightning alloc] initWithRow:row
-                                                   column:column
-                                             physicsModel:self.physicsModels[row][column]];
-    }
-    else if (projectileClass == [GameBubbleStar class]) {
-        bubble = [[GameBubbleStar alloc] initWithRow:row
-                                              column:column
-                                        physicsModel:self.physicsModels[row][column]];
-    }
-    else if (projectileClass == [GameBubbleBomb class]) {
-        bubble = [[GameBubbleBomb alloc] initWithRow:row
-                                              column:column
-                                        physicsModel:self.physicsModels[row][column]];
-    }
-    
-    if (bubble != nil) {
-        bubble.model.physicsModel.delegate = bubble;
-        bubble.model.physicsModel.enabled = YES;
+    else {
+        bubble = [[projectileClass alloc] initWithRow:row
+                                               column:column
+                                         physicsModel:nil];
     }
     return bubble;
 }
@@ -869,7 +913,7 @@
     GameBubbleBasic *newBubble = [[GameBubbleBasic alloc] initWithColor:color
                                                                     row:row
                                                                  column:column
-                                                           physicsModel:self.physicsModels[row][column]];
+                                                           physicsModel:nil];
     return newBubble;
 }
 
@@ -877,11 +921,9 @@
 // MODIFIES: self.projectileModel & self.projectile
 // EFFECTS: snape the projectile to the grid at given index path
 {
-    GameBubble *oldBubble = self.bubbleControllers[path.section][path.item];
-    [oldBubble.bubbleView removeFromSuperview];
-    GameBubble *newBubble = [self updatedBubbleAtRow:path.section column:path.item];
-    [self.gameArea addSubview:newBubble.bubbleView];
-    self.bubbleControllers[path.section][path.item] = newBubble;
+    [self switchBubbleAtRow:path.section
+                     column:path.item
+                 withBubble:[self updatedBubbleAtRow:path.section column:path.item]];
     
     
     self.projectileBubble.model.physicsModel.velocityVector = [TwoDVector nullVector];
@@ -890,39 +932,73 @@
     self.projectile.alpha = 0;
 }
 
+- (void)animatePrimaryReserveColorChange
+{
+    [UIView transitionWithView:self.primaryReserveBubble
+                      duration:0.2f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        self.primaryReserveBubble.image = [self getImageForColor:self.primaryReserveGameBubble];
+                    }
+                    completion:^(BOOL finished) {
+                    }];
+}
+
+- (void)animateSecondaryReserveColorChange
+{
+    [UIView transitionWithView:self.secondaryReserveBubble
+                      duration:0.2f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        self.secondaryReserveBubble.image = [self getImageForColor:self.secondaryReserveGameBubble];
+                    }
+                    completion:^(BOOL finished) {
+                    }];
+}
+
 - (void)reloadReserve
 // EFFECTS: reloads the reserve bubbles
 {
+    [self generateReserveBubbles];
     [UIView animateWithDuration:BUBBLE_RELOAD_DURATION
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         [self moveView:self.hiddenReserveBubble
-                                    toX:self.visibleReserveBubble.center.x
-                                   andY:self.visibleReserveBubble.center.y];
+                         [self moveView:self.secondaryReserveBubble
+                                    toX:self.primaryReserveBubble.center.x
+                                   andY:self.primaryReserveBubble.center.y];
                          CGPoint pointToConvert = [self.projectileLaunchPoint scalarComponents];
-                         CGPoint convertedPt = [[self.visibleReserveBubble superview] convertPoint:pointToConvert
+                         CGPoint convertedPt = [[self.primaryReserveBubble superview] convertPoint:pointToConvert
                                                                                           fromView:nil];
-                         [self moveView:self.visibleReserveBubble
+                         [self moveView:self.primaryReserveBubble
                                     toX:convertedPt.x
                                    andY:convertedPt.y];
                      }
                      completion:^(BOOL finished) {
-                         ((GameBubbleBasicModel *)self.projectileBubble.model).color = self.currentVisibleColor;
-                         self.projectile.image = [self getImageForColor:self.currentVisibleColor];
+                         ((GameBubbleBasicModel *)self.projectileBubble.model).color = self.primaryReserveGameBubble;
+                         //GameBubbleColor projectileColorBeforeGeneration = self.primaryReserveGameBubble;
+                        
+                         self.primaryReserveGameBubble = self.secondaryReserveGameBubble;
+//                         GameBubbleColor primaryReserveColorBeforeGeneration = self.primaryReserveGameBubble;
+                         
+                         
                          self.projectile.alpha = 1.0;
+                         [self moveView:self.primaryReserveBubble
+                                    toX:self.secondaryReserveBubble.center.x
+                                   andY:self.secondaryReserveBubble.center.y];
+                         [self moveView:self.secondaryReserveBubble
+                                    toX:self.secondaryReserveBubble.center.x+kDefaultBubbleDiameter
+                                   andY:self.secondaryReserveBubble.center.y];
                          
-                         [self moveView:self.visibleReserveBubble
-                                    toX:self.hiddenReserveBubble.center.x
-                                   andY:self.hiddenReserveBubble.center.y];
-                         [self moveView:self.hiddenReserveBubble
-                                    toX:self.hiddenReserveBubble.center.x+kDefaultBubbleDiameter
-                                   andY:self.hiddenReserveBubble.center.y];
-                         
-                         self.currentVisibleColor = self.currentHiddenColor;
-                         self.currentHiddenColor = arc4random_uniform(kGreen+1);
-                         self.visibleReserveBubble.image = [self getImageForColor:self.currentVisibleColor];
-                         self.hiddenReserveBubble.image = [self getImageForColor:self.currentHiddenColor];
+//                         if (primaryReserveColorBeforeGeneration != self.primaryReserveGameBubble) {
+//                             [self animatePrimaryReserveColorChange];
+//                         }
+//                         else {
+//                             self.primaryReserveBubble.image = [self getImageForColor:self.primaryReserveGameBubble];
+//                         }
+//                         
+//                         
+//                         [self animateSecondaryReserveColorChange];
                          self.projectileReady = YES;
                      }];
 }
@@ -930,7 +1006,7 @@
 - (UIView *)addAnimationBubbleForBubble:(GameBubble *)bubble
 // EFFECTS: add a temporary view over the collection view to animate on
 {
-    UIImageView *dropOutBubble = [[UIImageView alloc] initWithImage:bubble.bubbleView.image];//snapshotViewAfterScreenUpdates:NO];
+    UIImageView *dropOutBubble = [[UIImageView alloc] initWithImage:bubble.bubbleView.image];
     dropOutBubble.frame = CGRectMake(bubble.model.physicsModel.positionVector.xComponent - kDefaultBubbleRadius,
                                      bubble.model.physicsModel.positionVector.yComponent - kDefaultBubbleRadius,
                                      kDefaultBubbleDiameter,
@@ -939,20 +1015,44 @@
     return dropOutBubble;
 }
 
+- (NSArray *)sortBubblesByRowDescending:(NSMutableSet *)bubbles
+{
+    NSArray *sortedByRowBubbles = [[bubbles allObjects] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        GameBubbleModel *model1 = ((GameBubble *)obj1).model;
+        GameBubbleModel *model2 = ((GameBubble *)obj2).model;
+        if (model1.row > model2.row) {
+            return NSOrderedAscending;
+        }
+        else if (model1.row < model2.row) {
+            return NSOrderedDescending;
+        }
+        else {
+            return NSOrderedSame;
+        }
+    }];
+    return sortedByRowBubbles;
+}
+
 - (void)dropOutBubbles:(NSMutableSet *)bubbles
 // EFFECTS: drops out bubbles below the screeen
 {
-    for (GameBubble *bubble in bubbles) {
+    NSArray *sortedByRowBubbles;
+    sortedByRowBubbles = [self sortBubblesByRowDescending:bubbles];
+    
+    for (GameBubble *bubble in sortedByRowBubbles) {
         UIView *droppedBubble = [self addAnimationBubbleForBubble:bubble];
         [self emptyBubbleAtRow:bubble.model.row column:bubble.model.column];
-        [UIView animateWithDuration:BUBBLE_DROP_OUT_DURATION
-                              delay:0
-                            options:UIViewAnimationOptionCurveEaseIn
-                         animations:^{
-                             droppedBubble.center = CGPointMake(droppedBubble.center.x,
-                                                                self.gameArea.frame.size.height + BUBBLE_DROP_OUT_OFFSET);
-                         }
-                         completion:^(BOOL finished) {}];
+        [self.collisions addItem:droppedBubble];
+        [self.gravity addItem:droppedBubble];
+        /*[UIView animateWithDuration:BUBBLE_DROP_OUT_DURATION
+         delay:0
+         options:UIViewAnimationOptionCurveEaseIn
+         animations:^{
+         droppedBubble.center = CGPointMake(droppedBubble.center.x,
+         self.gameArea.frame.size.height + BUBBLE_DROP_OUT_OFFSET);
+         }
+         completion:^(BOOL finished) {}];
+         */
     }
 }
 
@@ -972,17 +1072,20 @@
 {
     bubble.model.physicsModel = self.physicsModels[row][column];
     bubble.model.physicsModel.delegate = bubble;
-    if ([bubble isEmpty]) {
-        bubble.model.physicsModel.enabled = NO;
-    }
-    else {
-        bubble.model.physicsModel.enabled = YES;
-    }
     
     GameBubble *oldBubble= self.bubbleControllers[row][column];
     [oldBubble.bubbleView removeFromSuperview];
     [self.gameArea addSubview:bubble.bubbleView];
     self.bubbleControllers[row][column] = bubble;
+    
+    if ([bubble isEmpty]) {
+        bubble.model.physicsModel.enabled = NO;
+        [self lowerRowSet:row-1];
+    }
+    else {
+        bubble.model.physicsModel.enabled = YES;
+        self.bottomMostFilledRow = bubble.model.row;
+    }
 }
 
 

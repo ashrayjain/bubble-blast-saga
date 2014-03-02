@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GameBubbleBasicModelDelegate.h"
+#import "SkyBackgroundViewController.h"
 
 /*
  This is the main Controller of the Application and has the main visual elements as its
@@ -16,12 +17,11 @@
  It handles all the user interactions on these objects.
 */
 
-@interface DesignerViewController : UIViewController
+@interface DesignerViewController : SkyBackgroundViewController
 
 // GameViewController View
 @property (strong, nonatomic) IBOutlet UIView *gameArea;
 @property (strong, nonatomic) IBOutlet UIView *palette;
-//@property (strong, nonatomic) IBOutlet UICollectionView *bubbleDesignerGrid;
 
 // GameViewController Model
 @property (strong, nonatomic) NSMutableArray *bubbleControllers;

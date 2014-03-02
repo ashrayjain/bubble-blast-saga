@@ -7,9 +7,6 @@
 
 @interface GameBubble ()
 
-@property (nonatomic) UIInterpolatingMotionEffect *parallaxEffectHorizontal;
-@property (nonatomic) UIInterpolatingMotionEffect *parallaxEffectVertical;
-
 @end
 
 @implementation GameBubble
@@ -73,12 +70,12 @@
 
 - (void)tapHandler:(UIGestureRecognizer *)gesture
 {
-    
+    return;
 }
 
 - (void)longpressHandler:(UIGestureRecognizer *)gesture
 {
-    
+    return;
 }
 
 - (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble
@@ -109,7 +106,7 @@
 
 - (void)didCollide:(id)sender withObject:(id)object
 {
-    
+    return;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder

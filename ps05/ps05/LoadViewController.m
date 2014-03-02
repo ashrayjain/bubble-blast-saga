@@ -50,13 +50,25 @@
     return [self.fileList count]*2;
 }
 
-- (UIImage *) imageForFileName:(NSString *)file
+- (UIImage *)imageForFileName:(NSString *)file
 {
     NSData *data = [[NSFileManager defaultManager] contentsAtPath:file];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     UIImage *image = [UIImage imageWithData:[unarchiver decodeObjectForKey:@"image"]];
     [unarchiver finishDecoding];
     return image;
+}
+
+- (BOOL)isPreloadedForFile:(NSString *)file
+{
+    NSData *data = [[NSFileManager defaultManager] contentsAtPath:file];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    BOOL preloaded = NO;
+    if ([unarchiver containsValueForKey:@"preloaded"]) {
+        preloaded = YES;
+    }
+    [unarchiver finishDecoding];
+    return preloaded;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -79,6 +91,15 @@
         cell.backgroundColor = [UIColor clearColor];
     }
     return cell;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *fileName = [self.fileList objectAtIndex:indexPath.row/2];
+    if ([self isPreloadedForFile:fileName]) {
+        return UITableViewCellEditingStyleNone;
+    }
+    return UITableViewCellEditingStyleDelete;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

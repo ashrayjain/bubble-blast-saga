@@ -14,20 +14,20 @@
 #import <UIKit/UIKit.h>
 #import "PhysicsEngineObjectDelegate.h"
 #import "GameBubbleBasicModelDelegate.h"
+#import "SkyBackgroundViewController.h"
 
 @class GameBubble;
 @class ProjectileLaunchPath;
-@interface GameplayViewController : UIViewController <UIAlertViewDelegate, PhysicsEngineObjectDelegate>
+@interface GameplayViewController : SkyBackgroundViewController <UIAlertViewDelegate, PhysicsEngineObjectDelegate, UIDynamicAnimatorDelegate>
 
 // Views
 @property (strong, nonatomic) IBOutlet UIView *gameArea;
-@property (strong, nonatomic) IBOutlet UIImageView *visibleReserveBubble;
-@property (strong, nonatomic) IBOutlet UIImageView *hiddenReserveBubble;
+@property (strong, nonatomic) IBOutlet UIImageView *primaryReserveBubble;
+@property (strong, nonatomic) IBOutlet UIImageView *secondaryReserveBubble;
 @property (strong, nonatomic) UIImageView *projectile;
 @property (strong, nonatomic) IBOutlet ProjectileLaunchPath *projectilePath;
 @property (strong, nonatomic) IBOutlet UIImageView *cannon;
 @property (strong, nonatomic) IBOutlet UIImageView *cannonBase;
-@property (strong, nonatomic) IBOutlet UIImageView *backgroundView;
 
 @property (strong, nonatomic) id loadedGrid;
 @property (strong, nonatomic) NSString *currentGridName;

@@ -10,10 +10,6 @@
 #import "GameBubbleBasic.h"
 #import "Constants.h"
 
-@interface GameBubbleStar ()
-
-@end
-
 @implementation GameBubbleStar
 
 - (id)initWithRow:(int)row column:(int)column physicsModel:(CircularObjectModel *)physicsModel

@@ -9,9 +9,6 @@
 #import "GameBubbleIndestructible.h"
 #import "Constants.h"
 
-@interface GameBubbleIndestructible ()
-
-@end
 
 @implementation GameBubbleIndestructible
 

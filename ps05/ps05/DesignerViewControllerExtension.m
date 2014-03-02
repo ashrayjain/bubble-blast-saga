@@ -29,6 +29,9 @@
 - (IBAction)backButtonPressed:(UIButton *)sender
 // EFFECTS: moves to the previous screen in the application
 {
+    UIView * snap = [self.backgroundView snapshotViewAfterScreenUpdates:NO];
+    [self.backgroundView removeFromSuperview];
+    [self.view insertSubview:snap atIndex:0];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

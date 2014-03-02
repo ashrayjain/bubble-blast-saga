@@ -93,6 +93,12 @@
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:self.data forKey:GRID_DATA_KEY];
     [archiver encodeObject:UIImagePNGRepresentation(self.image) forKey:@"image"];
+    
+    if ([gridName  isEqual: @"Design 1"] ||
+        [gridName  isEqual: @"Design 2"] ||
+        [gridName  isEqual: @"Design 3"]) {
+        [archiver encodeObject:@YES forKey:@"preloaded"];
+    }
     [archiver finishEncoding];
     BOOL success = [data writeToFile:[NSString stringWithFormat:@"%@/%@", documentsDirectoryPath(), gridName]
                           atomically:YES];
