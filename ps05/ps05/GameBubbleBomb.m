@@ -10,6 +10,10 @@
 #import "Constants.h"
 
 #define MAX_NUMBER_OF_NEIGHBOURS_FOR_GRID_CELL 6
+#define SPRITE_SIZE 192
+#define SPRITE_ROWS 4
+#define SPRITE_COLS 5
+#define SPRITE  @"fire.png"
 
 @interface GameBubbleBomb ()
 
@@ -63,12 +67,12 @@
 
 - (NSArray *)loadAnimation
 {
-    UIImage *image = [UIImage imageNamed:@"fire.png"];
+    UIImage *image = [UIImage imageNamed:SPRITE];
     NSMutableArray *images = [NSMutableArray array];
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 5; j++) {
+    for (int i = 0; i < SPRITE_ROWS; i++) {
+        for (int j = 0; j < SPRITE_COLS; j++) {
             CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
-                                                           CGRectMake(j*192, i*192, 192, 192));
+                                                           CGRectMake(j*SPRITE_SIZE, i*SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE));
             [images addObject:[UIImage imageWithCGImage:clip]];
             CFRelease(clip);
         }

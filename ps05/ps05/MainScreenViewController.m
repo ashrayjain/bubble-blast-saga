@@ -16,7 +16,8 @@
 #define ERROR_MSG_NO_SAVED_FILES_FOUND  @"No saved files found!"
 #define GRID_DATA_KEY                   @"grid"
 #define GRID_NAME_KEY                   @"gridName"
-
+#define SEGUE_LOAD                      @"loadPuzzleStarter"
+#define SEGUE_PLAY                      @"startGamePlayWithLoad"
 
 @interface MainScreenViewController ()
 
@@ -71,13 +72,7 @@
                                                                       self.randomPuzzleButton.center.y);
                          self.loadPuzzleButton.center = CGPointMake(centerX,
                                                                     self.loadPuzzleButton.center.y);
-                         
-                         
-                         
-                         //                         self.playButton.alpha = 0;
-                         //                         self.designButton.alpha = 0;
-                         //                         self.randomPuzzleButton.alpha = 1;
-                         //                         self.loadPuzzleButton.alpha = 1;
+
                          self.backButton.alpha = 1;
                      } completion:^(BOOL finished) {
                          self.playButton.enabled = NO;
@@ -106,12 +101,7 @@
                                                                       self.randomPuzzleButton.center.y);
                          self.loadPuzzleButton.center = CGPointMake(screenWidth + self.loadPuzzleButton.bounds.size.width,
                                                                     self.loadPuzzleButton.center.y);
-                         
-                         
-//                         self.playButton.alpha = 1;
-//                         self.designButton.alpha = 1;
-//                         self.randomPuzzleButton.alpha = 0;
-//                         self.loadPuzzleButton.alpha = 0;
+
                          self.backButton.alpha = 0;
                      }
                      completion:^(BOOL finished) {
@@ -131,14 +121,14 @@
         if (data != nil) {
             self.loadedData = [data objectForKey:GRID_DATA_KEY];
             self.gridName = [data objectForKey:GRID_NAME_KEY];
-            [self performSegueWithIdentifier:@"startGamePlayWithLoad" sender:self];
+            [self performSegueWithIdentifier:SEGUE_PLAY sender:self];
         }
     }];
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-    if ([identifier isEqual:@"loadPuzzleStarter"]) {
+    if ([identifier isEqual:SEGUE_LOAD]) {
         NSArray *files = fileListForLoading();
         if (files.count <= 0) {
             popUpAlertWithDelay(ERROR_TITLE, ERROR_MSG_NO_SAVED_FILES_FOUND, ERROR_ALERT_DELAY);
@@ -150,7 +140,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqual:@"startGamePlayWithLoad"]) {
+    if ([segue.identifier isEqual:SEGUE_PLAY]) {
         ((GameplayViewController *)segue.destinationViewController).loadedGrid = self.loadedData;
         ((GameplayViewController *)segue.destinationViewController).currentGridName = self.gridName;
     }

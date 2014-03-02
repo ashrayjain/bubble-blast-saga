@@ -77,6 +77,9 @@ Add a new super class for all UIViewControllers in the game.
 Bubble’s path can be seen across a straight line when panning and aiming the projectile. This adds accuracy.
 UIBezierPath used in a new view. 
 
+Preview While load
+Uses screenshot of the grid to display.
+
 Final Reflection
 The MVC architecture originally designed has evolved as the PS’s passed. As more and more realizations were made (sometimes the hard way), experience with MVC became better. Now, it doesn’t seem unnatural at all and infact seems to simplify things a lot.
 The game engine, though already quite modular can be made more generic given more time. The Game Engine currently, is completely decoupled from the game as such. It does not know what a “BUBBLE” is and can be easily ported over to another game where circular objects are used. However, some aspects could be improved.

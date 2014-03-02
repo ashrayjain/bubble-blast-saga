@@ -24,6 +24,11 @@
 #define CANCEL_BUTTON_LABEL             @"Cancel"
 
 #define GRID_DATA_KEY                   @"grid"
+#define PRELOADED_KEY                   @"preloaded"
+#define IMAGE_KEY                       @"image"
+#define PRELOADED_DESIGN_1              @"Design 1"
+#define PRELOADED_DESIGN_2              @"Design 2"
+#define PRELOADED_DESIGN_3              @"Design 3"
 
 @interface SaveController () <UIAlertViewDelegate>
 
@@ -92,12 +97,12 @@
     NSMutableData *data = [[NSMutableData alloc] init];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:self.data forKey:GRID_DATA_KEY];
-    [archiver encodeObject:UIImagePNGRepresentation(self.image) forKey:@"image"];
+    [archiver encodeObject:UIImagePNGRepresentation(self.image) forKey:IMAGE_KEY];
     
-    if ([gridName  isEqual: @"Design 1"] ||
-        [gridName  isEqual: @"Design 2"] ||
-        [gridName  isEqual: @"Design 3"]) {
-        [archiver encodeObject:@YES forKey:@"preloaded"];
+    if ([gridName  isEqual: PRELOADED_DESIGN_1] ||
+        [gridName  isEqual: PRELOADED_DESIGN_2] ||
+        [gridName  isEqual: PRELOADED_DESIGN_3]) {
+        [archiver encodeObject:@YES forKey:PRELOADED_KEY];
     }
     [archiver finishEncoding];
     BOOL success = [data writeToFile:[NSString stringWithFormat:@"%@/%@", documentsDirectoryPath(), gridName]

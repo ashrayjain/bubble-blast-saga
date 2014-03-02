@@ -8,6 +8,9 @@
 
 #import "GameBubbleLightning.h"
 #import "Constants.h"
+#define SPRITE_TEMPLATE @"bolt_tesla_000%d.png"
+#define SPRITE_LAST_FRAME @"bolt_tesla_0010.png"
+#define NUMBER_OF_SPRITES 9
 
 @implementation GameBubbleLightning
 
@@ -24,11 +27,11 @@
 - (NSArray *)loadAnimation
 {
     NSMutableArray *images = [NSMutableArray array];
-    for (int i = 1; i < 9; i++) {
-        NSString *fileName = [NSString stringWithFormat:@"bolt_tesla_000%d.png", i];
+    for (int i = 1; i < NUMBER_OF_SPRITES; i++) {
+        NSString *fileName = [NSString stringWithFormat:SPRITE_TEMPLATE, i];
         [images addObject:[UIImage imageNamed:fileName]];
     }
-   [images addObject:[UIImage imageNamed:@"bolt_tesla_0010.png"]];
+   [images addObject:[UIImage imageNamed:SPRITE_LAST_FRAME]];
     return [images copy];
 }
 

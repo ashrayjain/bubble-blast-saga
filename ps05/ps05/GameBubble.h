@@ -44,7 +44,10 @@
   // EFFECTS: the bubble is 'erased' after being long-pressed
 
 - (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble;
+  //EFFECTS: return wether the given bubble can be grouped with self
+
 - (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger;
+  //EFFECTS: return wether the given bubble should burst self is triggered by trigger
 
 
 @end

@@ -10,6 +10,13 @@
 #import "LoadViewControllerDelegate.h"
 #import "SkyBackgroundViewController.h"
 
+
+/*
+ This is the main screen controller.
+ This manages the main menu and is the first screen upon app startup.
+ */
+
+
 @interface MainScreenViewController : SkyBackgroundViewController <LoadViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIButton *loadPuzzleButton;

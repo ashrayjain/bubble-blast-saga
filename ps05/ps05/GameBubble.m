@@ -4,7 +4,8 @@
 #import "TwoDVector.h"
 
 #define MAX_NUMBER_OF_NEIGHBOURS_FOR_GRID_CELL  6
-
+#define SPRITE_SIZE 192
+#define SPRITE_ROW_COL 5
 @interface GameBubble ()
 
 @end
@@ -75,8 +76,8 @@
 {
     UIImage *image = [UIImage imageNamed:@"burst.png"];
     NSMutableArray *images = [NSMutableArray array];
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
+    for (int i = 0; i < SPRITE_ROW_COL; i++) {
+        for (int j = 0; j < SPRITE_ROW_COL; j++) {
             CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
                                                            CGRectMake(j*192, i*192, 192, 192));
             [images addObject:[UIImage imageWithCGImage:clip]];
