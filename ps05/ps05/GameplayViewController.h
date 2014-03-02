@@ -18,7 +18,7 @@
 
 @class GameBubble;
 @class ProjectileLaunchPath;
-@interface GameplayViewController : SkyBackgroundViewController <UIAlertViewDelegate, PhysicsEngineObjectDelegate, UIDynamicAnimatorDelegate>
+@interface GameplayViewController : SkyBackgroundViewController <UIAlertViewDelegate, PhysicsEngineObjectDelegate>
 
 // Views
 @property (strong, nonatomic) IBOutlet UIView *gameArea;

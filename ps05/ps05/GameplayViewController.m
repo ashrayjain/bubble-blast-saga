@@ -33,6 +33,21 @@
 #define BURST_BUBBLE_SIZE                       224
 #define BURST_BUBBLE_ORIGIN_OFFSET              80
 #define BUBBLE_DROP_OUT_OFFSET                  100
+#define END_TITLE                               @"Congrats!"
+#define END_MSG                                 @"You completed this level successfully!"
+#define OK_MSG                                  @"Ok"
+#define END_GAME_MSG                            @"End Game"
+#define BACK_TITLE                              @"Do you really wanna go back?"
+#define BACK_MSG                                @"Your unsaved progress will be lost forever!"
+#define YES_MSG                                 @"Yes"
+#define NO_MSG                                  @"No"
+
+#define KEY_FRAME_TIME_STEP_NO 100
+#define KEY_FRAME_TIME 0.3
+#define CANNON_SPLICING_WIDTH 400
+#define CANNON_SPLICING_HEIGHT 800
+#define CANNON_OFFSET 100
+#define CANNON_ANIMATION_DURATION 0.5
 
 @interface GameplayViewController ()
 
@@ -48,9 +63,6 @@
 @property (nonatomic) BOOL projectileReady;
 @property (nonatomic) double cannonAngle;
 @property (nonatomic) SaveController *saveController;
-@property (nonatomic) UIDynamicAnimator *animator;
-@property (nonatomic) UIGravityBehavior *gravity;
-@property (nonatomic) UICollisionBehavior *collisions;
 @property (nonatomic) NSArray *explodingAnimation;
 @property (nonatomic) NSMutableArray *explodingBubbles;
 @property (nonatomic) unsigned bottomMostFilledRow;
@@ -65,15 +77,6 @@
     [super viewDidLoad];
     [self.view insertSubview:self.backgroundView atIndex:0];
     
-    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.gameArea];
-    self.gravity = [[UIGravityBehavior alloc] initWithItems:nil];
-    self.collisions = [[UICollisionBehavior alloc] initWithItems:nil];
-    self.collisions.translatesReferenceBoundsIntoBoundary = YES;
-    [self.animator addBehavior:self.gravity];
-    [self.animator addBehavior:self.collisions];
-    self.animator.delegate = self;
-    
-    
     isDesignerMode = NO;
     self.projectileLaunchPoint = [TwoDVector twoDVectorFromXComponent:self.gameArea.frame.size.width/2
                                                            yComponent:self.gameArea.frame.size.height-kDefaultBubbleRadius];
@@ -82,35 +85,13 @@
     [self loadBubbleGridModel];
     [self initializeCannon];
     
-    UIImage *image = [UIImage imageNamed:@"burst.png"];
-    NSMutableArray *images = [NSMutableArray array];
-    //    for (int i = 0; i < 4; i++) {
-    //        for (int j = 0; j < 5; j++) {
-    //            CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
-    //                                                           CGRectMake(j*192, i*192, 192, 192));
-    //            [images addObject:[UIImage imageWithCGImage:clip]];
-    //        }
-    //    }
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
-                                                           CGRectMake(j*192, i*192, 192, 192));
-            [images addObject:[UIImage imageWithCGImage:clip]];
-            CFRelease(clip);
-        }
-    }
-    self.explodingAnimation = [images copy];
-    self.explodingBubbles = [NSMutableArray array];
     
     if (self.loadedGrid != nil) {
         [self loadBubbleGridModelFromLoadedData];
     }
     [self dropInitialHangingBubbles];
     if ([self isGameEnd]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congrats!"
-                                                        message:@"You completed this level successfully!"
-                                                       delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
+        [self showGameComplete];
     }
     [self generateReserveBubbles];
     [self loadProjectileWithColor:self.primaryReserveGameBubble];
@@ -269,7 +250,10 @@
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 6; j++) {
             // clip sprite into individual frames
-            CGImageRef clip = CGImageCreateWithImageInRect(img, CGRectMake(j*400, i*800+100, 400, 700));
+            CGImageRef clip = CGImageCreateWithImageInRect(img, CGRectMake(j*CANNON_SPLICING_WIDTH,
+                                                                           i*CANNON_SPLICING_HEIGHT+CANNON_OFFSET,
+                                                                           CANNON_SPLICING_WIDTH,
+                                                                           CANNON_SPLICING_HEIGHT-CANNON_OFFSET));
             UIImage *clipImg = [UIImage imageWithCGImage:clip];
             CFRelease(clip);
             
@@ -287,7 +271,7 @@
     self.cannonAngle = 0;
     self.cannon.image = [images firstObject];
     self.cannon.animationImages = images;
-    self.cannon.animationDuration = 0.5;
+    self.cannon.animationDuration = CANNON_ANIMATION_DURATION;
     self.cannon.animationRepeatCount = 1;
 }
 
@@ -606,15 +590,23 @@
  User input related methods
  */
 
+- (void)showGameComplete
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:END_TITLE
+                                                    message:END_MSG
+                                                   delegate:self cancelButtonTitle:OK_MSG otherButtonTitles:nil];
+    [alert show];
+}
+
 - (IBAction)backButtonPressed:(UIButton *)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Do you really wanna go back?" message:@"Your unsaved progress will be lost forever!" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:BACK_TITLE message:BACK_MSG delegate:self cancelButtonTitle:NO_MSG otherButtonTitles:YES_MSG, nil];
     [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
-    if ([title isEqual:@"Yes"] || [title isEqual:@"End Game"] || [title isEqual:@"Ok"]) {
+    if ([title isEqual:YES_MSG] || [title isEqual:END_GAME_MSG] || [title isEqual:OK_MSG]) {
         UIView * snap = [self.backgroundView snapshotViewAfterScreenUpdates:NO];
         [self.backgroundView removeFromSuperview];
         [self.view insertSubview:snap atIndex:0];
@@ -692,17 +684,17 @@
     double yOffset = self.projectileLaunchPoint.yComponent-self.cannon.center.y;
     double angleToRotate = -atan2(-velocity.yComponent, velocity.xComponent)+M_PI_2;
     double angleOffset = (angleToRotate - self.cannonAngle);
-    [UIView animateKeyframesWithDuration:0.3
+    [UIView animateKeyframesWithDuration:KEY_FRAME_TIME
                                    delay:0
                                  options:UIViewKeyframeAnimationOptionCalculationModePaced
                               animations:^{
-                                  for (int i = 0; i < 100; i++) {
-                                      [UIView addKeyframeWithRelativeStartTime:i*0.3/100
-                                                              relativeDuration:0.3/100
+                                  for (int i = 0; i < KEY_FRAME_TIME_STEP_NO; i++) {
+                                      [UIView addKeyframeWithRelativeStartTime:i*KEY_FRAME_TIME/KEY_FRAME_TIME_STEP_NO
+                                                              relativeDuration:KEY_FRAME_TIME/KEY_FRAME_TIME_STEP_NO
                                                                     animations:^{
                                                                         CGAffineTransform transform = CGAffineTransformMakeTranslation(xOffset, yOffset);
                                                                         transform = CGAffineTransformRotate(transform,
-                                                                                                            self.cannonAngle + angleOffset*i/100);
+                                                                                                            self.cannonAngle + angleOffset*i/KEY_FRAME_TIME_STEP_NO);
                                                                         transform = CGAffineTransformTranslate(transform,
                                                                                                                -xOffset,
                                                                                                                -yOffset);
@@ -748,35 +740,6 @@
  Implemented Protocols related methods
  */
 
-- (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
-{
-    [animator removeAllBehaviors];
-    for (UIView *view in self.gravity.items) {
-        [view removeFromSuperview];
-    }
-    for (UIView *view in self.collisions.items) {
-        [view removeFromSuperview];
-    }
-    
-    self.gravity = [[UIGravityBehavior alloc] initWithItems:nil];
-    self.collisions = [[UICollisionBehavior alloc] initWithItems:nil];
-    self.collisions.translatesReferenceBoundsIntoBoundary = YES;
-    [self.animator addBehavior:self.gravity];
-    [self.animator addBehavior:self.collisions];
-    //    NSArray *items = self.gravity.items;
-    //    for (UIView *item in items) {
-    //        [self.gravity removeItem:item];
-    //        [item removeFromSuperview];
-    //    }
-    //
-    //    items = self.collisions.items;
-    //    for (UIView *item in items) {
-    //        [self.gravity removeItem:item];
-    //        [item removeFromSuperview];
-    //    }
-}
-
-
 - (void)didUpdatePosition:(id)sender
 {
     PhysicsEngineObject *obj = sender;
@@ -807,14 +770,14 @@
     
     if (positionInGrid == nil || [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == NO) {
         positionInGrid = [self gridLocationAtPoint:projectile.positionVector.scalarComponents
-                 WithSearchRadius:15];
+                                  WithSearchRadius:15];
     }
     
     if ((positionInGrid == nil ||
          [((GameBubble *)self.bubbleControllers[positionInGrid.section][positionInGrid.item]) isEmpty] == NO) &&
         (projectile.positionVector.yComponent <= 770.56)) {
         positionInGrid = [self gridLocationAtPoint:projectile.positionVector.scalarComponents
-                 WithSearchRadius:kDefaultBubbleRadius];
+                                  WithSearchRadius:kDefaultBubbleRadius];
     }
     
     
@@ -836,7 +799,7 @@
         [self dropOutBubbles:[self getAllHangingBubblesForBurstBubbles:bubblesToBurst]];
         
         if ([self isGameEnd]) {
-            [self backButtonPressed:nil];
+            [self showGameComplete];
         }
         [self reloadReserve];
     }
@@ -866,30 +829,23 @@
     
     for (GameBubble *bubble in sortedByRowBubbles) {
         [self emptyBubbleAtRow:bubble.model.row column:bubble.model.column];
-        UIImageView * explosion = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        UIImageView * explosion = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kDefaultBubbleDiameter*2, kDefaultBubbleDiameter*2)];
         explosion.center = bubble.bubbleView.center;
-        explosion.animationImages = self.explodingAnimation;
+        explosion.animationImages = bubble.burstAnimation;
         explosion.animationDuration = 0.75;
         explosion.animationRepeatCount = 1;
         [self.view addSubview:explosion];
         [explosion startAnimating];
         
-
-        /*double delayInSeconds = 0.75;
-         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-         dispatch_after(popTime,
-         dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-         ^(void){
-         while (explosion.isAnimating == YES) {}
-         dispatch_async(dispatch_get_main_queue(), ^{                                                    [explosion removeFromSuperview];
-         });
-         });
-         */
+        double delayInSeconds = 0.75 + 1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime,
+                       dispatch_get_main_queue(),
+                       ^(void){
+                           [explosion removeFromSuperview];
+                       });
     }
-    
-    
 }
-
 
 - (GameBubble *)updatedBubbleAtRow:(int)row column:(int)column
 {
@@ -959,7 +915,6 @@
 - (void)reloadReserve
 // EFFECTS: reloads the reserve bubbles
 {
-    [self generateReserveBubbles];
     [UIView animateWithDuration:BUBBLE_RELOAD_DURATION
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut
@@ -976,11 +931,10 @@
                      }
                      completion:^(BOOL finished) {
                          ((GameBubbleBasicModel *)self.projectileBubble.model).color = self.primaryReserveGameBubble;
-                         //GameBubbleColor projectileColorBeforeGeneration = self.primaryReserveGameBubble;
-                        
-                         self.primaryReserveGameBubble = self.secondaryReserveGameBubble;
-//                         GameBubbleColor primaryReserveColorBeforeGeneration = self.primaryReserveGameBubble;
                          
+                         self.primaryReserveGameBubble = self.secondaryReserveGameBubble;
+                         GameBubbleColor primaryReserveColorBeforeGeneration = self.primaryReserveGameBubble;
+                         [self generateReserveBubbles];
                          
                          self.projectile.alpha = 1.0;
                          [self moveView:self.primaryReserveBubble
@@ -990,15 +944,15 @@
                                     toX:self.secondaryReserveBubble.center.x+kDefaultBubbleDiameter
                                    andY:self.secondaryReserveBubble.center.y];
                          
-//                         if (primaryReserveColorBeforeGeneration != self.primaryReserveGameBubble) {
-//                             [self animatePrimaryReserveColorChange];
-//                         }
-//                         else {
-//                             self.primaryReserveBubble.image = [self getImageForColor:self.primaryReserveGameBubble];
-//                         }
-//                         
-//                         
-//                         [self animateSecondaryReserveColorChange];
+                         if (primaryReserveColorBeforeGeneration != self.primaryReserveGameBubble) {
+                             [self animatePrimaryReserveColorChange];
+                         }
+                         else {
+                             self.primaryReserveBubble.image = [self getImageForColor:self.primaryReserveGameBubble];
+                         }
+                         
+                         
+                         [self animateSecondaryReserveColorChange];
                          self.projectileReady = YES;
                      }];
 }
@@ -1042,17 +996,14 @@
     for (GameBubble *bubble in sortedByRowBubbles) {
         UIView *droppedBubble = [self addAnimationBubbleForBubble:bubble];
         [self emptyBubbleAtRow:bubble.model.row column:bubble.model.column];
-        [self.collisions addItem:droppedBubble];
-        [self.gravity addItem:droppedBubble];
-        /*[UIView animateWithDuration:BUBBLE_DROP_OUT_DURATION
-         delay:0
-         options:UIViewAnimationOptionCurveEaseIn
-         animations:^{
-         droppedBubble.center = CGPointMake(droppedBubble.center.x,
-         self.gameArea.frame.size.height + BUBBLE_DROP_OUT_OFFSET);
-         }
-         completion:^(BOOL finished) {}];
-         */
+        [UIView animateWithDuration:BUBBLE_DROP_OUT_DURATION
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseIn
+                         animations:^{
+                             droppedBubble.center = CGPointMake(droppedBubble.center.x,
+                                                                self.gameArea.frame.size.height + BUBBLE_DROP_OUT_OFFSET);
+                         }
+                         completion:^(BOOL finished) {}];
     }
 }
 

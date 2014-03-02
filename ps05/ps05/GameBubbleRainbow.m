@@ -22,6 +22,22 @@
     return self;
 }
 
+- (NSArray *)loadAnimation
+{
+    UIImage *image = [UIImage imageNamed:@"burst.png"];
+    NSMutableArray *images = [NSMutableArray array];
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
+                                                           CGRectMake(j*192, i*192, 192, 192));
+            [images addObject:[UIImage imageWithCGImage:clip]];
+            CFRelease(clip);
+        }
+    }
+    return [images copy];
+}
+
 - (void)longpressHandler:(UIGestureRecognizer *)gesture
 {
     self.bubbleView.image = nil;

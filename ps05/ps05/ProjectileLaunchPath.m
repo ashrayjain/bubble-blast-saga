@@ -41,7 +41,7 @@
     CGFloat dashPattern[] = {DASH_LENGTH, DASH_LENGTH};
     [aPath setLineDash:dashPattern count:PATTERN_LENGTH phase:0];
     aPath.lineWidth = DASH_WIDTH;
-    [[UIColor whiteColor] setStroke];
+    [[UIColor darkGrayColor] setStroke];
     [aPath stroke];
 }
 

@@ -16,8 +16,20 @@
     self = [super initWithRow:row column:column physicsModel:physicsModel];
     if (self) {
         self.bubbleView.image = [UIImage imageNamed:kLightningBubbleImageName];
+        self.burstAnimation = [self loadAnimation];
     }
     return self;
+}
+
+- (NSArray *)loadAnimation
+{
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 1; i < 9; i++) {
+        NSString *fileName = [NSString stringWithFormat:@"bolt_tesla_000%d.png", i];
+        [images addObject:[UIImage imageNamed:fileName]];
+    }
+   [images addObject:[UIImage imageNamed:@"bolt_tesla_0010.png"]];
+    return [images copy];
 }
 
 - (void)longpressHandler:(UIGestureRecognizer *)gesture
@@ -28,6 +40,7 @@
 - (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger
 {
     if (![bubble isEmpty] && bubble.model.row == self.model.row) {
+        bubble.burstAnimation = [self.burstAnimation copy];
         return YES;
     }
     return NO;
@@ -48,7 +61,9 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.bubbleView.image = [UIImage imageNamed:kLightningBubbleImageName];
+        self.burstAnimation = [self loadAnimation];
     }
+    
     return self;
 }
 

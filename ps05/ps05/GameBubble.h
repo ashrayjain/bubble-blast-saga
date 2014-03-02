@@ -21,6 +21,7 @@
 @property (nonatomic) UIImageView *bubbleView;
 @property (nonatomic, readonly) BOOL isEmpty;
 @property (nonatomic, readonly) BOOL isSpecial;
+@property (nonatomic) NSArray *burstAnimation;
 
 - (id)initWithRow:(int)row
            column:(int)column
@@ -45,7 +46,5 @@
 - (BOOL)canBeGroupedWithBubble:(GameBubble *)bubble;
 - (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger;
 
-//- (BOOL)isEmpty;
-//- (BOOL)isSpecial;
 
 @end

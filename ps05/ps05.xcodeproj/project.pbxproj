@@ -117,16 +117,16 @@
 		0D64E49318BFA57E005B63FC /* GameBubbleIndestructible.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleIndestructible.m; sourceTree = "<group>"; };
 		0D64E49518BFA58D005B63FC /* GameBubbleStar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBubbleStar.h; sourceTree = "<group>"; };
 		0D64E49618BFA58D005B63FC /* GameBubbleStar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBubbleStar.m; sourceTree = "<group>"; };
-		0D65D06318C26F1600B860D8 /* bolt_tesla_0001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0001.png; sourceTree = "<group>"; };
-		0D65D06418C26F1600B860D8 /* bolt_tesla_0002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0002.png; sourceTree = "<group>"; };
-		0D65D06518C26F1600B860D8 /* bolt_tesla_0003.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0003.png; sourceTree = "<group>"; };
-		0D65D06618C26F1600B860D8 /* bolt_tesla_0004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0004.png; sourceTree = "<group>"; };
-		0D65D06718C26F1600B860D8 /* bolt_tesla_0005.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0005.png; sourceTree = "<group>"; };
-		0D65D06818C26F1600B860D8 /* bolt_tesla_0006.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0006.png; sourceTree = "<group>"; };
-		0D65D06918C26F1600B860D8 /* bolt_tesla_0007.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0007.png; sourceTree = "<group>"; };
-		0D65D06A18C26F1600B860D8 /* bolt_tesla_0008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0008.png; sourceTree = "<group>"; };
-		0D65D06B18C26F1600B860D8 /* bolt_tesla_0009.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0009.png; sourceTree = "<group>"; };
-		0D65D06C18C26F1600B860D8 /* bolt_tesla_0010.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bolt_tesla_0010.png; sourceTree = "<group>"; };
+		0D65D06318C26F1600B860D8 /* bolt_tesla_0001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0001.png; path = bolt_tesla/bolt_tesla_0001.png; sourceTree = "<group>"; };
+		0D65D06418C26F1600B860D8 /* bolt_tesla_0002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0002.png; path = bolt_tesla/bolt_tesla_0002.png; sourceTree = "<group>"; };
+		0D65D06518C26F1600B860D8 /* bolt_tesla_0003.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0003.png; path = bolt_tesla/bolt_tesla_0003.png; sourceTree = "<group>"; };
+		0D65D06618C26F1600B860D8 /* bolt_tesla_0004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0004.png; path = bolt_tesla/bolt_tesla_0004.png; sourceTree = "<group>"; };
+		0D65D06718C26F1600B860D8 /* bolt_tesla_0005.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0005.png; path = bolt_tesla/bolt_tesla_0005.png; sourceTree = "<group>"; };
+		0D65D06818C26F1600B860D8 /* bolt_tesla_0006.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0006.png; path = bolt_tesla/bolt_tesla_0006.png; sourceTree = "<group>"; };
+		0D65D06918C26F1600B860D8 /* bolt_tesla_0007.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0007.png; path = bolt_tesla/bolt_tesla_0007.png; sourceTree = "<group>"; };
+		0D65D06A18C26F1600B860D8 /* bolt_tesla_0008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0008.png; path = bolt_tesla/bolt_tesla_0008.png; sourceTree = "<group>"; };
+		0D65D06B18C26F1600B860D8 /* bolt_tesla_0009.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0009.png; path = bolt_tesla/bolt_tesla_0009.png; sourceTree = "<group>"; };
+		0D65D06C18C26F1600B860D8 /* bolt_tesla_0010.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bolt_tesla_0010.png; path = bolt_tesla/bolt_tesla_0010.png; sourceTree = "<group>"; };
 		0D65D06D18C26F1600B860D8 /* fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fire.png; sourceTree = "<group>"; };
 		0D65D07918C2735600B860D8 /* burst.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = burst.png; sourceTree = "<group>"; };
 		0D65D07B18C27EF300B860D8 /* SkyBackgroundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkyBackgroundViewController.h; sourceTree = "<group>"; };
@@ -252,7 +252,16 @@
 			children = (
 				0D672F9818C34C3800DC1230 /* cannon-base-cut.png */,
 				0D65D07918C2735600B860D8 /* burst.png */,
-				0D65D06218C26F1600B860D8 /* bolt_tesla */,
+				0D65D06318C26F1600B860D8 /* bolt_tesla_0001.png */,
+				0D65D06418C26F1600B860D8 /* bolt_tesla_0002.png */,
+				0D65D06518C26F1600B860D8 /* bolt_tesla_0003.png */,
+				0D65D06618C26F1600B860D8 /* bolt_tesla_0004.png */,
+				0D65D06718C26F1600B860D8 /* bolt_tesla_0005.png */,
+				0D65D06818C26F1600B860D8 /* bolt_tesla_0006.png */,
+				0D65D06918C26F1600B860D8 /* bolt_tesla_0007.png */,
+				0D65D06A18C26F1600B860D8 /* bolt_tesla_0008.png */,
+				0D65D06B18C26F1600B860D8 /* bolt_tesla_0009.png */,
+				0D65D06C18C26F1600B860D8 /* bolt_tesla_0010.png */,
 				0D65D06D18C26F1600B860D8 /* fire.png */,
 				0DA05D8718B9FD4C008F6E39 /* eraser-1.png */,
 				0D0D644818C1FB870092D005 /* back2.jpg */,
@@ -322,23 +331,6 @@
 				0DCA215918BE7C3C006D9DA7 /* SaveControllerDelegate.h */,
 			);
 			name = "Save/Load Controllers";
-			sourceTree = "<group>";
-		};
-		0D65D06218C26F1600B860D8 /* bolt_tesla */ = {
-			isa = PBXGroup;
-			children = (
-				0D65D06318C26F1600B860D8 /* bolt_tesla_0001.png */,
-				0D65D06418C26F1600B860D8 /* bolt_tesla_0002.png */,
-				0D65D06518C26F1600B860D8 /* bolt_tesla_0003.png */,
-				0D65D06618C26F1600B860D8 /* bolt_tesla_0004.png */,
-				0D65D06718C26F1600B860D8 /* bolt_tesla_0005.png */,
-				0D65D06818C26F1600B860D8 /* bolt_tesla_0006.png */,
-				0D65D06918C26F1600B860D8 /* bolt_tesla_0007.png */,
-				0D65D06A18C26F1600B860D8 /* bolt_tesla_0008.png */,
-				0D65D06B18C26F1600B860D8 /* bolt_tesla_0009.png */,
-				0D65D06C18C26F1600B860D8 /* bolt_tesla_0010.png */,
-			);
-			path = bolt_tesla;
 			sourceTree = "<group>";
 		};
 		0DA05D1718B9DB58008F6E39 = {

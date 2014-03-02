@@ -40,6 +40,7 @@
         self.model = [[GameBubbleModel alloc] initWithRow:row column:column physicsModel:physicsModel];
         [self initializeView];
         [self initializeGestures];
+        self.burstAnimation = [self loadAnimation];
     }
     return self;
 }
@@ -53,6 +54,7 @@
         self.bubbleView.center = position;
         self.model = [[GameBubbleModel alloc] initWithRow:-1 column:-1 physicsModel:physicsModel];
         [self initializeGestures];
+        self.burstAnimation = [self loadAnimation];
     }
     return self;
 }
@@ -64,8 +66,24 @@
         self.model = model;
         [self initializeView];
         [self initializeGestures];
+        [self loadAnimation];
     }
     return self;
+}
+
+- (NSArray *)loadAnimation
+{
+    UIImage *image = [UIImage imageNamed:@"burst.png"];
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            CGImageRef clip = CGImageCreateWithImageInRect(image.CGImage,
+                                                           CGRectMake(j*192, i*192, 192, 192));
+            [images addObject:[UIImage imageWithCGImage:clip]];
+            CFRelease(clip);
+        }
+    }
+    return [images copy];
 }
 
 - (void)tapHandler:(UIGestureRecognizer *)gesture
@@ -116,6 +134,7 @@
         self.model = [[GameBubbleModel alloc] initWithCoder:aDecoder];
         [self initializeView];
         [self initializeGestures];
+        self.burstAnimation = [self loadAnimation];
     }
     return self;
 }

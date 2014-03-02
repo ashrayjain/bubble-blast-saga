@@ -1,0 +1,93 @@
+Integration
+
+My design allowed the integration because of different controllers being used for designer and gameplay. This allowed both of them to be added along with extra controllers for the main screen to a navigation controller and get the basic flow of the game. Furthermore, the similarity in the models being used for both modes allows greater compatibility without mush effort.
+
+Alternatively, one could do both the task in the same controller as well. This however is not as cohesive and can lead to problems later on when one part of the application needs to be modified drastically, in which case the other part will also be affected.
+
+Special Behaviors
+
+The special bubbles have been simply implemented as new subclasses of the main GameBubble Class. All the related logic for the special bubble can be included in the new bubble class itself without having to change much code anywhere else.
+
+This is better than other alternatives as it allows very pain free addition of more bubbles without problems. Also it adds to the cohesiveness of the entire design.
+
+
+Testing
+
+Gameplay
+Black Box Testing:
+
+1. On Startup:
+	a. A single bubble should already be loaded in the bottom center of the screen
+	along with another bubble in the lower left corner that acts as the next bubble to 
+	be fired.
+	
+	b. The grid should be populated with random arrangements of bubbles. There should 
+	not be any glitch in the grid and no grid cell in the middle of other bubbles 
+	should be empty.
+
+2. Gameplay:
+	a. Tapping at a point on the screen should launch the projectile bubble straight 	towards that point with constant speed.
+	
+	b. Drawing a path starting from the projectile bubble should launch the bubble in 	that direction with constant speed.
+	
+	c. Collision of a bubble with the left, right and bottom walls should reflect off 	realistically without glitches.
+
+	d. Upon collision with a bubble, the projectile bubble should snap on to the empty 	position on the grid nearest to the projectile bubble’s center.
+	
+	e. After the snapping of the bubble, any adjacent bubbles of the same color should 	burst with an animation while the bubbles that are left suspended without a path 	to the top wall must fall down, out of the screen with an animation. The whole 		process should be smooth and without glitches.
+
+	f. Trying to snap a bubble after the screen limit has been reached should not end 	successfully. The projectile should reset to its original location.
+
+	g. As the animations are running, the projectile bubble should be replenished with 	an animation. The currently visible next bubble should move into the projectile’s 	location whereas a new bubble should come in from the right bottom corner.
+
+Designer
+Black box testing: Application Launcho The palette should be populated appropriately.o The design grid should be properly drawn  and should be completely vacant. 
+o Pressing “RESET” button should not change the grid in any way.
+Pressing “SAVE” button should open the “Save Design” popup. Pressing “Cancel” should dismiss the “Save Design” popup. Entering something and pressing “Save” should display:	 Save successful alert if file was saved successfully	 Save unsuccessful if file was not saved successfully (for example, pressing savewithout entering anything, or entering characters not allowed in filenames byiOS)o Pressing “LOAD” button should display:	 No saved files alert, when no saved files exist, for example, a fresh install.	 Popover with a table of all saved design names. (Refer to section on “LOAD” for more tests)o Pressing “START” shouldn’t do anything. 
+
+ Palette Areao Single tap on an object should make that object opaque and make any other opaque object in the palette transparent.o Panning, pinching or any other such gesture should not affect the palette in any other way. (Double tap registers as two single taps) Design Grido Panning across the grid should:	 Color the cells under the finger(s) to the color of object selected in the palette	 Do nothing if nothing is selected in the palette 
+o Single Tap on any cell on the grid should:	 Cycle through colors in order (Blue -> Red -> Orange -> Green) if the cell was colored previously. This does not happen for special bubbles.	 Do nothing if the cell was empty previously.o Long press on any cell in the grid should:	 Erase the color in that cell if the cell was colored previously.	 Do nothing if the cell was empty previously.o Performing gestures outside the grid, at the edge regions of the cells and so on, mustnot do anything. 
+
+ Load Workflowo Tapping on a cell in the table should load that particular design in the design grid and close the load popover.o Tapping on any point outside the popover’s boundary should close the popover.o Scrolling on the table should appropriately reveal hidden design names if there are moresaved designs than can be displayed at a time.o Swiping any cell to the left should reveal the red DELETE button.o Pressing the DELETE button for a particular cell should animate the table and removethat cell from the table. Reopening the Load popover must not display this cell again. 
+
+ Save Workflowo Entering invalid names dismisses the popup and displays an error alert.o Entering valid name dismisses the popup and displays a success alert.o Entering a name that already exists on file should overwrite the design of that name. Hiding / Switching Application
+o Switching to another application and back or locking the device should not affect the game. The exact same state must be resumed as the last state when the application was switched. (Note: This does not include alerts or the save dialog. However, the load popover must stay open across resumes.)
+
+Integrated Testing
+1. Menu items must load correctly without glitches.
+2. Pressing any button should do the appropriate transition.
+3. Pressing BACK from various screens should correctly return to the previous screen.
+4. The moving background must not glitch and should continue working even after switching apps.
+
+
+Bells and Whistles
+
+Special Bubble (Rainbow Bubble) added. This bubble can group with any other colored bubble.
+Added by adding subclass. Tests the initial motivation of having a command pattern style game bubble.
+
+There are exciting animations for special bubbles like the exploding bubble and the  lightning bubble.
+Moved animations to each bubble. Allows more modularity and control.
+
+Parallax effect on home screen (moving device makes the text look 3D)
+UIMotionEffects used.
+
+Moving background across the app.
+Add a new super class for all UIViewControllers in the game.
+
+Bubble’s path can be seen across a straight line when panning and aiming the projectile. This adds accuracy.
+UIBezierPath used in a new view. 
+
+Final Reflection
+The MVC architecture originally designed has evolved as the PS’s passed. As more and more realizations were made (sometimes the hard way), experience with MVC became better. Now, it doesn’t seem unnatural at all and infact seems to simplify things a lot.
+The game engine, though already quite modular can be made more generic given more time. The Game Engine currently, is completely decoupled from the game as such. It does not know what a “BUBBLE” is and can be easily ported over to another game where circular objects are used. However, some aspects could be improved.
+
+Bonus Reflection
+a. About 10-15 hours!! (had to do lot of hard work due to poor design decisions and conflict with UICollectionView approach vs normal approach since PS3)
+
+b. Stuck with original design, albeit with bad architecture and hacky integration!! (Just kidding) However, some greater insight before could have helped save some time!
+
+c. Could have removed CollectionView from PS3!! Though it is a worth learning aspect and proves to be useful, in this case it added a lot of hardship for a lot of people.
+
+d. As in (c), the collection view issue aside, other than that, everything was very well designed and exciting to go through. Really enjoyed it. :D
+
+
