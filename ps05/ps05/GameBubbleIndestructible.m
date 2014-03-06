@@ -33,7 +33,7 @@
 
 - (BOOL)isSpecial
 {
-    return NO;
+    return YES;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder

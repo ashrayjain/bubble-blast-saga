@@ -42,7 +42,7 @@
 
 - (BOOL)shouldBurstBubble:(GameBubble *)bubble whenTriggeredBy:(GameBubble *)trigger
 {
-    if (![bubble isEmpty] && bubble.model.row == self.model.row) {
+    if (bubble.model.row == self.model.row) {
         bubble.burstAnimation = [self.burstAnimation copy];
         return YES;
     }

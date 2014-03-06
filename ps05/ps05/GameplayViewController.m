@@ -140,6 +140,26 @@
 
 - (void)generateReserveBubbles
 {
+    NSMutableDictionary *componentsCount;
+    componentsCount = [self getComponentsCount];
+    
+    GameBubbleBasicModel *projectileModel = (GameBubbleBasicModel *)self.projectileBubble.model;
+    GameBubbleColor projectileColor = projectileModel.color;
+
+    NSMutableArray *chosenColors = [self getChosenColors:componentsCount];
+    
+    int assignedIndex = 0;
+    if (![self isColorInGrid:projectileColor]) {
+        projectileModel.color = [chosenColors[assignedIndex++] integerValue];
+    }
+    if (![self isColorInGrid:self.primaryReserveGameBubble]) {
+        self.primaryReserveGameBubble = [chosenColors[assignedIndex++] integerValue];
+    }
+    self.secondaryReserveGameBubble = [chosenColors[assignedIndex] integerValue];
+}
+
+- (NSMutableDictionary *)getComponentsCount
+{
     // Only generates GameBubbleBasic for PS 5 Requirement
     NSMutableDictionary *componentsCount = [[NSMutableDictionary alloc] init];
     
@@ -171,7 +191,11 @@
             }
         }
     }
-    
+    return componentsCount;
+}
+
+- (NSMutableDictionary *)getSortedBasicBubbleComponents:(NSMutableDictionary *)componentsCount
+{
     // For this PS requirements
     NSMutableArray *basicBubbles = [componentsCount objectForKey:[NSNumber numberWithInt:kGameBubbleBasic]];
     
@@ -204,12 +228,16 @@
         }
         [colorsInLastRow addObject:color];
     }
+    return data;
+}
+
+- (NSMutableArray *)getChosenColors:(NSMutableDictionary *)componentsCount
+{
+    NSMutableDictionary *data;
+    data = [self getSortedBasicBubbleComponents:componentsCount];
     
     NSSortDescriptor *descending = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
     NSArray *allKeys = [data.allKeys sortedArrayUsingDescriptors:[NSArray arrayWithObject:descending]];
-    
-    GameBubbleBasicModel *projectileModel = (GameBubbleBasicModel *)self.projectileBubble.model;
-    GameBubbleColor projectileColor = projectileModel.color;
     
     NSMutableArray *chosenColors = [NSMutableArray array];
     for (int i = 0; i < MIN(allKeys.count, 3); i++) {
@@ -217,17 +245,30 @@
         [chosenColors addObject:choices[arc4random_uniform(choices.count)]];
     }
     while (chosenColors.count < 3) {
-        [chosenColors addObject:[NSNumber numberWithInt:arc4random_uniform(kEmpty)]];
+        GameBubbleColor color;
+        do {
+            color = arc4random_uniform(kEmpty);
+        } while (![self isColorInGrid:color] && ![self isGameEnd]);
+        [chosenColors addObject:[NSNumber numberWithInt:color]];
     }
-    
-    int assignedIndex = 0;
-    if (![colorsInLastRow containsObject:[NSNumber numberWithInt:projectileColor]]) {
-        projectileModel.color = [chosenColors[assignedIndex++] integerValue];
+    return chosenColors;
+}
+
+- (BOOL)isColorInGrid:(GameBubbleColor)color
+{
+    for (int i = self.bottomMostFilledRow; i >= 0; i--) {
+        NSMutableArray *row = self.bubbleControllers[i];
+        for (int j = 0;  j < row.count; j++) {
+            GameBubble *bubble = self.bubbleControllers[i][j];
+            if (![bubble isEmpty] && ![bubble isSpecial]) {
+                GameBubbleBasicModel *model = (GameBubbleBasicModel *)bubble.model;
+                if (model.color == color) {
+                    return YES;
+                }
+            }
+        }
     }
-    if (![colorsInLastRow containsObject:[NSNumber numberWithInt:self.primaryReserveGameBubble]]) {
-        self.primaryReserveGameBubble = [chosenColors[assignedIndex++] integerValue];
-    }
-    self.secondaryReserveGameBubble = [chosenColors[assignedIndex] integerValue];
+    return NO;
 }
 
 - (NSNumber *)getColorForComponent:(NSMutableSet *)set
@@ -623,12 +664,13 @@
         return;
     }
     // pan started from projectile
-    if (sender.state == UIGestureRecognizerStateBegan && [self.projectile pointInside:[sender locationInView:self.projectile]
-                                                                            withEvent:nil]) {
+    if (sender.state == UIGestureRecognizerStateBegan) {
         self.panStarted = YES;
         self.projectilePath.startPoint = self.projectile.center;
-        self.projectilePath.endPoint = [sender locationInView:nil];
+        TwoDVector *endPoint = [TwoDVector twoDVectorFromCGPoint:[sender locationInView:nil]];
+        self.projectilePath.endPoint = endPoint.scalarComponents;
         self.projectilePath.enabled = YES;
+        [self.projectilePath setNeedsDisplay];
     }
     else if (sender.state == UIGestureRecognizerStateEnded && self.panStarted == YES) {
         [self launchProjectileWithVector:[TwoDVector twoDVectorFromCGPoint:[sender locationInView:nil]]];
@@ -666,6 +708,7 @@
         return;
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
+        self.projectileReady = NO;
         [self launchProjectileWithVector:[TwoDVector twoDVectorFromCGPoint:[sender locationInView:self.gameArea]]];
     }
 }
@@ -705,8 +748,6 @@
                               completion:^(BOOL finished) {
                                   [self.cannon startAnimating];
                                   self.projectileBubble.model.physicsModel.velocityVector = velocity;
-                                  self.projectileReady = NO;
-                                  
                               }];
     self.cannonAngle = angleToRotate;
 }
