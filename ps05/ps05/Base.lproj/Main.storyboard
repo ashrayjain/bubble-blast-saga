@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="9dK-4p-CbE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="9dK-4p-CbE">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -58,7 +58,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0BC-YD-cMY">
-                                        <rect key="frame" x="1014" y="729" width="492" height="101"/>
+                                        <rect key="frame" x="1013" y="729" width="494" height="101"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="70"/>
                                         <size key="titleShadowOffset" width="0.0" height="5"/>
@@ -573,15 +573,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bubble-blue.png" width="160" height="160"/>
-        <image name="bubble-bomb.png" width="160" height="160"/>
-        <image name="bubble-green.png" width="160" height="160"/>
+        <image name="bubble-blue.png" width="80" height="80"/>
+        <image name="bubble-bomb.png" width="80" height="80"/>
+        <image name="bubble-green.png" width="80" height="80"/>
         <image name="bubble-indestructible.png" width="160" height="160"/>
-        <image name="bubble-lightning.png" width="160" height="160"/>
-        <image name="bubble-orange.png" width="160" height="160"/>
-        <image name="bubble-rainbow.png" width="160" height="160"/>
-        <image name="bubble-red.png" width="160" height="160"/>
-        <image name="bubble-star.png" width="160" height="160"/>
+        <image name="bubble-lightning.png" width="80" height="80"/>
+        <image name="bubble-orange.png" width="80" height="80"/>
+        <image name="bubble-rainbow.png" width="80" height="80"/>
+        <image name="bubble-red.png" width="80" height="80"/>
+        <image name="bubble-star.png" width="80" height="80"/>
         <image name="cannon-base-cut.png" width="400" height="200"/>
         <image name="eraser-1.png" width="254" height="152"/>
     </resources>
@@ -592,6 +592,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="qbS-Kp-iQ8"/>
-        <segue reference="d9x-0w-ZnA"/>
+        <segue reference="LqQ-kx-LnQ"/>
     </inferredMetricsTieBreakers>
 </document>

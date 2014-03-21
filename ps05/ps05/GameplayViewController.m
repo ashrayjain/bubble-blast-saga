@@ -256,19 +256,21 @@
 
 - (BOOL)isColorInGrid:(GameBubbleColor)color
 {
+    BOOL isColoredBubbleExists = NO;
     for (int i = self.bottomMostFilledRow; i >= 0; i--) {
         NSMutableArray *row = self.bubbleControllers[i];
         for (int j = 0;  j < row.count; j++) {
             GameBubble *bubble = self.bubbleControllers[i][j];
             if (![bubble isEmpty] && ![bubble isSpecial]) {
                 GameBubbleBasicModel *model = (GameBubbleBasicModel *)bubble.model;
+                isColoredBubbleExists = YES;
                 if (model.color == color) {
                     return YES;
                 }
             }
         }
     }
-    return NO;
+    return !isColoredBubbleExists;
 }
 
 - (NSNumber *)getColorForComponent:(NSMutableSet *)set
@@ -870,7 +872,10 @@
     
     for (GameBubble *bubble in sortedByRowBubbles) {
         [self emptyBubbleAtRow:bubble.model.row column:bubble.model.column];
-        UIImageView * explosion = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kDefaultBubbleDiameter*2, kDefaultBubbleDiameter*2)];
+        UIImageView * explosion = [[UIImageView alloc] initWithFrame:CGRectMake(0,
+                                                                                0,
+                                                                                kDefaultBubbleDiameter*2,
+                                                                                kDefaultBubbleDiameter*2)];
         explosion.center = bubble.bubbleView.center;
         explosion.animationImages = bubble.burstAnimation;
         explosion.animationDuration = 0.75;
