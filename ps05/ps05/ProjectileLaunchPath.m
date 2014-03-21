@@ -11,7 +11,6 @@
 #define DASH_LENGTH     10
 #define PATTERN_LENGTH  2
 #define DASH_WIDTH      5
-#define EDGE_THRESHOLD  30
 
 @interface ProjectileLaunchPath ()
 
